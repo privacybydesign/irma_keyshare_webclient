@@ -1,0 +1,135 @@
+<!-- Adapted from bootstrap signin demo page -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <meta name="irma-cloud-server" value="<IRMA_CLOUD_SERVER>">
+
+    <title>Experimental IRMA cloud</title>
+
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="signin.css" rel="stylesheet">
+
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="bower_components/jquery-qrcode/dist/jquery.qrcode.js"></script>
+    <script type="text/javascript" src="bower_components/moment/moment.js"></script>
+    <script type="text/javascript" src="cloud.js"></script>
+  </head>
+
+  <body>
+
+    <div class="container" id="loginContainer">
+      <div id="login_alert_box">
+      </div>
+      <form class="form-signin" id="login_form">
+        <h2 class="form-signin-heading">Experimental IRMA Cloud</h2>
+        </p>
+        <p>Please sign in to your IRMA Cloud account</p>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" id="signin_button">Sign in</button>
+        </p>
+        Don't have an account? <a href="" id="register_link">Register now</a> to link your IRMA app to our Cloud Server.
+      </form>
+
+    </div> <!-- /container -->
+    <div class="container" id="registerContainer" hidden>
+        <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
+        <h2>Register for Experimental IRMA Cloud access</h2>
+        <div id="register_alert_box">
+        </div>
+        <form class="form-horizontal" id="register_form">
+          <div class="form-group">
+            <label for="registerEmail" class="col-sm-3 control">Email address</label>
+            <div class="col-sm-9">
+                <input type="email" class="form-control" id="registerEmail" placeholder="Email" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="registerPassword" class="col-sm-3 control">Password</label>
+            <div class="col-sm-9">
+                <input type="password" class="form-control" id="registerPassword" placeholder="Password" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="registerPasswordConf" class="col-sm-3 control">Password (confirm)</label>
+            <div class="col-sm-9">
+                <input type="password" class="form-control" id="registerPasswordConf" placeholder="Password (confirm)" required>
+            </div>
+          </div>
+          
+
+          Choose a pin-code that you will use to authenticate your IRMA token.
+          <div class="form-group">
+            <label for="registerPin" class="col-sm-3 control">PIN</label>
+            <div class="col-sm-9">
+                <input type="password" class="form-control" id="registerPin" placeholder="PIN" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="registerPinConf" class="col-sm-3 control">PIN (confirm)</label>
+            <div class="col-sm-9">
+                <input type="password" class="form-control" id="registerPinConf" placeholder="PIN (confirm)" required>
+            </div>
+          </div>
+          <div class="form-group">
+              <div class="col-sm-offset-3 col-sm-9">
+                  <button type="submit" class="btn btn-primary">Register</button>
+              </div>
+          </div>
+        </form>
+        </div>
+    </div>
+
+    <div class="container" id="enrolmentContainer" hidden>
+        <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
+            <h2 class="text-center">Enroll for IRMA Cloud access</h2>
+            <div id="enrolment_alert_box">
+            </div>
+            <div class="img-responsive center-block text-center">
+                <div id="enroll_qr"></div>
+                <p><small>Scan QR code with your IRMA app</small></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="userContainer" hidden>
+        <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
+            <h2>Welcome to your cloud portal</h2>
+            <div id="enrolment_alert_box">
+            </div>
+            <p> You can view your recent events. Also, you can disable your IRMA App
+            if your phone is stolen, or you think it is being abused</p>
+
+            <h3>Disable IRMA App</h3>
+            <p> Press the disable button to disable your IRMA app. Neither you nor anyone else will be able to user your IRMA App after disabling it.</p>
+            <button class="btn btn-primary" id="disableBtn" hidden>Disable IRMA App</button>
+            <button class="btn btn-primary" id="enableBtn" hidden>Enable IRMA App</button>
+
+            <h3>Recent events</h3>
+            <button class="btn" id="refreshBtn">Refresh</button>
+            <table class="table" id="userLogs">
+                <thead>
+                    <tr>
+                        <th>When</th>
+                        <th>Event</th>
+                    </tr>
+                </thead>
+                <tbody id="userLogsBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+  </body>
+</html>
