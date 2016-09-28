@@ -214,12 +214,6 @@ $(function() {
         updateUserContainer();
     });
 
-    function processEnableDisable(data) {
-        user = data;
-        console.log("New user object", user);
-        updateUserContainer();
-    }
-
     function processEnrolmentPoll(data) {
         if(data.enrolled) {
             console.log("User enrolled, continuing!");
@@ -239,7 +233,36 @@ $(function() {
     }
 
     function updateUserContainer() {
+        updateUserEnablement();
+        updateUserLogs();
+    }
+
+    function updateUserEnablement() {
+        console.log("Updating enable status");
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            url: server + "/web/users/" + user.ID,
+            success: processEnableDisable,
+            error: console.log
+        });
+    }
+
+    function updateUserLogs() {
         console.log("Adding logs to user container");
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            url: server + "/web/users/" + user.ID + "/logs",
+            success: processUserLogs,
+        });
+    }
+
+    function processEnableDisable(data) {
+        user = data;
+        console.log("New user object", user);
 
         if(user.enabled) {
             $("#enableBtn").hide();
@@ -248,14 +271,7 @@ $(function() {
             $("#enableBtn").show();
             $("#disableBtn").hide();
         }
-
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            url: server + "/web/users/" + user.ID + "/logs",
-            success: processUserLogs,
-        });
+        updateUserLogs();
     }
 
     function processUserLogs(data) {
