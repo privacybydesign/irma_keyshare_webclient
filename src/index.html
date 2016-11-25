@@ -10,18 +10,18 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <meta name="irma-cloud-server" value="<IRMA_CLOUD_SERVER>">
+    <meta name="irma-keyshare-server" value="<IRMA_KEYSHARE_SERVER>">
 
-    <title>Experimental IRMA cloud</title>
+    <title>Experimental IRMA keyshare</title>
 
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link href="cloud.css" rel="stylesheet">
+    <link href="keyshare.css" rel="stylesheet">
 
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="bower_components/jquery-qrcode/dist/jquery.qrcode.js"></script>
     <script type="text/javascript" src="bower_components/moment/moment.js"></script>
-    <script type="text/javascript" src="cloud.js"></script>
+    <script type="text/javascript" src="keyshare.js"></script>
   </head>
 
   <body>
@@ -30,22 +30,22 @@
       <div id="login_alert_box">
       </div>
       <form class="form-signin" id="login_form">
-        <h2 class="form-signin-heading">Experimental IRMA Cloud</h2>
+        <h2 class="form-signin-heading">Experimental IRMA Keyshare</h2>
         </p>
-        <p>Please sign in to your IRMA Cloud account</p>
+        <p>Please sign in to your IRMA Keyshare account</p>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
         <button class="btn btn-lg btn-primary btn-block" type="submit" id="signin_button">Sign in</button>
         </p>
-        Don't have an account? <a href="" id="register_link">Register now</a> to link your IRMA app to our Cloud Server.
+        Don't have an account? <a href="" id="register_link">Register now</a> to link your IRMA app to our Keyshare Server.
       </form>
 
     </div> <!-- /container -->
     <div class="container" id="registerContainer" hidden>
         <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-        <h2>Register for Experimental IRMA Cloud access</h2>
+        <h2>Register for Experimental IRMA Keyshare access</h2>
         <div id="register_alert_box">
         </div>
         <form class="form-horizontal" id="register_form">
@@ -67,7 +67,7 @@
                 <input type="password" class="form-control" id="registerPasswordConf" placeholder="Password (confirm)" required>
             </div>
           </div>
-          
+
 
           Choose a pin-code that you will use to authenticate your IRMA token.
           <div class="form-group">
@@ -93,7 +93,7 @@
 
     <div class="container" id="enrolmentContainer" hidden>
         <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-            <h2 class="text-center">Enroll for IRMA Cloud access</h2>
+            <h2 class="text-center">Enroll for IRMA Keyshare access</h2>
             <div id="enrolment_alert_box">
             </div>
             <div class="img-responsive center-block text-center">
@@ -105,7 +105,7 @@
 
     <div class="container" id="userContainer" hidden>
         <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-            <h2>Welcome to your cloud portal</h2>
+            <h2>Welcome to your keyshare portal</h2>
             <div id="enrolment_alert_box">
             </div>
             <p> You can view your recent events. Also, you can disable your IRMA App

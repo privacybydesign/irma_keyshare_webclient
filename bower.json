@@ -1,6 +1,6 @@
 {
-  "name": "irma_cloud_webclient",
-  "description": "Simple demo webclient for IRMA cloud server",
+  "name": "irma_keyshare_webclient",
+  "description": "Simple demo webclient for IRMA keyshare server",
   "main": "",
   "authors": [
     "Wouter Lueks",

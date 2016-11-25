@@ -1,7 +1,7 @@
 {
-  "name": "irma_cloud_webclient",
+  "name": "irma_keyshare_webclient",
   "version": "0.0.1",
-  "description": "IRMA cloud webclient",
+  "description": "IRMA keyshare webclient",
   "author": "Wouter Lueks, Radboud University",
   "license": "BSD-3-Clause",
   "devDependencies": {

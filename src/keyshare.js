@@ -12,9 +12,9 @@ $(function() {
 
             meta_name = meta_name.toLowerCase();
             console.log("Examining meta: ", meta_name);
-            if(meta_name === "irma-cloud-server") {
+            if(meta_name === "irma-keyshare-server") {
                 server = metas[i].getAttribute("value");
-                console.log("Cloud Server set to", server);
+                console.log("Keyshare Server set to", server);
             }
         }
     }
@@ -159,7 +159,7 @@ $(function() {
         console.log("Showing enrolment now");
 
         var qr_data = {
-            a: "cloud_enroll",
+            irmaqr: "keyshare",
             url: server,
             username: data.username,
             userID: data.ID

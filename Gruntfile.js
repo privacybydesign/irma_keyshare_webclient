@@ -3,13 +3,13 @@ module.exports = function (grunt) {
     // these are used to configure the server pages (so it can find
     // the API) and the examples (so they can find the authentication server)
     var authentication_server_url, authentication_api_url, server_url;
-    if( typeof(grunt.option("cloud_server_url")) === "undefined") {
-        console.log("INFO: set cloud_server_url to create a working setup");
+    if( typeof(grunt.option("keyshare_server_url")) === "undefined") {
+        console.log("INFO: set keyshare_server_url to create a working setup");
     }
-    // cloud_server_url = grunt.option("cloud_server_url") || "https://demo.irmacard.org/tomcat/irma_api_server/";
-    cloud_server_url = grunt.option("cloud_server_url");
+    // keyshare_server_url = grunt.option("keyshare_server_url") || "https://demo.irmacard.org/tomcat/irma_api_server/";
+    keyshare_server_url = grunt.option("keyshare_server_url");
 
-    console.log("Cloud server url:", cloud_server_url);
+    console.log("keyshare server url:", keyshare_server_url);
 
     grunt.initConfig({
         copy: {
@@ -37,8 +37,8 @@ module.exports = function (grunt) {
                 }],
                 options: {
                     replacements: [{
-                        pattern: '<IRMA_CLOUD_SERVER>',
-                        replacement: cloud_server_url
+                        pattern: '<IRMA_KEYSHARE_SERVER>',
+                        replacement: keyshare_server_url
                     }]
                 }
             }
