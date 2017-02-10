@@ -23,20 +23,6 @@ $(function() {
         }
     }
 
-    function loginSuccess(data, status, jqXHR) {
-        console.log("Login success");
-        console.log(data, status, jqXHR);
-        $("#loginContainer").hide();
-        getUserObject(data);
-    }
-
-    function loginError(jqXHR, status, error) {
-        console.log(jqXHR, status, error);
-        $("#login_alert_box").html('<div class="alert alert-danger" role="alert">'
-                             + '<strong>Username or password incorrect!</strong> '
-                             + '</div>');
-    }
-
     $("#register_link").on("click", function() {
         console.log("Register link clicked");
         $("#loginContainer").hide();
@@ -56,16 +42,27 @@ $(function() {
         return false;
     });
 
+    function loginSuccess() {
+        console.log("Login success");
+        $("#loginContainer").hide();
+        $("#loginDone").show();
+    }
+
+    function loginError(jqXHR, status, error) {
+        console.log(jqXHR, status, error);
+        $("#login_alert_box").html('<div class="alert alert-danger" role="alert">'
+                             + '<strong>Error submitting email address.</strong> '
+                             + '</div>');
+    }
+
     $("#login_form").on("submit", function() {
         console.log("Signin button pressed");
         var email = $("#inputEmail").prop("value");
-        var password = $("#inputPassword").prop("value");
 
         $("#login_alert_box").empty();
 
         var loginObject = {
-            "username": email,
-            "password": password
+            "username": email
         };
 
         console.log(loginObject);
@@ -125,7 +122,7 @@ $(function() {
     });
 
     $("#refreshBtn").on("click", function() {
-        updateUserContainer();
+        updateUserContainer(user);
     });
 
     $("#logoutBtn").on("click", function() {
