@@ -109,6 +109,7 @@ $(function() {
             url: server + "/web/users/" + user.ID + "/enable",
             success: processEnableDisable,
         });
+        $("#refreshBtn").click();
     });
 
     $("#disableBtn").on("click", function() {
@@ -119,6 +120,7 @@ $(function() {
             url: server + "/web/users/" + user.ID + "/disable",
             success: processEnableDisable,
         });
+        $("#refreshBtn").click();
     });
 
     $("#refreshBtn").on("click", function() {
