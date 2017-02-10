@@ -16,15 +16,18 @@ $(function() {
                 server = metas[i].getAttribute("value");
                 console.log("Keyshare Server set to", server);
             }
+            if(meta_name === "scheme-mananger-url") {
+                schememanager = metas[i].getAttribute("value");
+                console.log("Scheme manager set to", server);
+            }
         }
     }
-    getSetupFromMetas();
 
     function loginSuccess(data, status, jqXHR) {
         console.log("Login success");
         console.log(data, status, jqXHR);
         $("#loginContainer").hide();
-        processLogin(data);
+        getUserObject(data);
     }
 
     function loginError(jqXHR, status, error) {
@@ -37,7 +40,19 @@ $(function() {
     $("#register_link").on("click", function() {
         console.log("Register link clicked");
         $("#loginContainer").hide();
-        $("#registerContainer").show();
+        $("#enrolmentContainer").show();
+
+        var qr_data = {
+            irmaqr: "schememanager",
+            url: schememanager,
+        }
+
+        console.log(qr_data);
+        $("#enroll_qr").qrcode({
+            text: JSON.stringify(qr_data),
+            size: 256,
+        });
+
         return false;
     });
 
@@ -68,124 +83,23 @@ $(function() {
         return false;
     });
 
-    function registerSuccess(data, status, jqXHR) {
-        console.log("Register success");
-        console.log(data, status, jqXHR);
-        $("#registerContainer").hide();
-        processLogin(data);
-    }
-
-    function registerError(jqXHR, status, error) {
-        console.log("Register error");
-        console.log(jqXHR, status, error);
-        $("#register_alert_box").html('<div class="alert alert-danger" role="alert">'
-                             + '<strong>Failed to register, try again!</strong> '
-                             + '</div>');
-    }
-
-    $("#register_form").on("submit", function() {
-        console.log("Register form pressed pressed");
-        var email = $("#registerEmail").prop("value");
-        var password = $("#registerPassword").prop("value");
-        var passwordConf = $("#registerPasswordConf").prop("value");
-        var pin = $("#registerPin").prop("value");
-        var pinConf = $("#registerPinConf").prop("value");
-
-        $("#register_alert_box").empty();
-
-        if(password !== passwordConf) {
-            console.log("Passwords not equal!");
-            $("#register_alert_box").html('<div class="alert alert-danger" role="alert">'
-                             + '<strong>Passwords not equal!</strong> '
-                             + '</div>');
-            return false;
-        }
-
-        if(pin !== pinConf) {
-            console.log("PIN codes not equal!");
-            $("#register_alert_box").html('<div class="alert alert-danger" role="alert">'
-                             + '<strong>PIN codes not equal!</strong> '
-                             + '</div>');
-            return false;
-        }
-
-        var registerObject = {
-            "username": email,
-            "pin": pin,
-            "password": password
-        };
-
-        console.log(registerObject);
-
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            url: server + "/web/users",
-            data: JSON.stringify(registerObject),
-            success: registerSuccess,
-            error: registerError
-        });
-
-        return false;
-    });
-
-    function processLogin(data) {
+    function getUserObject(data) {
         console.log("Checking if user complete enrolment!", data);
 
         $.ajax({
             type: "GET",
             dataType: "json",
             contentType: "application/json;charset=utf-8",
-            url: server + "/web/users/" + data.userID,
-            success: processUserEnrolmentCheck,
-            error: console.log
+            url: server + "/web/users/" + data.ID,
+            success: showUserPortal,
+            error: function() {
+                $("#login_alert_box").html('<div class="alert alert-danger" role="alert">'
+                                   + '<strong>Invalid session, please login again</strong> '
+                                   + '</div>');
+                console.log($.removeCookie('sessionid', { path: '/' }));
+                $("#loginContainer").show();
+            }
         });
-    }
-
-    function processUserEnrolmentCheck(data) {
-        console.log("Retrieved user data", data);
-
-        if(!data.enrolled) {
-            doEnroll(data);
-        } else {
-            showUserPortal(data);
-        }
-    }
-
-    var enrolmentTimer;
-
-    function doEnroll(data) {
-        console.log("Showing enrolment now");
-
-        var qr_data = {
-            irmaqr: "keyshare",
-            url: server,
-            username: data.username,
-            userID: data.ID
-        }
-
-        console.log(qr_data);
-
-        $("#enrolmentContainer").show();
-        $("#enroll_qr").qrcode({
-            text: JSON.stringify(qr_data),
-            size: 256,
-        });
-
-        // Starting time to check if enrolment has completed
-        var requestUserStatus = function () {
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                contentType: "application/json;charset=utf-8",
-                url: server + "/web/users/" + data.ID,
-                success: processEnrolmentPoll,
-                error: console.log
-            });
-        }
-
-        enrolmentTimer = setInterval(requestUserStatus, 1000);
     }
 
     var user;
@@ -214,39 +128,28 @@ $(function() {
         updateUserContainer();
     });
 
-    function processEnrolmentPoll(data) {
-        if(data.enrolled) {
-            console.log("User enrolled, continuing!");
-            clearTimeout(enrolmentTimer);
-            $("#enrolmentContainer").hide();
-
-            showUserPortal(data);
-        }
-    }
+    $("#logoutBtn").on("click", function() {
+        $.ajax({
+            type: "GET",
+            url: server + "/web/logout",
+            success: function() {
+                window.location = "/irma_keyshare_server";
+            },
+        });
+    });
 
     function showUserPortal(data) {
         console.log("Showing user Portal now");
         user = data;
 
-        updateUserContainer();
+        updateUserContainer(data);
+        $("#loginContainer").hide();
         $("#userContainer").show();
     }
 
-    function updateUserContainer() {
-        updateUserEnablement();
+    function updateUserContainer(data) {
+        processEnableDisable(data);
         updateUserLogs();
-    }
-
-    function updateUserEnablement() {
-        console.log("Updating enable status");
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            url: server + "/web/users/" + user.ID,
-            success: processEnableDisable,
-            error: console.log
-        });
     }
 
     function updateUserLogs() {
@@ -271,7 +174,6 @@ $(function() {
             $("#enableBtn").show();
             $("#disableBtn").hide();
         }
-        updateUserLogs();
     }
 
     function processUserLogs(data) {
@@ -286,4 +188,18 @@ $(function() {
             tableContent.append("<tr><td>" + moment(entry.time).fromNow() + "</td><td>" + entry.event + "</td></tr>");
         }
     }
+
+    function tryLoginFromCookie() {
+        var sessionId = $.cookie('sessionid');
+        var userId = $.cookie('userid');
+
+        if (sessionId !== undefined) {
+            getUserObject({ID: userId}, null, null);
+        } else {
+            $("#loginContainer").show();
+        }
+    }
+
+    getSetupFromMetas();
+    tryLoginFromCookie();
 });

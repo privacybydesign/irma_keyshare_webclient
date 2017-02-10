@@ -2,14 +2,24 @@ module.exports = function (grunt) {
     // Setup default urls for the irma web server, and irma api server urls
     // these are used to configure the server pages (so it can find
     // the API) and the examples (so they can find the authentication server)
-    var authentication_server_url, authentication_api_url, server_url;
+    var authentication_server_url, authentication_api_url, server_url, scheme_manager_name;
     if( typeof(grunt.option("keyshare_server_url")) === "undefined") {
         console.log("INFO: set keyshare_server_url to create a working setup");
     }
+    if( typeof(grunt.option("scheme_manager_name")) === "undefined") {
+        console.log("INFO: set scheme_manager_name to create a working setup");
+    }
+    if( typeof(grunt.option("scheme_manager_url")) === "undefined") {
+        console.log("INFO: set scheme_manager_url to create a working setup");
+    }
     // keyshare_server_url = grunt.option("keyshare_server_url") || "https://demo.irmacard.org/tomcat/irma_api_server/";
     keyshare_server_url = grunt.option("keyshare_server_url");
+    scheme_manager_name = grunt.option("scheme_manager_name");
+    scheme_manager_url = grunt.option("scheme_manager_url");
 
     console.log("keyshare server url:", keyshare_server_url);
+    console.log("scheme manager name:", scheme_manager_name);
+    console.log("scheme manager url:", scheme_manager_url);
 
     grunt.initConfig({
         copy: {
@@ -37,8 +47,16 @@ module.exports = function (grunt) {
                 }],
                 options: {
                     replacements: [{
-                        pattern: '<IRMA_KEYSHARE_SERVER>',
+                        pattern: '[IRMA_KEYSHARE_SERVER]',
                         replacement: keyshare_server_url
+                    },
+                    {
+                        pattern: /\[SCHEME_MANAGER_NAME\]/g,
+                        replacement: scheme_manager_name
+                    },
+                    {
+                        pattern: /\[SCHEME_MANAGER_URL\]/g,
+                        replacement: scheme_manager_url
                     }]
                 }
             }
