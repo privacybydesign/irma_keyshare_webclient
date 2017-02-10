@@ -12,7 +12,7 @@ $(function() {
 
             meta_name = meta_name.toLowerCase();
             console.log("Examining meta: ", meta_name);
-            if(meta_name === "irma-keyshare-server") {
+            if(meta_name === "keyshare-server-url") {
                 server = metas[i].getAttribute("value");
                 console.log("Keyshare Server set to", server);
             }
@@ -60,6 +60,17 @@ $(function() {
       $("#alert_box").html('<div class="alert alert-danger" role="alert">'
                                + '<strong>' + message + '</strong></div>');
     }
+
+    var showWarning = function(msg) {
+        $("#alert_box").html('<div class="alert alert-warning" role="alert">'
+                             + '<strong>Warning:</strong> '
+                             + msg + '</div>');
+    };
+
+    var showSuccess = function(data) {
+        $("#alert_box").html('<div class="alert alert-success" role="alert">'
+                             + '<strong>Success:</strong> Credentials issued </div>');
+    };
 
     $("#login_form").on("submit", function() {
         console.log("Signin button pressed");
@@ -250,6 +261,23 @@ $(function() {
         $("#loginContainer").show();
         if (typeof(schememanager) === 'undefined')
             $("#register").hide();
+    }
+
+    $("#issueEmail").on("click", function() {
+        // Clear errors
+        $(".form-group").removeClass("has-error");
+        $("#alert_box").empty();
+
+        $.ajax({
+            type: "GET",
+            url: server + "/web/users/" + user.ID + "/issue_email",
+            success: processIssueEmail,
+            error: showError
+        });
+    });
+
+    var processIssueEmail = function(data) {
+        IRMA.issue(data, showSuccess, showWarning, showError);
     }
 
     getSetupFromMetas();

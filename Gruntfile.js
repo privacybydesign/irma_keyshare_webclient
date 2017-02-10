@@ -1,8 +1,7 @@
 module.exports = function (grunt) {
-    // Setup default urls for the irma web server, and irma api server urls
-    // these are used to configure the server pages (so it can find
-    // the API) and the examples (so they can find the authentication server)
-    var authentication_server_url, authentication_api_url, server_url, scheme_manager_name;
+    // Setup urls for the keyshare server, api server, and irma_js
+    // these are used to configure the webclient
+    var keyshare_server_url, scheme_manager_name, scheme_manager_url, api_server_url, irma_js_url;
     if( typeof(grunt.option("keyshare_server_url")) === "undefined") {
         console.log("INFO: set keyshare_server_url to create a working setup");
     }
@@ -12,14 +11,24 @@ module.exports = function (grunt) {
     if( typeof(grunt.option("scheme_manager_url")) === "undefined") {
         console.log("INFO: set scheme_manager_url to create a working setup");
     }
-    // keyshare_server_url = grunt.option("keyshare_server_url") || "https://demo.irmacard.org/tomcat/irma_api_server/";
+    if( (typeof(grunt.option("api_server_url")) === "undefined") ) {
+        console.log("INFO: set api_server_url (possibly also irma_js_url) to enable email issuing");
+    }
+
     keyshare_server_url = grunt.option("keyshare_server_url");
     scheme_manager_name = grunt.option("scheme_manager_name");
     scheme_manager_url = grunt.option("scheme_manager_url");
+    api_server_url = grunt.option("api_server_url") + "/api/v2/";
+    api_web_url = grunt.option("api_server_url") + "/server/"
+    irma_js_url = grunt.option("irma_js_url") || grunt.option("api_server_url");
+    irma_js_url += "/client";
+
 
     console.log("keyshare server url:", keyshare_server_url);
     console.log("scheme manager name:", scheme_manager_name);
     console.log("scheme manager url:", scheme_manager_url);
+    console.log("api_server_url:", api_server_url);
+    console.log("irma_js_url:", irma_js_url);
 
     grunt.initConfig({
         copy: {
@@ -47,17 +56,25 @@ module.exports = function (grunt) {
                 }],
                 options: {
                     replacements: [{
-                        pattern: '[IRMA_KEYSHARE_SERVER]',
+                        pattern: /\[KEYSHARE_SERVER_URL\]/g,
                         replacement: keyshare_server_url
-                    },
-                    {
+                    },{
                         pattern: /\[SCHEME_MANAGER_NAME\]/g,
                         replacement: scheme_manager_name
-                    },
-                    {
+                    },{
                         pattern: /\[SCHEME_MANAGER_URL\]/g,
                         replacement: scheme_manager_url
-                    }]
+                    },{
+                        pattern: /\[API_SERVER_URL\]/g,
+                        replacement: api_server_url
+                    },{
+                        pattern: /\[API_WEB_URL\]/g,
+                        replacement: api_web_url
+                    },{
+                        pattern: /\[IRMA_JS_URL\]/g,
+                        replacement: irma_js_url
+                    }
+                  ]
                 }
             }
         },

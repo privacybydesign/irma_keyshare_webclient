@@ -10,8 +10,10 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <meta name="irma-keyshare-server" value="[IRMA_KEYSHARE_SERVER]">
+    <meta name="keyshare-server-url" value="[KEYSHARE_SERVER_URL]">
     <meta name="scheme-mananger-url" value="[SCHEME_MANAGER_URL]">
+    <meta name="irma-api-server" value="[API_SERVER_URL]">
+    <meta name="irma-web-server" value="[API_WEB_URL]">
 
     <title>[SCHEME_MANAGER_NAME] keyshare server</title>
 
@@ -24,6 +26,7 @@
     <script type="text/javascript" src="bower_components/jquery-qrcode/dist/jquery.qrcode.js"></script>
     <script type="text/javascript" src="bower_components/moment/moment.js"></script>
     <script type="text/javascript" src="keyshare.js"></script>
+    <script type="text/javascript" src="[IRMA_JS_URL]/irma.js" async defer></script>
   </head>
 
   <body>
@@ -77,6 +80,10 @@
             <h2>Enrollment completed successfully</h2>
 
             <p>You have successfully enrolled to this keyshare server. You can now start using credentials associated to this server.</p>
+
+            <h3>Get an email address attribute</h3>
+            <p>You can issue your email address as an attribute below.</p>
+            <button class="btn btn-primary" id="issueEmail" hidden>Get email attribute</button>
         </div>
     </div>
 
