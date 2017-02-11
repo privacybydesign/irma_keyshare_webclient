@@ -85,8 +85,6 @@ $(function() {
 
         $.ajax({
             type: "GET",
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
             url: server + "/web/users/" + data.ID,
             success: showUserPortal,
             error: function() {
@@ -199,6 +197,25 @@ $(function() {
         }
     }
 
+    function tryLoginFromParam() {
+        var index = window.location.href.indexOf('?');
+        if (index === -1)
+            return false;
+
+        var param = window.location.href.slice(index + 1);
+        $.ajax({
+            type: "GET",
+            url: server + "/web/users/finishenroll/" + param,
+            complete: function() {
+                window.location = "/irma_keyshare_server";
+            }
+        });
+
+        return true;
+    }
+
     getSetupFromMetas();
-    tryLoginFromCookie();
+
+    if (!tryLoginFromParam())
+        tryLoginFromCookie();
 });
