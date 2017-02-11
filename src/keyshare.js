@@ -192,15 +192,14 @@ $(function() {
         }
     }
 
-    function tryLoginFromParam() {
-        var index = window.location.href.indexOf('?');
-        if (index === -1)
+    function tryLoginFromUrl() {
+        if(!window.location.hash)
             return false;
 
-        var param = window.location.href.slice(index + 1);
+        var token = window.location.hash.substring(1);
         $.ajax({
             type: "GET",
-            url: server + "/web/users/finishenroll/" + param,
+            url: server + "/web/users/finishenroll/" + token,
             complete: function() {
                 window.location = "/irma_keyshare_server";
             }
@@ -211,6 +210,6 @@ $(function() {
 
     getSetupFromMetas();
 
-    if (!tryLoginFromParam())
+    if (!tryLoginFromUrl())
         tryLoginFromCookie();
 });
