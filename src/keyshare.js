@@ -80,12 +80,10 @@ $(function() {
         return false;
     });
 
-    function getUserObject(data) {
-        console.log("Checking if user complete enrolment!", data);
-
+    function getUserObject(userId) {
         $.ajax({
             type: "GET",
-            url: server + "/web/users/" + data.ID,
+            url: server + "/web/users/" + userId,
             success: showUserPortal,
             error: function() {
                 $("#login_alert_box").html('<div class="alert alert-danger" role="alert">'
@@ -122,7 +120,7 @@ $(function() {
     });
 
     $("#refreshBtn").on("click", function() {
-        updateUserContainer(user);
+        updateUserContainer();
     });
 
     $("#logoutBtn").on("click", function() {
@@ -139,13 +137,13 @@ $(function() {
         console.log("Showing user Portal now");
         user = data;
 
-        updateUserContainer(data);
+        updateUserContainer();
         $("#loginContainer").hide();
         $("#userContainer").show();
     }
 
-    function updateUserContainer(data) {
-        processEnableDisable(data);
+    function updateUserContainer() {
+        processEnableDisable();
         updateUserLogs();
     }
 
@@ -160,10 +158,7 @@ $(function() {
         });
     }
 
-    function processEnableDisable(data) {
-        user = data;
-        console.log("New user object", user);
-
+    function processEnableDisable() {
         if(user.enabled) {
             $("#enableBtn").hide();
             $("#disableBtn").show();
@@ -191,7 +186,7 @@ $(function() {
         var userId = $.cookie('userid');
 
         if (sessionId !== undefined) {
-            getUserObject({ID: userId}, null, null);
+            getUserObject(userId);
         } else {
             $("#loginContainer").show();
         }
