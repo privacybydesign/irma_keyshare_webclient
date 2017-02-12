@@ -50,9 +50,12 @@ $(function() {
 
     function loginError(jqXHR, status, error) {
         console.log(jqXHR, status, error);
-        $("#login_alert_box").html('<div class="alert alert-danger" role="alert">'
-                             + '<strong>Error submitting email address.</strong> '
-                             + '</div>');
+        showError("Error submitting email address.");
+    }
+
+    function showError(message) {
+      $("#login_alert_box").html('<div class="alert alert-danger" role="alert">'
+                               + '<strong>' + message + '</strong></div>');
     }
 
     $("#login_form").on("submit", function() {
@@ -196,16 +199,48 @@ $(function() {
         if(!window.location.hash)
             return false;
 
-        var token = window.location.hash.substring(1);
+        var hash = window.location.hash.substring(1);
+        var parts = hash.split('/');
+        if (parts.length != 2)
+            return false;
+
+        var path = parts[0];
+        var token = parts[1];
+
+        console.log("Path: ", path);
+        console.log("Token: ", token);
+
+        if (path !== "finishenroll" && path !== "login")
+            return false;
+
         $.ajax({
             type: "GET",
-            url: server + "/web/users/finishenroll/" + token,
-            complete: function() {
-                window.location = "/irma_keyshare_server";
+            url: server + "/web/" + path + "/" + token,
+            success: function(data) {
+                processUrlLogin(data, path);
+            },
+            error: function() {
+                showError("Invalid request.");
             }
         });
 
         return true;
+    }
+
+    function removeHash() {
+        var loc = window.location;
+        if ("pushState" in history)
+            history.pushState("", document.title, loc.pathname + loc.search);
+        else
+            loc.hash = "";
+    }
+
+    function processUrlLogin(data, path) {
+        removeHash();
+        if (path === "finishenroll")
+            $("#enrollmentFinished").show();
+        else
+            showUserPortal(data);
     }
 
     getSetupFromMetas();
