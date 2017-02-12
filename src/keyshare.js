@@ -92,7 +92,7 @@ $(function() {
                 $("#login_alert_box").html('<div class="alert alert-danger" role="alert">'
                                    + '<strong>Invalid session, please login again</strong> '
                                    + '</div>');
-                console.log($.removeCookie('sessionid', { path: '/' }));
+                Cookies.remove('sessionid', { path: '/' });
                 $("#loginContainer").show();
             }
         });
@@ -185,8 +185,8 @@ $(function() {
     }
 
     function tryLoginFromCookie() {
-        var sessionId = $.cookie('sessionid');
-        var userId = $.cookie('userid');
+        var sessionId = Cookies.get('sessionid');
+        var userId = Cookies.get('userid');
 
         if (sessionId !== undefined) {
             getUserObject(userId);
@@ -227,7 +227,7 @@ $(function() {
         return true;
     }
 
-    function removeHash() {
+    function removeHashFromUrl() {
         var loc = window.location;
         if ("pushState" in history)
             history.pushState("", document.title, loc.pathname + loc.search);
@@ -236,7 +236,7 @@ $(function() {
     }
 
     function processUrlLogin(data, path) {
-        removeHash();
+        removeHashFromUrl();
         if (path === "finishenroll")
             $("#enrollmentFinished").show();
         else
