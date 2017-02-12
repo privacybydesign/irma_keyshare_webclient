@@ -210,7 +210,7 @@ $(function() {
         console.log("Path: ", path);
         console.log("Token: ", token);
 
-        if (path !== "finishenroll" && path !== "login")
+        if (path !== "enroll" && path !== "login")
             return false;
 
         $.ajax({
@@ -237,7 +237,7 @@ $(function() {
 
     function processUrlLogin(data, path) {
         removeHashFromUrl();
-        if (path === "finishenroll")
+        if (path === "enroll")
             $("#enrollmentFinished").show();
         else
             showUserPortal(data);
