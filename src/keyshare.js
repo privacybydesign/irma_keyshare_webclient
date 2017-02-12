@@ -231,7 +231,7 @@ $(function() {
         var loc = window.location;
         if ("pushState" in history)
             history.pushState("", document.title, loc.pathname + loc.search);
-        else
+        else // For IE9 and below. May cause the page to scroll up
             loc.hash = "";
     }
 
