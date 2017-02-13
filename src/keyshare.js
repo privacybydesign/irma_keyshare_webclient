@@ -132,6 +132,7 @@ $(function() {
                 window.location = "/irma_keyshare_server";
             },
         });
+        return false;
     });
 
     function showUserPortal(data) {
@@ -144,6 +145,7 @@ $(function() {
     }
 
     function updateUserContainer() {
+        $("#username").html("Logged in as " + user.username)
         processEnableDisable();
         updateUserLogs();
     }
