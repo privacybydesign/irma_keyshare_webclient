@@ -54,7 +54,7 @@ $(function() {
     }
 
     function showError(message) {
-      $("#login_alert_box").html('<div class="alert alert-danger" role="alert">'
+      $("#alert_box").html('<div class="alert alert-danger" role="alert">'
                                + '<strong>' + message + '</strong></div>');
     }
 
@@ -62,7 +62,7 @@ $(function() {
         console.log("Signin button pressed");
         var email = $("#inputEmail").prop("value");
 
-        $("#login_alert_box").empty();
+        $("#alert_box").empty();
 
         var loginObject = {
             "username": email
@@ -89,9 +89,7 @@ $(function() {
             url: server + "/web/users/" + userId,
             success: showUserPortal,
             error: function() {
-                $("#login_alert_box").html('<div class="alert alert-danger" role="alert">'
-                                   + '<strong>Invalid session, please login again</strong> '
-                                   + '</div>');
+                showError("Expired or invalid session, please login again");
                 Cookies.remove('sessionid', { path: '/' });
                 $("#loginContainer").show();
             }

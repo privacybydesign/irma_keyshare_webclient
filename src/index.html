@@ -28,20 +28,20 @@
 
   <body>
 
-    <div class="container" id="loginContainer" hidden>
-      <div id="login_alert_box">
-      </div>
-      <form class="form-signin" id="login_form">
-        <h2 class="form-signin-heading">[SCHEME_MANAGER_NAME] keyshare server</h2>
-        </p>
-        <p>Please sign in to your keyshare account</p>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-        <button class="btn btn-lg btn-primary btn-block" type="submit" id="signin_button">Sign in</button>
-        </p>
-        Don't have an account? <a href="" id="register_link">Register now</a> to link your IRMA app to our Keyshare Server.
-      </form>
+    <div class="container" id="alert_box">
+    </div>
 
+    <div class="container" id="loginContainer" hidden>
+        <form class="form-signin" id="login_form">
+            <h2 class="form-signin-heading">[SCHEME_MANAGER_NAME] keyshare server</h2>
+            </p>
+            <p>Please sign in to your keyshare account</p>
+            <label for="inputEmail" class="sr-only">Email address</label>
+            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" id="signin_button">Sign in</button>
+            </p>
+            Don't have an account? <a href="" id="register_link">Register now</a> to link your IRMA app to our Keyshare Server.
+        </form>
     </div> <!-- /container -->
 
     <div class="container" id="loginDone" hidden>
@@ -54,8 +54,6 @@
     <div class="container" id="enrolmentContainer" hidden>
         <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
             <h2 class="text-center">Enroll for IRMA Keyshare access</h2>
-            <div id="enrolment_alert_box">
-            </div>
             <div class="img-responsive center-block text-center">
                 <div id="enroll_qr"></div>
                 <p><small>Scan QR code with your IRMA app</small></p>
@@ -66,8 +64,7 @@
     <div class="container" id="enrollmentFinished" hidden>
         <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
             <h2>Enrollment completed successfully</h2>
-            <div id="enrolment_alert_box">
-            </div>
+
             <p>You have successfully enrolled to this keyshare server. You can now start using credentials associated to this server.</p>
         </div>
     </div>
@@ -75,8 +72,6 @@
     <div class="container" id="userContainer" hidden>
         <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
             <h2>Welcome to your keyshare portal</h2>
-            <div id="enrolment_alert_box">
-            </div>
             <p> You can view your recent events. Also, you can disable your IRMA App
             if your phone is stolen, or you think it is being abused</p>
 
