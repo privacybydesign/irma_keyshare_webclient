@@ -33,7 +33,15 @@
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+.form-signin .form-signin-heading {
+    text-align: center;
+}
 
 #enroll_qr {
   margin: 2em;
+}
+
+#logon-divider {
+  text-align: center;
+  margin: 1em 0;
 }

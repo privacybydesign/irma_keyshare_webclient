@@ -63,13 +63,12 @@ $(function() {
 
     var showWarning = function(msg) {
         $("#alert_box").html('<div class="alert alert-warning" role="alert">'
-                             + '<strong>Warning:</strong> '
-                             + msg + '</div>');
+                             + '<strong>Warning:</strong> ' + msg + '</div>');
     };
 
-    var showSuccess = function(data) {
+    var showSuccess = function(msg) {
         $("#alert_box").html('<div class="alert alert-success" role="alert">'
-                             + '<strong>Success:</strong> Credentials issued </div>');
+                             + '<strong>Success:</strong> ' + msg +  '</div>');
     };
 
     $("#login_form").on("submit", function() {
@@ -96,6 +95,33 @@ $(function() {
 
         return false;
     });
+
+    $("#signin_irma_button").on("click", function() {
+      // Clear errors
+      $(".form-group").removeClass("has-error");
+      $("#alert_box").empty();
+
+      $.ajax({
+          type: "GET",
+          url: server + "/web/login-irma",
+          success: function(data) {
+              IRMA.verify(data, discloseSuccess, showWarning, showError);
+          },
+          error: showError
+      });
+    });
+
+    function discloseSuccess(jwt) {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            contentType: "text/plain",
+            url: server + "/web/login-irma/proof",
+            data: jwt,
+            success: tryLoginFromCookie,
+            error: loginError
+        });
+    }
 
     function getUserObject(userId) {
         $.ajax({
@@ -286,7 +312,9 @@ $(function() {
     });
 
     var processIssueEmail = function(data) {
-        IRMA.issue(data, showSuccess, showWarning, showError);
+        IRMA.issue(data, function() {
+            showSuccess("Email address successfully issued");
+        }, showWarning, showError);
     }
 
     $("a.frontpage").attr("href", window.location.href.replace(window.location.hash,""))

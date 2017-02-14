@@ -37,23 +37,27 @@
     <div class="container" id="loginContainer" hidden>
         <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
             <h2>[SCHEME_MANAGER_NAME] keyshare server</h2>
-            This is the keyshare server associated to the IRMA
+            <p>This is the keyshare server associated to the IRMA
             scheme manager <strong>[SCHEME_MANAGER_NAME]</strong>. In order to use credentials from
-            this scheme manager, you need to be registered with this keyshare server.
-            More information on keyshare servers can be found
-            <a href="https://privacybydesign.foundation/irma-begin">here</a>.
-            <div class="wrapper">
-                <form class="form-signin" id="login_form">
-                    <h2 class="form-signin-heading">Log in</h2>
+            this scheme manager, you need to be registered with this keyshare server.</p>
+
+            <ul>
+                <li id="register"><a href="" id="register_link">Click here</a> to add this scheme manager to your IRMA app and register with this keyserver.</li>
+                <li>More information on keyshare servers can be found
+                <a href="https://privacybydesign.foundation/irma-begin">here</a>.
+            </ul>
+
+            <form class="form-signin" id="login_form">
+                <h2 class="form-signin-heading">Log in</h2>
+                <div class="wrapper">
                     <label for="inputEmail" class="sr-only">Email address</label>
+                    <h4 id="logon-divider">Using onetime password</h4>
                     <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-                    <button class="btn btn-lg btn-primary btn-block" type="submit" id="signin_button">Sign in</button>
-                    </p>
-                    <div id="register">
-                        <a href="" id="register_link">Click here</a> to add the scheme manager to your IRMA app.
-                    </div>
-                </form>
-            </div>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit" id="signin_button">Send login link</button>
+                    <h4 id="logon-divider">Using email attribute</h4>
+                    <button class="btn btn-lg btn-primary btn-block" id="signin_irma_button">Show email attribute</button>
+                </div>
+            </form>
 
         </div>
     </div> <!-- /container -->
@@ -80,6 +84,7 @@
             <h2>Enrollment completed successfully</h2>
 
             <p>You have successfully enrolled to this keyshare server. You can now start using credentials associated to this server.</p>
+            <ul><li><a class="frontpage">Go to your keyshare portal</a></li></ul>
 
             <h3>Get an email address attribute</h3>
             <p>You can issue your email address as an attribute below.</p>
