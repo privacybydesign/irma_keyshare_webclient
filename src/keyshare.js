@@ -263,7 +263,7 @@ $(function() {
             $("#register").hide();
     }
 
-    $("#issueEmail").on("click", function() {
+    $(".issueEmail").on("click", function() {
         // Clear errors
         $(".form-group").removeClass("has-error");
         $("#alert_box").empty();
