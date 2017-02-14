@@ -227,17 +227,27 @@ $(function() {
         if (path !== "enroll" && path !== "login")
             return false;
 
-        $.ajax({
-            type: "GET",
-            url: server + "/web/" + path + "/" + token,
-            success: function(data) {
-                processUrlLogin(data, path);
-            },
-            error: function() {
-                showError("Invalid request.");
-            }
-        });
+        switch (path) {
+            case "enroll":
+            case "login":
+                $.ajax({
+                    type: "GET",
+                    url: server + "/web/" + path + "/" + token,
+                    success: function(data) {
+                        processUrlLogin(data, path);
+                    },
+                    error: function() {
+                        showError("Invalid request.");
+                    }
+                });
+                break;
 
+            default:
+                showError("Invalid path specified after #");
+                return false;
+        }
+
+        removeHashFromUrl();
         return true;
     }
 
@@ -250,7 +260,6 @@ $(function() {
     }
 
     function processUrlLogin(data, path) {
-        removeHashFromUrl();
         if (path === "enroll")
             $("#enrollmentFinished").show();
         else
@@ -279,6 +288,8 @@ $(function() {
     var processIssueEmail = function(data) {
         IRMA.issue(data, showSuccess, showWarning, showError);
     }
+
+    $("a.frontpage").attr("href", window.location.href.replace(window.location.hash,""))
 
     getSetupFromMetas();
 
