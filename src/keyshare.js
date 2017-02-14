@@ -17,8 +17,11 @@ $(function() {
                 console.log("Keyshare Server set to", server);
             }
             if(meta_name === "scheme-mananger-url") {
-                schememanager = metas[i].getAttribute("value");
-                console.log("Scheme manager set to", server);
+                var val = metas[i].getAttribute("value");
+                if (val !== "undefined") {
+                    schememanager = metas[i].getAttribute("value");
+                    console.log("Scheme manager set to", server);
+                }
             }
         }
     }
@@ -91,7 +94,7 @@ $(function() {
             error: function() {
                 showError("Expired or invalid session, please login again");
                 Cookies.remove('sessionid', { path: '/' });
-                $("#loginContainer").show();
+                showLogin();
             }
         });
     }
@@ -191,7 +194,7 @@ $(function() {
         if (sessionId !== undefined) {
             getUserObject(userId);
         } else {
-            $("#loginContainer").show();
+            showLogin();
         }
     }
 
@@ -241,6 +244,12 @@ $(function() {
             $("#enrollmentFinished").show();
         else
             showUserPortal(data);
+    }
+
+    function showLogin() {
+        $("#loginContainer").show();
+        if (typeof(schememanager) === 'undefined')
+            $("#register").hide();
     }
 
     getSetupFromMetas();
