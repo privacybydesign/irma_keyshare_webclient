@@ -1,15 +1,11 @@
-IRMA cloud webclient
+IRMA keyshare webclient
 ======================
 
-This project contains all the web sources to interact with an IRMA Cloud server. Currently these pages should be considered a *prototype* implementation of a web interface for the cloud server. In particular it allows users to
+This project contains all the web sources to interact with an [IRMA keyshare server](https://github.com/credentials/irma_keyshare_server). Currently these pages should be considered a *prototype* implementation of a web interface for the keyshare server. In particular it allows users to
 
- * register an account with a cloud server, so that it can benefit from the extra security offered by this server;
+ * register an account with a keyshare server, so that it can benefit from the extra security offered by this server;
  * inspect a log of recent actions; and
  * disable the user's IRMA App.
-
-# Development
-
-Some notes on development
 
 ## Quick start
 
@@ -25,24 +21,22 @@ by installing grunt and bower. Then run
 
 to install the node dependencies and JavaScript libraries. Finally run
 
-    grunt build --cloud_server_url="http://<YOUR_SERVER>:8080/irma_cloud_server/api/v1
+    grunt build --keyshare_server_url="http://<YOUR_SERVER>:8080/irma_keyshare_server/api/v1 --scheme_manager_name="<NAME>" --scheme_manager_url="<URL>"
 
-compile the web sources. See below for how to setup server URLs for a local or remote server. Alternatively, you can just run
-
-    grunt --cloud_server_url="http://<YOUR_SERVER>:8080/irma_cloud_server/api/v1
-
-to keep rebuilding the files as they change. (Make sure that you run `grunt build` at least once to make sure everything gets build, or just run `grunt build watch` to build and keep building.)
+to compile the web sources. See below for how to setup server URLs for a local or remote server. If you skip the `build` keyword, grunt keeps rebuilding the files as they change. (Make sure that you run `grunt build` at least once to make sure everything gets build, or just run `grunt build watch` to build and keep building.)
 
 Typically, you want `<YOUR_SERVER>` to be publicly reachable, or at least reachable by the IRMA-app that you are using.
 
-## URLs for api web pages and apis
+### Arguments
 
-This project relies on the URL of the cloud server, you can specify it using the `--cloud_server_url` option as specified above.
+ * `--keyshare_server_url`: specifies the URL of the keyshare server to use
+ * `--scheme_manager_name`: name of the scheme manager that this keyshare server is associated to
+ * `--scheme_manager_url`: url of the scheme manager. Used to generate a QR that the IRMA app can scan to install this scheme mananger. (If absent, this QR will not be shown.)
 
-## Running a local verification server
+## Running a local server
 
-If you are running a local cloud server using the `irma_cloud_server` project you might as well use it to host the web pages as too (and thus avoid CORS problems). First, make sure that the assembled output is written to the `webapp` directory. If `irma_cloud_server` is in the same directory is `irma_cloud_server` run:
+If you are running a local keyshare server using the `irma_keyshare_server` project you might as well use it to host the web pages as too (and thus avoid CORS problems). First, make sure that the assembled output is written to the `webapp` directory. If `irma_keyshare_server` is in the same directory is `irma_keyshare_server` run:
 
-    ln -s ../irma_cloud_server/src/main/webapp/ build
+    ln -s ../irma_keyshare_server/src/main/webapp/ build
 
 (please first remove your `build` directory before running this command).
