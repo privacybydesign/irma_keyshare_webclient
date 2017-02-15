@@ -28,19 +28,26 @@ $(function() {
 
     $("#register_link").on("click", function() {
         console.log("Register link clicked");
-        $("#loginContainer").hide();
-        $("#enrolmentContainer").show();
 
-        var qr_data = {
-            irmaqr: "schememanager",
-            url: schememanager,
+        if( /Android/i.test(navigator.userAgent) ) {
+            window.location.href = "intent://#Intent;package=org.irmacard.cardemu;scheme=schememanager;"
+                + "S.url=" + encodeURIComponent(schememanager) + ";"
+                + "S.browser_fallback_url=http%3A%2F%2Fapp.irmacard.org%2Fschememanager;end";
         }
 
-        console.log(qr_data);
-        $("#enroll_qr").qrcode({
-            text: JSON.stringify(qr_data),
-            size: 256,
-        });
+        else {
+            $("#loginContainer").hide();
+            $("#enrolmentContainer").show();
+            var qr_data = {
+                irmaqr: "schememanager",
+                url: schememanager,
+            }
+            console.log(qr_data);
+            $("#enroll_qr").qrcode({
+                text: JSON.stringify(qr_data),
+                size: 256,
+            });
+        }
 
         return false;
     });
