@@ -73,42 +73,40 @@ $(function() {
 
     $("#login_form").on("submit", function() {
         console.log("Signin button pressed");
-        var email = $("#inputEmail").prop("value");
 
+        // Clear errors
+        $(".form-group").removeClass("has-error");
         $("#alert_box").empty();
 
-        var loginObject = {
-            "username": email
-        };
+        var logintype = $("input[name=login-type]:checked").val();
 
-        console.log(loginObject);
+        if (logintype === "email") {
+            var email = $("#inputEmail").prop("value");
+            var loginObject = { "username": email };
 
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            url: server + "/web/login",
-            data: JSON.stringify(loginObject),
-            success: loginSuccess,
-            error: loginError
-        });
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                url: server + "/web/login",
+                data: JSON.stringify(loginObject),
+                success: loginSuccess,
+                error: loginError
+            });
+        }
+
+        if (logintype === "irma") {
+            $.ajax({
+                type: "GET",
+                url: server + "/web/login-irma",
+                success: function(data) {
+                    IRMA.verify(data, discloseSuccess, showWarning, showError);
+                },
+                error: showError
+            });
+        }
 
         return false;
-    });
-
-    $("#signin_irma_button").on("click", function() {
-      // Clear errors
-      $(".form-group").removeClass("has-error");
-      $("#alert_box").empty();
-
-      $.ajax({
-          type: "GET",
-          url: server + "/web/login-irma",
-          success: function(data) {
-              IRMA.verify(data, discloseSuccess, showWarning, showError);
-          },
-          error: showError
-      });
     });
 
     function discloseSuccess(jwt) {
@@ -297,6 +295,14 @@ $(function() {
         if (typeof(schememanager) === 'undefined')
             $("#register").hide();
     }
+
+    $("#login-email-button").on("click", function() {
+        $("#inputEmail").prop("disabled", false);
+    });
+
+    $("#login-irma-button").on("click", function() {
+        $("#inputEmail").prop("disabled", true);
+    });
 
     $(".issueEmail").on("click", function() {
         // Clear errors
