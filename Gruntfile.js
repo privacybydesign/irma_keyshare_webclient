@@ -2,16 +2,16 @@ module.exports = function (grunt) {
     // Setup urls for the keyshare server, api server, and irma_js
     // these are used to configure the webclient
     var keyshare_server_url, scheme_manager_name, scheme_manager_url, api_server_url, irma_js_url;
-    if( typeof(grunt.option("keyshare_server_url")) === "undefined") {
+    if ( typeof(grunt.option("keyshare_server_url")) === "undefined") {
         console.log("INFO: set keyshare_server_url to create a working setup");
     }
-    if( typeof(grunt.option("scheme_manager_name")) === "undefined") {
+    if ( typeof(grunt.option("scheme_manager_name")) === "undefined") {
         console.log("INFO: set scheme_manager_name to create a working setup");
     }
-    if( typeof(grunt.option("scheme_manager_url")) === "undefined") {
+    if ( typeof(grunt.option("scheme_manager_url")) === "undefined") {
         console.log("INFO: set scheme_manager_url to create a working setup");
     }
-    if( (typeof(grunt.option("api_server_url")) === "undefined") ) {
+    if ( (typeof(grunt.option("api_server_url")) === "undefined") ) {
         console.log("INFO: set api_server_url (possibly also irma_js_url) to enable email issuing");
     }
 
@@ -19,7 +19,7 @@ module.exports = function (grunt) {
     scheme_manager_name = grunt.option("scheme_manager_name");
     scheme_manager_url = grunt.option("scheme_manager_url");
     api_server_url = grunt.option("api_server_url") + "/api/v2/";
-    api_web_url = grunt.option("api_server_url") + "/server/"
+    api_web_url = grunt.option("api_server_url") + "/server/";
     irma_js_url = grunt.option("irma_js_url") || grunt.option("api_server_url");
     irma_js_url += "/client";
 
@@ -37,46 +37,46 @@ module.exports = function (grunt) {
                 cwd: "bower_components",
                 src: ["**/*"],
                 dest: "build/bower_components",
-                expand: "true"
+                expand: "true",
             },
             examples: {
                 cwd: "src",
                 src: ["**/*", "!**/*.html"],
                 dest: "build/",
-                expand: "true"
+                expand: "true",
             },
         },
-        'string-replace': {
+        "string-replace": {
             examples: {
                 files: [{
                     cwd: "./src",
                     src: ["**/*.html"],
                     dest: "build/",
-                    expand: "true"
+                    expand: "true",
                 }],
                 options: {
                     replacements: [{
                         pattern: /\[KEYSHARE_SERVER_URL\]/g,
-                        replacement: keyshare_server_url
-                    },{
+                        replacement: keyshare_server_url,
+                    }, {
                         pattern: /\[SCHEME_MANAGER_NAME\]/g,
-                        replacement: scheme_manager_name
-                    },{
+                        replacement: scheme_manager_name,
+                    }, {
                         pattern: /\[SCHEME_MANAGER_URL\]/g,
-                        replacement: scheme_manager_url
-                    },{
+                        replacement: scheme_manager_url,
+                    }, {
                         pattern: /\[API_SERVER_URL\]/g,
-                        replacement: api_server_url
-                    },{
+                        replacement: api_server_url,
+                    }, {
                         pattern: /\[API_WEB_URL\]/g,
-                        replacement: api_web_url
-                    },{
+                        replacement: api_web_url,
+                    }, {
                         pattern: /\[IRMA_JS_URL\]/g,
-                        replacement: irma_js_url
-                    }
-                  ]
-                }
-            }
+                        replacement: irma_js_url,
+                    },
+                  ],
+                },
+            },
         },
         watch: {
             webfiles: {
@@ -84,15 +84,15 @@ module.exports = function (grunt) {
                     "./src/**/*",
                     "!./src/**/*.html",
                 ],
-                tasks: ["copy"]
+                tasks: ["copy"],
             },
             htmlfiles: {
                 files: [
-                    "./src/**/*.html"
+                    "./src/**/*.html",
                 ],
-                tasks: ["string-replace"]
-            }
-        }
+                tasks: ["string-replace"],
+            },
+        },
     });
 
     grunt.loadNpmTasks("grunt-contrib-watch");

@@ -1,22 +1,22 @@
 $(function() {
-    var server;
+    var server, schememanager;
 
     function getSetupFromMetas() {
         console.log("Running getSetupFromMetas");
         var metas = document.getElementsByTagName("meta");
-        for(var i = 0; i < metas.length; i++) {
+        for (var i = 0; i < metas.length; i++) {
             var meta_name = metas[i].getAttribute("name");
-            if (meta_name == null) {
+            if (meta_name === null) {
                 continue;
             }
 
             meta_name = meta_name.toLowerCase();
             console.log("Examining meta: ", meta_name);
-            if(meta_name === "keyshare-server-url") {
+            if (meta_name === "keyshare-server-url") {
                 server = metas[i].getAttribute("value");
                 console.log("Keyshare Server set to", server);
             }
-            if(meta_name === "scheme-mananger-url") {
+            if (meta_name === "scheme-mananger-url") {
                 var val = metas[i].getAttribute("value");
                 if (val !== "undefined") {
                     schememanager = metas[i].getAttribute("value");
@@ -29,7 +29,7 @@ $(function() {
     $("#register_link").on("click", function() {
         console.log("Register link clicked");
 
-        if( /Android/i.test(navigator.userAgent) ) {
+        if ( /Android/i.test(navigator.userAgent) ) {
             window.location.href = "intent://#Intent;package=org.irmacard.cardemu;scheme=schememanager;"
                 + "S.url=" + encodeURIComponent(schememanager) + ";"
                 + "S.browser_fallback_url=http%3A%2F%2Fapp.irmacard.org%2Fschememanager;end";
@@ -41,7 +41,7 @@ $(function() {
             var qr_data = {
                 irmaqr: "schememanager",
                 url: schememanager,
-            }
+            };
             console.log(qr_data);
             $("#enroll_qr").qrcode({
                 text: JSON.stringify(qr_data),
@@ -64,18 +64,18 @@ $(function() {
     }
 
     function showError(message) {
-      $("#alert_box").html('<div class="alert alert-danger" role="alert">'
-                               + '<strong>' + message + '</strong></div>');
+      $("#alert_box").html("<div class=\"alert alert-danger\" role=\"alert\">"
+                               + "<strong>" + message + "</strong></div>");
     }
 
     var showWarning = function(msg) {
-        $("#alert_box").html('<div class="alert alert-warning" role="alert">'
-                             + '<strong>Warning:</strong> ' + msg + '</div>');
+        $("#alert_box").html("<div class=\"alert alert-warning\" role=\"alert\">"
+                             + "<strong>Warning:</strong> " + msg + "</div>");
     };
 
     var showSuccess = function(msg) {
-        $("#alert_box").html('<div class="alert alert-success" role="alert">'
-                             + '<strong>Success:</strong> ' + msg +  '</div>');
+        $("#alert_box").html("<div class=\"alert alert-success\" role=\"alert\">"
+                             + "<strong>Success:</strong> " + msg + "</div>");
     };
 
     $("#login_form").on("submit", function() {
@@ -98,7 +98,7 @@ $(function() {
                 url: server + "/web/login",
                 data: JSON.stringify(loginObject),
                 success: loginSuccess,
-                error: loginError
+                error: loginError,
             });
         }
 
@@ -109,7 +109,7 @@ $(function() {
                 success: function(data) {
                     IRMA.verify(data, discloseSuccess, showWarning, showError);
                 },
-                error: showError
+                error: showError,
             });
         }
 
@@ -124,7 +124,7 @@ $(function() {
             url: server + "/web/login-irma/proof",
             data: jwt,
             success: tryLoginFromCookie,
-            error: loginError
+            error: loginError,
         });
     }
 
@@ -135,9 +135,9 @@ $(function() {
             success: showUserPortal,
             error: function() {
                 showError("Expired or invalid session, please login again");
-                Cookies.remove('sessionid', { path: '/' });
+                Cookies.remove("sessionid", { path: "/" });
                 showLogin();
-            }
+            },
         });
     }
 
@@ -190,7 +190,7 @@ $(function() {
     }
 
     function updateUserContainer() {
-        $("#username").html("Logged in as " + user.username)
+        $("#username").html("Logged in as " + user.username);
         processEnableDisable();
         updateUserLogs();
     }
@@ -207,7 +207,7 @@ $(function() {
     }
 
     function processEnableDisable() {
-        if(user.enabled) {
+        if (user.enabled) {
             $("#enableBtn").hide();
             $("#disableBtn").show();
         } else {
@@ -222,7 +222,7 @@ $(function() {
         var tableContent = $("#userLogsBody");
 
         tableContent.empty();
-        for(i = 0; i < data.length; i++) {
+        for (var i = 0; i < data.length; i++) {
             var entry = data[i];
             console.log("Processing entry: ", entry);
             tableContent.append("<tr><td>" + moment(entry.time).fromNow() + "</td><td>" + entry.event + "</td></tr>");
@@ -230,8 +230,8 @@ $(function() {
     }
 
     function tryLoginFromCookie() {
-        var sessionId = Cookies.get('sessionid');
-        var userId = Cookies.get('userid');
+        var sessionId = Cookies.get("sessionid");
+        var userId = Cookies.get("userid");
 
         if (sessionId !== undefined) {
             getUserObject(userId);
@@ -241,12 +241,12 @@ $(function() {
     }
 
     function tryLoginFromUrl() {
-        if(!window.location.hash)
+        if (!window.location.hash)
             return false;
 
         var hash = window.location.hash.substring(1);
-        var parts = hash.split('/');
-        if (parts.length != 2)
+        var parts = hash.split("/");
+        if (parts.length !== 2)
             return false;
 
         var path = parts[0];
@@ -269,7 +269,7 @@ $(function() {
                     },
                     error: function() {
                         showError("Invalid request.");
-                    }
+                    },
                 });
                 break;
 
@@ -299,7 +299,7 @@ $(function() {
 
     function showLogin() {
         $("#loginContainer").show();
-        if (typeof(schememanager) === 'undefined')
+        if (typeof(schememanager) === "undefined")
             $("#register").hide();
     }
 
@@ -320,7 +320,7 @@ $(function() {
             type: "GET",
             url: server + "/web/users/" + user.ID + "/issue_email",
             success: processIssueEmail,
-            error: showError
+            error: showError,
         });
     });
 
@@ -328,9 +328,9 @@ $(function() {
         IRMA.issue(data, function() {
             showSuccess("Email address successfully issued");
         }, showWarning, showError);
-    }
+    };
 
-    $("a.frontpage").attr("href", window.location.href.replace(window.location.hash,""))
+    $("a.frontpage").attr("href", window.location.href.replace(window.location.hash, ""));
 
     getSetupFromMetas();
 
