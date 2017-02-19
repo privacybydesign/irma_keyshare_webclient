@@ -289,6 +289,7 @@ $(function() {
     }
 
     function processUrlLogin(data, path) {
+        user = data;
         if (path === "enroll")
             $("#enrollmentFinished").show();
         else
