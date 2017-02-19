@@ -149,9 +149,8 @@ $(function() {
             dataType: "json",
             contentType: "application/json;charset=utf-8",
             url: server + "/web/users/" + user.ID + "/enable",
-            success: processEnableDisable,
+            success: showUserPortal,
         });
-        $("#refreshBtn").click();
     });
 
     $("#disableBtn").on("click", function() {
@@ -160,9 +159,8 @@ $(function() {
             dataType: "json",
             contentType: "application/json;charset=utf-8",
             url: server + "/web/users/" + user.ID + "/disable",
-            success: processEnableDisable,
+            success: showUserPortal,
         });
-        $("#refreshBtn").click();
     });
 
     $("#refreshBtn").on("click", function() {
