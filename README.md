@@ -21,7 +21,10 @@ by installing grunt and bower. Then run
 
 to install the node dependencies and JavaScript libraries. Finally run
 
-    grunt build --keyshare_server_url="http://<YOUR_SERVER>:8080/irma_keyshare_server/api/v1 --scheme_manager_name="<NAME>" --scheme_manager_url="<URL>"
+    grunt build --keyshare_server_url="http://<YOUR_SERVER>:8080/irma_keyshare_server/api/v1 \
+      --scheme_manager_name="<NAME>" \
+      --scheme_manager_url="<URL>" \
+      --api_server_url="http://<YOUR_SERVER>:8081/irma_api_server"
 
 to compile the web sources. See below for how to setup server URLs for a local or remote server. If you skip the `build` keyword, grunt keeps rebuilding the files as they change. (Make sure that you run `grunt build` at least once to make sure everything gets build, or just run `grunt build watch` to build and keep building.)
 
@@ -31,7 +34,10 @@ Typically, you want `<YOUR_SERVER>` to be publicly reachable, or at least reacha
 
  * `--keyshare_server_url`: specifies the URL of the keyshare server to use
  * `--scheme_manager_name`: name of the scheme manager that this keyshare server is associated to
- * `--scheme_manager_url`: url of the scheme manager. Used to generate a QR that the IRMA app can scan to install this scheme mananger. (If absent, this QR will not be shown.)
+ * `--scheme_manager_url` (optional): url of the scheme manager. Used to generate a QR that the IRMA app can scan to install this scheme mananger. (If absent, this QR will not be shown.)
+ * `--api_server_url`: url of the [API server](https://github.com/credentials/irma_api_server) to use for issuing and verifying email attributes
+ * `--api_web_url` (optional): url of the disclosing or issuance HTML popup for for [irma_js](https://github.com/credentials/irma_js). (If absent, will be derived from the `--api_server_url` parameter.)
+ * `--irma_js` (optional): url of the [irma_js](https://github.com/credentials/irma_js) client. (If absent, will be derived from the `--api_server_url` parameter.)
 
 ## Running a local server
 

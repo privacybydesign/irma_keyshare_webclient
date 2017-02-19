@@ -1,7 +1,7 @@
 module.exports = function (grunt) {
     // Setup urls for the keyshare server, api server, and irma_js
     // these are used to configure the webclient
-    var keyshare_server_url, scheme_manager_name, scheme_manager_url, api_server_url, irma_js_url;
+    var keyshare_server_url, scheme_manager_name, scheme_manager_url, api_server_url, api_web_url, irma_js_url;
     if ( typeof(grunt.option("keyshare_server_url")) === "undefined") {
         console.log("INFO: set keyshare_server_url to create a working setup");
     }
@@ -19,15 +19,17 @@ module.exports = function (grunt) {
     scheme_manager_name = grunt.option("scheme_manager_name");
     scheme_manager_url = grunt.option("scheme_manager_url");
     api_server_url = grunt.option("api_server_url") + "/api/v2/";
-    api_web_url = grunt.option("api_server_url") + "/server/";
+    api_web_url = grunt.option("api_web_url") || grunt.option("api_server_url");
+    api_web_url += "/server/";
     irma_js_url = grunt.option("irma_js_url") || grunt.option("api_server_url");
-    irma_js_url += "/client";
+    irma_js_url += "/client/";
 
 
     console.log("keyshare server url:", keyshare_server_url);
     console.log("scheme manager name:", scheme_manager_name);
     console.log("scheme manager url:", scheme_manager_url);
     console.log("api_server_url:", api_server_url);
+    console.log("api_web_url:", api_web_url);
     console.log("irma_js_url:", irma_js_url);
 
     grunt.initConfig({
