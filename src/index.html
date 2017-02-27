@@ -37,7 +37,7 @@
     <div class="container" id="alert_box">
     </div>
 
-    <div class="container" id="loginContainer" hidden>
+    <div class="container" id="login-container" hidden>
         <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
             <h2>[SCHEME_MANAGER_NAME] keyshare server</h2>
             <p>This is the keyshare server associated to the IRMA
@@ -45,20 +45,20 @@
             this scheme manager, you need to be registered with this keyshare server.</p>
 
             <ul>
-                <li id="register"><a href="" id="register_link">Click here</a> to add this scheme manager to your IRMA app and register with this keyserver.</li>
+                <li id="register"><a href="" id="register-link">Click here</a> to add this scheme manager to your IRMA app and register with this keyserver.</li>
                 <li>More information on keyshare servers can be found
                 <a href="https://privacybydesign.foundation/irma-begin">here</a>.
             </ul>
 
-            <form class="form-signin" id="login_form">
+            <form class="form-signin" id="login-form">
                 <h2 class="form-signin-heading">Log in</h2>
                 <div class="form-group">
                     <label class="form-check-label">
                         <input class="form-check-input" type="radio" name="login-type" id="login-email-button" value="email" checked>
                         Using login link via email
                     </label>
-                    <label for="inputEmail" class="sr-only">Email address</label>
-                    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                    <label for="input-email" class="sr-only">Email address</label>
+                    <input type="email" id="input-email" class="form-control" placeholder="Email address" required autofocus>
                 </div>
                 <div class="form-group">
                     <label class="form-check-label">
@@ -66,20 +66,20 @@
                         By disclosing email attribute
                     </label>
                 </div>
-                <button class="btn btn-lg btn-primary btn-block" type="submit" id="signin_button">Log in</button>
+                <button class="btn btn-lg btn-primary btn-block" type="submit" id="signin-button">Log in</button>
             </form>
 
         </div>
     </div> <!-- /container -->
 
-    <div class="container" id="loginDone" hidden>
+    <div class="container" id="login-done" hidden>
         <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
             <h2>Check your email</h2>
             <p>Log in by clicking on the link that has been sent to your email address.</p>
         </div>
     </div> <!-- /container -->
 
-    <div class="container" id="enrolmentContainer" hidden>
+    <div class="container" id="enrolment-container" hidden>
         <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
             <h2 class="text-center">[SCHEME_MANAGER_NAME] scheme manager</h2>
             <div class="img-responsive center-block text-center">
@@ -89,7 +89,7 @@
         </div>
     </div>
 
-    <div class="container" id="enrollmentFinished" hidden>
+    <div class="container" id="enrollment-finished" hidden>
         <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
             <h2>Enrollment completed successfully</h2>
 
@@ -98,37 +98,37 @@
 
             <h3>Get an email address attribute</h3>
             <p>You can issue your email address as an attribute below.</p>
-            <button class="btn btn-primary issueEmail" id="issueEmail" hidden>Get email attribute</button>
+            <button class="btn btn-primary issue-email-btn" id="issue-email-btn" hidden>Get email attribute</button>
         </div>
     </div>
 
-    <div class="container" id="userContainer" hidden>
+    <div class="container" id="user-container" hidden>
         <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
             <h2>Welcome to your keyshare portal</h2>
-            <p><span id="username"></span> - <a href="#" id="logoutBtn">Log out</a></p>
+            <p><span id="username"></span> - <a href="#" id="logout-btn">Log out</a></p>
 
             <h3>Recent events</h3>
-            <button class="btn" id="refreshBtn">Refresh</button>
-            <button class="btn" id="prevBtn"><span class="glyphicon glyphicon-chevron-left"></span> Previous</button>
-            <button class="btn" id="nextBtn">Next <span class="glyphicon glyphicon-chevron-right"></span></button>
-            <table class="table" id="userLogs">
+            <button class="btn" id="refresh-btn">Refresh</button>
+            <button class="btn" id="prev-btn"><span class="glyphicon glyphicon-chevron-left"></span> Previous</button>
+            <button class="btn" id="next-btn">Next <span class="glyphicon glyphicon-chevron-right"></span></button>
+            <table class="table" id="user-logs">
                 <thead>
                     <tr>
                         <th>When</th>
                         <th>Event</th>
                     </tr>
                 </thead>
-                <tbody id="userLogsBody">
+                <tbody id="user-logs-body">
                 </tbody>
             </table>
 
             <h3>Get or renew your email address attribute</h3>
             <p>You can issue your email address as an attribute. This attribute can then be used to login on this keyshare portal.</p>
-            <button class="btn btn-primary issueEmail" id="issueEmail" hidden>Get email attribute</button>
+            <button class="btn btn-primary issue-email-btn" id="issue-email-btn" hidden>Get email attribute</button>
 
             <h3>Disable IRMA app</h3>
             <p>Press the disable button to permanently disable your IRMA app. All your attributes will become unusable.</p>
-            <button class="btn btn-danger" id="disableBtn" hidden>Disable IRMA app</button>
+            <button class="btn btn-danger" id="disable-btn" hidden>Disable IRMA app</button>
 
         </div>
     </div>

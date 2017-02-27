@@ -26,7 +26,7 @@ $(function() {
         }
     }
 
-    $("#register_link").on("click", function() {
+    $("#register-link").on("click", function() {
         console.log("Register link clicked");
 
         if ( /Android/i.test(navigator.userAgent) ) {
@@ -36,8 +36,8 @@ $(function() {
         }
 
         else {
-            $("#loginContainer").hide();
-            $("#enrolmentContainer").show();
+            $("#login-container").hide();
+            $("#enrolment-container").show();
             var qr_data = {
                 irmaqr: "schememanager",
                 url: schememanager,
@@ -54,8 +54,8 @@ $(function() {
 
     function loginSuccess() {
         console.log("Login success");
-        $("#loginContainer").hide();
-        $("#loginDone").show();
+        $("#login-container").hide();
+        $("#login-done").show();
     }
 
     function loginError(jqXHR, status, error) {
@@ -78,7 +78,7 @@ $(function() {
                              + "<strong>Success:</strong> " + msg + "</div>");
     };
 
-    $("#login_form").on("submit", function() {
+    $("#login-form").on("submit", function() {
         console.log("Signin button pressed");
 
         // Clear errors
@@ -88,7 +88,7 @@ $(function() {
         var logintype = $("input[name=login-type]:checked").val();
 
         if (logintype === "email") {
-            var email = $("#inputEmail").prop("value");
+            var email = $("#input-email").prop("value");
             var loginObject = { "username": email };
 
             $.ajax({
@@ -143,7 +143,7 @@ $(function() {
 
     var user;
 
-    $("#disableBtn").on("click", function() {
+    $("#disable-btn").on("click", function() {
         BootstrapDialog.show({
             title: "Disable all attributes?",
             message: "This will permanently disable your IRMA app. If you do this, your attributes will become unusable. Are you certain?",
@@ -173,12 +173,12 @@ $(function() {
         });
     });
 
-    $("#refreshBtn").on("click", function() {
+    $("#refresh-btn").on("click", function() {
         logStart = 0;
         updateUserContainer();
     });
 
-    $("#logoutBtn").on("click", function() {
+    $("#logout-btn").on("click", function() {
         $.ajax({
             type: "GET",
             url: server + "/web/logout",
@@ -194,13 +194,13 @@ $(function() {
         user = data;
 
         updateUserContainer();
-        $("#loginContainer").hide();
-        $("#userContainer").show();
+        $("#login-container").hide();
+        $("#user-container").show();
     }
 
     function updateUserContainer() {
         $("#username").html("Logged in as " + user.username);
-        $("#disableBtn").prop("disabled", !user.enabled);
+        $("#disable-btn").prop("disabled", !user.enabled);
         updateUserLogs();
     }
 
@@ -221,9 +221,9 @@ $(function() {
         // Update state and buttons
         logNext = data.next;
         logPrev = data.previous;
-        $("#nextBtn").prop("disabled", typeof logNext === "undefined");
-        $("#prevBtn").prop("disabled", typeof logPrev === "undefined");
-        $("#refreshBtn").prop("disabled", typeof logPrev !== "undefined");
+        $("#next-btn").prop("disabled", typeof logNext === "undefined");
+        $("#prev-btn").prop("disabled", typeof logPrev === "undefined");
+        $("#refresh-btn").prop("disabled", typeof logPrev !== "undefined");
 
         if (logPrev === "undefined")
             logStart = 0; // Make sure the Refresh button retrieves previously unseen events
@@ -232,7 +232,7 @@ $(function() {
             return;
 
         // Repopulate table
-        var tableContent = $("#userLogsBody");
+        var tableContent = $("#user-logs-body");
         tableContent.empty();
         for (var i = 0; i < data.entries.length; i++) {
             var entry = data.entries[i];
@@ -245,7 +245,7 @@ $(function() {
         }
     }
 
-    $("#prevBtn").on("click", function() {
+    $("#prev-btn").on("click", function() {
         if (logPrev === 0)
             return;
 
@@ -253,7 +253,7 @@ $(function() {
         updateUserLogs();
     });
 
-    $("#nextBtn").on("click", function() {
+    $("#next-btn").on("click", function() {
         if (logNext === 0)
             return;
 
@@ -325,26 +325,26 @@ $(function() {
     function processUrlLogin(data, path) {
         user = data;
         if (path === "enroll")
-            $("#enrollmentFinished").show();
+            $("#enrollment-finished").show();
         else
             showUserPortal(data);
     }
 
     function showLogin() {
-        $("#loginContainer").show();
+        $("#login-container").show();
         if (typeof(schememanager) === "undefined")
             $("#register").hide();
     }
 
     $("#login-email-button").on("click", function() {
-        $("#inputEmail").prop("disabled", false);
+        $("#input-email").prop("disabled", false);
     });
 
     $("#login-irma-button").on("click", function() {
-        $("#inputEmail").prop("disabled", true);
+        $("#input-email").prop("disabled", true);
     });
 
-    $(".issueEmail").on("click", function() {
+    $(".issue-email-btn").on("click", function() {
         // Clear errors
         $(".form-group").removeClass("has-error");
         $("#alert_box").empty();
