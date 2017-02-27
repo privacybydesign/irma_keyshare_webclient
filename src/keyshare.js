@@ -230,7 +230,6 @@ $(function() {
         tableContent.empty();
         for (var i = 0; i < data.length; i++) {
             var entry = data[i];
-            console.log("Processing entry: ", entry);
             tableContent.append("<tr><td>" + moment(entry.time).fromNow() + "</td><td>" + entry.event + "</td></tr>");
         }
     }
