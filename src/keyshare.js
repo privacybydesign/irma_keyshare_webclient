@@ -174,6 +174,7 @@ $(function() {
     });
 
     $("#refreshBtn").on("click", function() {
+        logStart = 0;
         updateUserContainer();
     });
 
@@ -199,40 +200,66 @@ $(function() {
 
     function updateUserContainer() {
         $("#username").html("Logged in as " + user.username);
-        processEnableDisable();
+        $("#disableBtn").prop("disabled", !user.enabled);
         updateUserLogs();
     }
 
+    var logStart = 0, logNext = 0, logPrev = 0;
+
     function updateUserLogs() {
-        console.log("Adding logs to user container");
+        console.log("Querying logs earlier than " + logStart);
         $.ajax({
             type: "GET",
             dataType: "json",
             contentType: "application/json;charset=utf-8",
-            url: server + "/web/users/" + user.ID + "/logs",
+            url: server + "/web/users/" + user.ID + "/logs/" + logStart,
             success: processUserLogs,
         });
     }
 
-    function processEnableDisable() {
-        if (user.enabled) {
-            $("#disableBtn").removeAttr("disabled");
-        } else {
-            $("#disableBtn").attr("disabled", "yes");
-        }
-    }
-
     function processUserLogs(data) {
-        console.log("Got logs", data);
+        // Update state and buttons
+        logNext = data.next;
+        logPrev = data.previous;
+        $("#nextBtn").prop("disabled", typeof logNext === "undefined");
+        $("#prevBtn").prop("disabled", typeof logPrev === "undefined");
+        $("#refreshBtn").prop("disabled", typeof logPrev !== "undefined");
 
+        if (logPrev === "undefined")
+            logStart = 0; // Make sure the Refresh button retrieves previously unseen events
+
+        if (data.entries.length === 0)
+            return;
+
+        // Repopulate table
         var tableContent = $("#userLogsBody");
-
         tableContent.empty();
-        for (var i = 0; i < data.length; i++) {
-            var entry = data[i];
-            tableContent.append("<tr><td>" + moment(entry.time).fromNow() + "</td><td>" + entry.event + "</td></tr>");
+        for (var i = 0; i < data.entries.length; i++) {
+            var entry = data.entries[i];
+            tableContent.append("<tr><td title=\""
+                    + moment(entry.time).format("dddd, D MMM YYYY, H:mm:ss")
+                    + "\">"
+                    + moment(entry.time).fromNow()
+                    + "</td><td>"
+                    + entry.event + "</td></tr>");
         }
     }
+
+    $("#prevBtn").on("click", function() {
+        if (logPrev === 0)
+            return;
+
+        logStart = logPrev;
+        updateUserLogs();
+    });
+
+    $("#nextBtn").on("click", function() {
+        if (logNext === 0)
+            return;
+
+        logStart = logNext;
+        updateUserLogs();
+    });
 
     function tryLoginFromCookie() {
         var sessionId = Cookies.get("sessionid");
