@@ -18,6 +18,7 @@
     <title>[SCHEME_MANAGER_NAME] keyshare server</title>
 
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bower_components/bootstrap3-dialog/src/css/bootstrap-dialog.css" rel="stylesheet">
 
     <link href="keyshare.css" rel="stylesheet">
 
@@ -25,6 +26,8 @@
     <script type="text/javascript" src="bower_components/js-cookie/src/js.cookie.js"></script>
     <script type="text/javascript" src="bower_components/jquery-qrcode/dist/jquery.qrcode.js"></script>
     <script type="text/javascript" src="bower_components/moment/moment.js"></script>
+    <script type="text/javascript" src="bower_components/bootstrap/js/modal.js"></script>
+    <script type="text/javascript" src="bower_components/bootstrap3-dialog/src/js/bootstrap-dialog.js"></script>
     <script type="text/javascript" src="keyshare.js"></script>
     <script type="text/javascript" src="[IRMA_JS_URL]irma.js" async defer></script>
   </head>
@@ -108,11 +111,6 @@
             <p>You can issue your email address as an attribute. This attribute can then be used to login on this keyshare portal.</p>
             <button class="btn btn-primary issueEmail" id="issueEmail" hidden>Get email attribute</button>
 
-            <h3>Disable IRMA App</h3>
-            <p>Press the disable button to disable your IRMA app. Neither you nor anyone else will be able to use your IRMA App after disabling it, until you re-enable it here.</p>
-            <button class="btn btn-primary" id="disableBtn" hidden>Disable IRMA App</button>
-            <button class="btn btn-primary" id="enableBtn" hidden>Enable IRMA App</button>
-
             <h3>Recent events</h3>
             <button class="btn" id="refreshBtn">Refresh</button>
             <table class="table" id="userLogs">
@@ -125,6 +123,10 @@
                 <tbody id="userLogsBody">
                 </tbody>
             </table>
+
+            <h3>Disable IRMA App</h3>
+            <p>Press the disable button to permanently disable your IRMA app. All your attributes will become unusable.</p>
+            <button class="btn btn-danger" id="disableBtn" hidden>Disable IRMA App</button>
 
         </div>
     </div>

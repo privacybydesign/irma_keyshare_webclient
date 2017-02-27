@@ -143,23 +143,33 @@ $(function() {
 
     var user;
 
-    $("#enableBtn").on("click", function() {
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            url: server + "/web/users/" + user.ID + "/enable",
-            success: showUserPortal,
-        });
-    });
-
     $("#disableBtn").on("click", function() {
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            url: server + "/web/users/" + user.ID + "/disable",
-            success: showUserPortal,
+        BootstrapDialog.show({
+            title: "Disable all attributes?",
+            message: "This will permanently disable your IRMA app. If you do this, your attributes will become unusable. Are you certain?",
+            type: BootstrapDialog.TYPE_DANGER,
+            buttons: [{
+                id: "disable-cancel",
+                label: "Cancel",
+                cssClass: "btn-secondary",
+                action: function(dialogRef) {
+                    dialogRef.close();
+                },
+            }, {
+                id: "disable-confirm",
+                label: "Disable",
+                cssClass: "btn-danger",
+                action: function(dialogRef) {
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        contentType: "application/json;charset=utf-8",
+                        url: server + "/web/users/" + user.ID + "/disable",
+                        success: showUserPortal,
+                    });
+                    dialogRef.close();
+                },
+            }],
         });
     });
 
@@ -206,11 +216,9 @@ $(function() {
 
     function processEnableDisable() {
         if (user.enabled) {
-            $("#enableBtn").hide();
-            $("#disableBtn").show();
+            $("#disableBtn").removeAttr("disabled");
         } else {
-            $("#enableBtn").show();
-            $("#disableBtn").hide();
+            $("#disableBtn").attr("disabled", "yes");
         }
     }
 

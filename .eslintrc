@@ -193,6 +193,7 @@
     "IRMA": true,
     "moment": true,
     "Cookies": true,
+    "BootstrapDialog": true,
   },
 
   "ecmaFeatures": {
