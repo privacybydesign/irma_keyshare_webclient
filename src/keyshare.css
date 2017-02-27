@@ -34,7 +34,7 @@
   border-top-right-radius: 0;
 }
 .form-signin .form-signin-heading {
-    text-align: center;
+  text-align: center;
 }
 
 #enroll_qr {
@@ -44,4 +44,16 @@
 #logon-divider {
   text-align: center;
   margin: 1em 0;
+}
+
+body {
+  padding-bottom: 1em;
+}
+
+#userContainer h3 {
+  margin-top: 1em;
+}
+
+#refreshBtn {
+  margin-right: 1em;
 }
