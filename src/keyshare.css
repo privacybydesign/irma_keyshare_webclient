@@ -54,6 +54,6 @@ body {
     margin-top: 1em;
 }
 
-#refresh-btn {
+#refresh-btn, #disable-btn {
     margin-right: 1em;
 }

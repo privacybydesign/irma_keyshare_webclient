@@ -75,7 +75,7 @@ $(function() {
 
     var showSuccess = function(msg) {
         $("#alert_box").html("<div class=\"alert alert-success\" role=\"alert\">"
-                             + "<strong>Success:</strong> " + msg + "</div>");
+                              + msg + "</div>");
     };
 
     $("#login-form").on("submit", function() {
@@ -173,17 +173,54 @@ $(function() {
         });
     });
 
+    $("#delete-btn").on("click", function() {
+        BootstrapDialog.show({
+            title: "Delete your account?",
+            message: "This will permanently disable your attributes. Are you certain?",
+            type: BootstrapDialog.TYPE_DANGER,
+            buttons: [{
+                id: "delete-cancel",
+                label: "Cancel",
+                cssClass: "btn-secondary",
+                action: function(dialogRef) {
+                    dialogRef.close();
+                },
+            }, {
+                id: "delete-confirm",
+                label: "Delete",
+                cssClass: "btn-danger",
+                action: function(dialogRef) {
+                    $.ajax({
+                        type: "POST",
+                        url: server + "/web/users/" + user.ID + "/delete",
+                        success: function() {
+                            showLoginContainer("Account successfully deleted.");
+                        },
+                    });
+                    dialogRef.close();
+                },
+            }],
+        });
+    });
+
     $("#refresh-btn").on("click", function() {
-        logStart = 0;
+        logStart = 0; // Ensures we fetch the most recent events
         updateUserContainer();
     });
+
+    function showLoginContainer(message) {
+        $("#user-container").hide();
+        $("#login-container").show();
+        if (typeof message !== "undefined")
+            showSuccess(message);
+    }
 
     $("#logout-btn").on("click", function() {
         $.ajax({
             type: "GET",
             url: server + "/web/logout",
             success: function() {
-                window.location = "/irma_keyshare_server";
+                showLoginContainer("You are now logged out.");
             },
         });
         return false;
