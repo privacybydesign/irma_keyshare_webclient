@@ -397,6 +397,7 @@ $(function() {
     var processIssueEmail = function(data) {
         IRMA.issue(data, function() {
             showSuccess("Email address successfully issued");
+            updateUserContainer();
         }, showWarning, showError);
     };
 
