@@ -1,17 +1,19 @@
 {
   "name": "irma_keyshare_webclient",
-  "description": "Simple demo webclient for IRMA keyshare server",
+  "description": "Webclient for IRMA keyshare server",
   "main": "",
   "authors": [
     "Wouter Lueks",
-    "Radboud University"
+    "Sietse Ringers",
+    "Radboud University",
+    "Privacy by Design Foundation"
   ],
   "license": "BSD-3-Clause",
   "moduleType": [
     "es6",
     "globals"
   ],
-  "homepage": "https://irmacard.org/",
+  "homepage": "https://privacybydesign.foundation/",
   "private": true,
   "ignore": [
     "**/.*",
