@@ -194,6 +194,7 @@
     "moment": true,
     "Cookies": true,
     "BootstrapDialog": true,
+    "jwt_decode": true,
   },
 
   "ecmaFeatures": {

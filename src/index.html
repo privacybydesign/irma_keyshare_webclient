@@ -29,6 +29,7 @@
         <script type="text/javascript" src="bower_components/moment/locale/nl.js"></script>
         <script type="text/javascript" src="bower_components/bootstrap/js/modal.js"></script>
         <script type="text/javascript" src="bower_components/bootstrap3-dialog/src/js/bootstrap-dialog.js"></script>
+        <script type="text/javascript" src="bower_components/jwt-decode/build/jwt-decode.js"></script>
         <script type="text/javascript" src="keyshare.js"></script>
         <script type="text/javascript" src="[IRMA_JS_URL]irma.js" async defer></script>
     </head>
@@ -80,16 +81,43 @@
             </div>
         </div>
 
+        <div class="container" id="enrollment-email-issue" hidden>
+            <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
+                <h2>MijnIRMA-registratie: stap 4</h2>
+
+                <p>
+                    Uw email-adres <span id="enrollment-email-address"></span> is nu gecontroleerd.
+                    Klik hieronder om dit adres in uw IRMA app te laden. U kunt deze later gebruiken
+                    om in te loggen op MijnIRMA.
+                </p>
+
+                <button class="btn btn-primary" id="issue-email-btn">Laad email-adres</button>
+
+                <div id="email-issue-help" hidden>
+                    <h3>Wat nu?</h3>
+                    <p>
+                        Pak uw telefoon, open de IRMA app, en tik op "Tap to scan QR" bovenin het scherm.
+                        Scan de QR-code en volg de instructies in de app.
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <div class="container" id="enrollment-finished" hidden>
             <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-                <h2>Enrollment completed successfully</h2>
-
-                <p>You have successfully enrolled to this keyshare server. You can now start using credentials associated to this server.</p>
-                <ul><li><a class="frontpage">Go to your keyshare portal</a></li></ul>
-
-                <h3>Get an email address attribute</h3>
-                <p>You can issue your email address as an attribute below.</p>
-                <button class="btn btn-primary" id="issue-email-btn" hidden>Get email attribute</button>
+                <h2>MijnIRMA-registratie klaar</h2>
+                <p>
+                    Gefeliciteerd! De MijnIRMA-registratie is nu afgerond, en uw eerste IRMA-attribuut staat op uw telefoon.
+                    <ul>
+                        <li><a href="/enroll">Laad meer attributen</a></li>
+                        <li><a id="show-main" href="#">Ga naar MijnIRMA</a></li>
+                        <li><a id="enrollment-test-email-button" href="#">Test het emailadres-attribuut</a></li>
+                    </ul>
+                </p>
+                <div id="email-issue-test" hidden>
+                    <h4>Verificatie gelukt</h4>
+                    Email-adres: <span id="enrollment-test-email"></span>
+                </div>
             </div>
         </div>
 

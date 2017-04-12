@@ -340,6 +340,7 @@ $(function() {
                     },
                 });
                 break;
+
             case "qr":
                 if ( /Android/i.test(navigator.userAgent) ) {
                     window.location.href = "intent://#Intent;package=org.irmacard.cardemu;scheme=schememanager;"
@@ -381,8 +382,10 @@ $(function() {
 
     function processUrlLogin(data, path) {
         user = data;
-        if (path === "enroll")
-            $("#enrollment-finished").show();
+        if (path === "enroll") {
+            $("#enrollment-email-issue").show();
+            $("span#enrollment-email-address").html(user.username);
+        }
         else
             showUserPortal(data);
     }
@@ -397,21 +400,43 @@ $(function() {
         // Clear errors
         $(".form-group").removeClass("has-error");
         $("#alert_box").empty();
+        $("#email-issue-help").show();
 
         $.ajax({
             type: "GET",
             url: server + "/web/users/" + user.ID + "/issue_email",
-            success: processIssueEmail,
+            success: function(data) {
+                IRMA.issue(data, function() {
+                    $("#enrollment-email-issue").hide();
+                    $("#enrollment-finished").show();
+                }, showWarning, showError);
+            },
             error: showError,
         });
     });
 
-    var processIssueEmail = function(data) {
-        IRMA.issue(data, function() {
-            showSuccess("Email address successfully issued");
-            updateUserContainer();
-        }, showWarning, showError);
-    };
+    $("#enrollment-test-email-button").on("click", function() {
+        $.ajax({
+            type: "GET",
+            url: server + "/web/users/" + user.ID + "/test_email",
+            success: function(verify_jwt) {
+                IRMA.verify(verify_jwt, function(result_jwt) {
+                    var email = jwt_decode(result_jwt).attributes["pbdf.pbdf.mijnirma.email"];
+                    $("#enrollment-test-email").html(email);
+                    $("#email-issue-test").show();
+                }, showWarning, showError);
+            },
+            error: showError,
+        });
+        return false;
+    });
+
+    $("#show-main").on("click", function() {
+        updateUserContainer();
+        $("#enrollment-finished").hide();
+        $("#user-container").show();
+        return false;
+    });
 
     $("a.frontpage").attr("href", window.location.href.replace(window.location.hash, ""));
 
