@@ -212,6 +212,10 @@ $(function() {
     function updateUserContainer() {
         $("#username").html("U bent ingelogd als " + user.username);
         $("#disable-btn").prop("disabled", !user.enabled);
+        if (user.emailIssued)
+            $("#issue-email-later").hide();
+        else
+            $("#issue-email-later").show();
         updateUserLogs();
     }
 
@@ -396,22 +400,42 @@ $(function() {
             $("#register").hide();
     }
 
-    $("#issue-email-btn").on("click", function() {
+    function issueEmail(successCallback) {
         // Clear errors
         $(".form-group").removeClass("has-error");
         $("#alert_box").empty();
-        $("#email-issue-help").show();
 
         $.ajax({
             type: "GET",
             url: server + "/web/users/" + user.ID + "/issue_email",
             success: function(data) {
                 IRMA.issue(data, function() {
-                    $("#enrollment-email-issue").hide();
-                    $("#enrollment-finished").show();
+                    $.ajax({ // Notify server of email issuance success
+                        type: "POST",
+                        url: server + "/web/users/" + user.ID + "/email_issued",
+                        success: function(data) {
+                            user = data;
+                        },
+                    });
+                    successCallback();
                 }, showWarning, showError);
             },
             error: showError,
+        });
+    }
+
+    $("#issue-email-btn").on("click", function() {
+        $("#email-issue-help").show();
+
+        issueEmail(function() {
+            $("#enrollment-email-issue").hide();
+            $("#enrollment-finished").show();
+        });
+    });
+
+    $("#issue-email-later-btn").on("click", function() {
+        issueEmail(function() {
+            $("#issue-email-later").hide();
         });
     });
 
