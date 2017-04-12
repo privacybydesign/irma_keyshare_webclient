@@ -26,32 +26,6 @@ $(function() {
         }
     }
 
-    $("#register-link").on("click", function() {
-        console.log("Register link clicked");
-
-        if ( /Android/i.test(navigator.userAgent) ) {
-            window.location.href = "intent://#Intent;package=org.irmacard.cardemu;scheme=schememanager;"
-                + "S.url=" + encodeURIComponent(schememanager) + ";"
-                + "S.browser_fallback_url=http%3A%2F%2Fapp.irmacard.org%2Fschememanager;end";
-        }
-
-        else {
-            $("#login-container").hide();
-            $("#enrolment-container").show();
-            var qr_data = {
-                irmaqr: "schememanager",
-                url: schememanager,
-            };
-            console.log(qr_data);
-            $("#enroll_qr").qrcode({
-                text: JSON.stringify(qr_data),
-                size: 256,
-            });
-        }
-
-        return false;
-    });
-
     function loginSuccess() {
         console.log("Login success");
         $("#login-container").hide();
@@ -315,21 +289,21 @@ $(function() {
 
         var hash = window.location.hash.substring(1);
         var parts = hash.split("/");
-        if (parts.length !== 2)
-            return false;
-
         var path = parts[0];
         var token = parts[1];
 
         console.log("Path: ", path);
         console.log("Token: ", token);
 
-        if (path !== "enroll" && path !== "login")
+        if (path !== "enroll" && path !== "login" && path !== "qr")
             return false;
 
         switch (path) {
             case "enroll":
             case "login":
+                if (parts.length !== 2)
+                    return false;
+
                 $.ajax({
                     type: "GET",
                     url: server + "/web/" + path + "/" + token,
@@ -340,6 +314,27 @@ $(function() {
                         showError("Invalid request.");
                     },
                 });
+                break;
+            case "qr":
+                if ( /Android/i.test(navigator.userAgent) ) {
+                    window.location.href = "intent://#Intent;package=org.irmacard.cardemu;scheme=schememanager;"
+                        + "S.url=" + encodeURIComponent(schememanager) + ";"
+                        + "S.browser_fallback_url=http%3A%2F%2Fapp.irmacard.org%2Fschememanager;end";
+                }
+
+                else {
+                    $("#login-container").hide();
+                    $("#enrolment-container").show();
+                    var qr_data = {
+                        irmaqr: "schememanager",
+                        url: schememanager,
+                    };
+                    console.log(qr_data);
+                    $("#enroll_qr").qrcode({
+                        text: JSON.stringify(qr_data),
+                        size: 256,
+                    });
+                }
                 break;
 
             default:
