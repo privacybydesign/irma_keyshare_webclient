@@ -34,7 +34,7 @@ $(function() {
 
     function loginError(jqXHR, status, error) {
         console.log(jqXHR, status, error);
-        showError("Error submitting email address.");
+        showError("Er is een fout opgetreden bij het inloggen.");
     }
 
     function showError(message) {
@@ -108,7 +108,7 @@ $(function() {
             url: server + "/web/users/" + userId,
             success: showUserPortal,
             error: function() {
-                showError("Expired or invalid session, please login again");
+                showError("Sessie is verlopen of ongeldig, log opnieuw in");
                 Cookies.remove("sessionid", { path: "/" });
                 showLogin();
             },
@@ -168,7 +168,7 @@ $(function() {
                         type: "POST",
                         url: server + "/web/users/" + user.ID + "/delete",
                         success: function() {
-                            showLoginContainer("Account successfully deleted.");
+                            showLoginContainer("MijnIRMA account verwijderd.");
                         },
                     });
                     dialogRef.close();
@@ -336,7 +336,7 @@ $(function() {
                         processUrlLogin(data, path);
                     },
                     error: function() {
-                        showError("Invalid request.");
+                        showError("Ongeldig sessietoken.");
                     },
                 });
                 break;
