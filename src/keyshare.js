@@ -78,40 +78,40 @@ $(function() {
                               + msg + "</div>");
     };
 
-    $("#login-form").on("submit", function() {
-        console.log("Signin button pressed");
-
-        // Clear errors
+    $("#login-form-irma").on("submit", function() {
+        console.log("IRMA signin button pressed");
         $(".form-group").removeClass("has-error");
         $("#alert_box").empty();
 
-        var logintype = $("input[name=login-type]:checked").val();
+        $.ajax({
+            type: "GET",
+            url: server + "/web/login-irma",
+            success: function(data) {
+                IRMA.verify(data, discloseSuccess, showWarning, showError);
+            },
+            error: showError,
+        });
 
-        if (logintype === "email") {
-            var email = $("#input-email").prop("value");
-            var loginObject = { "username": email };
+        return false;
+    });
 
-            $.ajax({
-                type: "POST",
-                dataType: "json",
-                contentType: "application/json;charset=utf-8",
-                url: server + "/web/login",
-                data: JSON.stringify(loginObject),
-                success: loginSuccess,
-                error: loginError,
-            });
-        }
+    $("#login-form-email").on("submit", function() {
+        console.log("Email signin button pressed");
+        $(".form-group").removeClass("has-error");
+        $("#alert_box").empty();
 
-        if (logintype === "irma") {
-            $.ajax({
-                type: "GET",
-                url: server + "/web/login-irma",
-                success: function(data) {
-                    IRMA.verify(data, discloseSuccess, showWarning, showError);
-                },
-                error: showError,
-            });
-        }
+        var email = $("#input-email").prop("value");
+        var loginObject = { "username": email };
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            url: server + "/web/login",
+            data: JSON.stringify(loginObject),
+            success: loginSuccess,
+            error: loginError,
+        });
 
         return false;
     });
@@ -372,14 +372,6 @@ $(function() {
         if (typeof(schememanager) === "undefined")
             $("#register").hide();
     }
-
-    $("#login-email-button").on("click", function() {
-        $("#input-email").prop("disabled", false);
-    });
-
-    $("#login-irma-button").on("click", function() {
-        $("#input-email").prop("disabled", true);
-    });
 
     $(".issue-email-btn").on("click", function() {
         // Clear errors
