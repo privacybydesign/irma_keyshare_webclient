@@ -41,10 +41,10 @@
 
         <div class="container" id="login-container" hidden>
             <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-                <h2>MijnIRMA login</h2>
-                <p>Dit is de MijnIRMA van <strong>[SCHEME_MANAGER_NAME]</strong>.
-                U kunt hier het gebruik van uw IRMA-app bekijken, of het gebruik
-                van uw IRMA-app blokkeren.</p>
+                <h2 id="login-header">MijnIRMA login</h2>
+                <p>Dit is de MijnIRMA website van de <strong>[SCHEME_MANAGER_NAME]</strong>.
+                U kunt hier het gebruik van uw IRMA app bekijken, of het gebruik
+                van uw IRMA app blokkeren.</p>
 
                 <div class="form-signin">
                     <h3 class="form-signin-heading">Log in met</h3>
@@ -54,7 +54,7 @@
                     <div id="login-separator">of</div>
                     <form id="login-form-email">
                         <div class="input-group">
-                            <input type="email" id="input-email" class="form-control" placeholder="Email address" required autofocus>
+                            <input type="email" id="input-email" class="form-control" placeholder="Email-adres" required autofocus>
                             <span class="input-group-btn">
                                 <button class="btn btn-lg btn-primary" type="submit" id="signin-button-email">Email link</button>
                             </span>
@@ -88,7 +88,7 @@
                 <p>
                     Uw email-adres <span id="enrollment-email-address"></span> is nu gecontroleerd.
                     Klik hieronder om dit adres in uw IRMA app te laden. U kunt deze later gebruiken
-                    om in te loggen op MijnIRMA.
+                    om in te loggen op MijnIRMA. Dit is de laatste stap in het registratieproces.
                 </p>
 
                 <button class="btn btn-primary" id="issue-email-btn">Laad email-adres</button>
@@ -129,7 +129,7 @@
                 <div id="issue-email-later" hidden>
                     <h3>Laad uw email-adres in uw IRMA app</h3>
                     <p>
-                        Klik hieronder om uw email-adres als attribuut in uw IRMA-app te laden.
+                        Klik hieronder om uw email-adres als attribuut in uw IRMA app te laden.
                         U kunt deze dan later gebruiken om hier in te loggen.
                     </p>
                     <button class="btn btn-primary issue-email-btn" id="issue-email-later-btn">Laad email-attribute</button>
