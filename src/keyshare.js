@@ -145,19 +145,19 @@ $(function() {
 
     $("#disable-btn").on("click", function() {
         BootstrapDialog.show({
-            title: "Disable all attributes?",
-            message: "This will permanently disable your IRMA app. If you do this, your attributes will become unusable. Are you certain?",
+            title: "MijnIRMA blokkeren?",
+            message: "Als u dit doet worden al uw attributen permanent onbruikbaar. Weet u het zeker?",
             type: BootstrapDialog.TYPE_DANGER,
             buttons: [{
                 id: "disable-cancel",
-                label: "Cancel",
+                label: "Annuleren",
                 cssClass: "btn-secondary",
                 action: function(dialogRef) {
                     dialogRef.close();
                 },
             }, {
                 id: "disable-confirm",
-                label: "Disable",
+                label: "Blokkeren",
                 cssClass: "btn-danger",
                 action: function(dialogRef) {
                     $.ajax({
@@ -175,19 +175,19 @@ $(function() {
 
     $("#delete-btn").on("click", function() {
         BootstrapDialog.show({
-            title: "Delete your account?",
-            message: "This will permanently disable your attributes. Are you certain?",
+            title: "MijnIRMA verwijderen?",
+            message: "Als u dit doet worden al uw attributen permanent onbruikbaar. Weet u het zeker?",
             type: BootstrapDialog.TYPE_DANGER,
             buttons: [{
                 id: "delete-cancel",
-                label: "Cancel",
+                label: "Annuleren",
                 cssClass: "btn-secondary",
                 action: function(dialogRef) {
                     dialogRef.close();
                 },
             }, {
                 id: "delete-confirm",
-                label: "Delete",
+                label: "Blokkeren",
                 cssClass: "btn-danger",
                 action: function(dialogRef) {
                     $.ajax({
@@ -236,7 +236,7 @@ $(function() {
     }
 
     function updateUserContainer() {
-        $("#username").html("Logged in as " + user.username);
+        $("#username").html("U bent ingelogd als " + user.username);
         $("#disable-btn").prop("disabled", !user.enabled);
         updateUserLogs();
     }
@@ -373,7 +373,7 @@ $(function() {
             $("#register").hide();
     }
 
-    $(".issue-email-btn").on("click", function() {
+    $("#issue-email-btn").on("click", function() {
         // Clear errors
         $(".form-group").removeClass("has-error");
         $("#alert_box").empty();
@@ -396,6 +396,8 @@ $(function() {
     $("a.frontpage").attr("href", window.location.href.replace(window.location.hash, ""));
 
     getSetupFromMetas();
+
+    moment().locale("nl");
 
     if (!tryLoginFromUrl())
         tryLoginFromCookie();
