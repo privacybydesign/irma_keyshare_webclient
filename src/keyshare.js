@@ -252,7 +252,32 @@ $(function() {
                     + "\">"
                     + moment(entry.time).fromNow()
                     + "</td><td>"
-                    + entry.event + "</td></tr>");
+                    + getEventString(entry) + "</td></tr>");
+        }
+    }
+
+    function getEventString(entry) {
+        switch (entry.event) {
+            case "PIN_CHECK_REFUSED":
+                return "PIN verificatie in IRMA app geblokkeerd";
+            case "IRMA_APP_AUTH_REFUSED":
+                return "IRMA sessie in IRMA-app geblokkeerd";
+            case "PIN_CHECK_SUCCESS":
+                return "PIN geverifiëerd";
+            case "PIN_CHECK_FAILED":
+                return "PIN verkeerd, " + entry.param + " pogingen resterend";
+            case "PIN_CHECK_BLOCKED":
+                return "PIN te vaak verkeerd, geblokkeerd voor " + entry.param + " seconden";
+            case "IRMA_SESSION":
+                return "IRMA sessie uitgevoerd";
+            case "IRMA_ENABLED":
+                return "MijnIRMA ingeschakeld";
+            case "IRMA_BLOCKED":
+                return "MijnIRMA geblokkeerd";
+
+            default:
+                showError("Received unexpected log entry type");
+                return "";
         }
     }
 
