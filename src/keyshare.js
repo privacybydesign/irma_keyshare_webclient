@@ -340,15 +340,19 @@ $(function() {
                         processUrlLogin(data, path);
                     },
                     error: function() {
-                        showError("Ongeldig sessietoken.");
+                        showError("Er is een fout opgetreden bij emailverificatie.");
                     },
                 });
+                removeHashFromUrl();
                 break;
 
             case "qr":
+                var url = schememanager;
+                if (typeof token !== "undefined" && token.length > 0)
+                    url = decodeURIComponent(token);
                 if ( /Android/i.test(navigator.userAgent) ) {
                     window.location.href = "intent://#Intent;package=org.irmacard.cardemu;scheme=schememanager;"
-                        + "S.url=" + encodeURIComponent(schememanager) + ";"
+                        + "S.url=" + encodeURIComponent(url) + ";"
                         + "S.browser_fallback_url=http%3A%2F%2Fapp.irmacard.org%2Fschememanager;end";
                 }
 
@@ -357,7 +361,7 @@ $(function() {
                     $("#enrolment-container").show();
                     var qr_data = {
                         irmaqr: "schememanager",
-                        url: schememanager,
+                        url: url,
                     };
                     console.log(qr_data);
                     $("#enroll_qr").qrcode({
@@ -372,7 +376,6 @@ $(function() {
                 return false;
         }
 
-        removeHashFromUrl();
         return true;
     }
 
