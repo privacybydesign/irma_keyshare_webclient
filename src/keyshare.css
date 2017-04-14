@@ -1,3 +1,9 @@
+#email-issue-help img {
+    padding: 4px;
+}
+#email-issue-help p {
+    padding-left: 0px;
+}
 #login-separator {
     text-align: center;
     margin: 3px;
