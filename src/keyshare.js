@@ -161,7 +161,7 @@ $(function() {
                 },
             }, {
                 id: "delete-confirm",
-                label: "Blokkeren",
+                label: "Verwijderen",
                 cssClass: "btn-danger",
                 action: function(dialogRef) {
                     $.ajax({
