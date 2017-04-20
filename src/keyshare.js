@@ -194,7 +194,7 @@ $(function() {
             type: "GET",
             url: server + "/web/logout",
             success: function() {
-                showLoginContainer("You are now logged out.");
+                showLoginContainer("U bent nu uitgelogd.");
             },
         });
         return false;
