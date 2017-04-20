@@ -312,6 +312,11 @@ $(function() {
         }
     }
 
+    function cookiesEnabled() {
+        return ("cookie" in document && (document.cookie.length > 0
+            || (document.cookie = "test").indexOf.call(document.cookie, "test") > -1));
+    }
+
     function tryLoginFromUrl() {
         if (!window.location.hash)
             return false;
@@ -330,6 +335,8 @@ $(function() {
         switch (path) {
             case "enroll":
             case "login":
+                if (!cookiesEnabled()) // Can't do anything in this case
+                    return false;
                 if (parts.length !== 2)
                     return false;
 
@@ -473,4 +480,7 @@ $(function() {
 
     if (!tryLoginFromUrl())
         tryLoginFromCookie();
+
+    if (!cookiesEnabled())
+        showError("MijnIRMA maakt gebruik van cookies. Schakel cookies in en probeer het nogmaals.");
 });
