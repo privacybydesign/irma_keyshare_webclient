@@ -347,7 +347,7 @@ $(function() {
                         processUrlLogin(data, path);
                     },
                     error: function() {
-                        showError("Er is een fout opgetreden bij emailverificatie.");
+                        showError("Er is een fout opgetreden bij e-mailverificatie.");
                     },
                 });
                 removeHashFromUrl();
