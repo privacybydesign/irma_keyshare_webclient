@@ -197,7 +197,6 @@ $(function() {
                 showLoginContainer("U bent nu uitgelogd.");
             },
         });
-        return false;
     });
 
     function showUserPortal(data) {
