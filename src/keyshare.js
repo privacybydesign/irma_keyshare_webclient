@@ -34,7 +34,7 @@ $(function() {
 
     function loginError(jqXHR, status, error) {
         console.log(jqXHR, status, error);
-        showError("Er is een fout opgetreden bij het inloggen.");
+        showError("An error occured during login.");
     }
 
     function showError(message) {
@@ -108,7 +108,7 @@ $(function() {
             url: server + "/web/users/" + userId,
             success: showUserPortal,
             error: function() {
-                showError("Sessie is verlopen of ongeldig, log opnieuw in");
+                showError("Session has expired or is invalid, please login again.");
                 Cookies.remove("sessionid", { path: "/" });
                 showLogin();
             },
@@ -119,19 +119,19 @@ $(function() {
 
     $("#disable-btn").on("click", function() {
         BootstrapDialog.show({
-            title: "MijnIRMA blokkeren?",
-            message: "Als u dit doet worden al uw attributen permanent onbruikbaar. Weet u het zeker?",
+            title: "Block MyIRMA?",
+            message: "If you proceed, all your attributes will become permanently unusable. Are you certain?",
             type: BootstrapDialog.TYPE_DANGER,
             buttons: [{
                 id: "disable-cancel",
-                label: "Annuleren",
+                label: "Cancel",
                 cssClass: "btn-secondary",
                 action: function(dialogRef) {
                     dialogRef.close();
                 },
             }, {
                 id: "disable-confirm",
-                label: "Blokkeren",
+                label: "Block",
                 cssClass: "btn-danger",
                 action: function(dialogRef) {
                     $.ajax({
@@ -149,26 +149,27 @@ $(function() {
 
     $("#delete-btn").on("click", function() {
         BootstrapDialog.show({
-            title: "MijnIRMA verwijderen?",
-            message: "Als u dit doet worden al uw attributen permanent onbruikbaar. Weet u het zeker?",
+            title: "Delete MyIRMA?",
+            message: "If you proceed, all your attributes will become permanently unusable, "
+                   + "and your logs and email address will be deleted from MyIRMA. Are you certain?",
             type: BootstrapDialog.TYPE_DANGER,
             buttons: [{
                 id: "delete-cancel",
-                label: "Annuleren",
+                label: "Cancel",
                 cssClass: "btn-secondary",
                 action: function(dialogRef) {
                     dialogRef.close();
                 },
             }, {
                 id: "delete-confirm",
-                label: "Verwijderen",
+                label: "Delete",
                 cssClass: "btn-danger",
                 action: function(dialogRef) {
                     $.ajax({
                         type: "POST",
                         url: server + "/web/users/" + user.ID + "/delete",
                         success: function() {
-                            showLoginContainer("MijnIRMA account verwijderd.");
+                            showLoginContainer("MyIRMA account deleted.");
                         },
                     });
                     dialogRef.close();
@@ -194,7 +195,7 @@ $(function() {
             type: "GET",
             url: server + "/web/logout",
             success: function() {
-                showLoginContainer("U bent nu uitgelogd.");
+                showLoginContainer("You are now logged out.");
             },
         });
     });
@@ -209,7 +210,7 @@ $(function() {
     }
 
     function updateUserContainer() {
-        $("#username").html("U bent ingelogd als " + user.username);
+        $("#username").html("You are logged in as " + user.username);
         $("#disable-btn").prop("disabled", !user.enabled);
         if (user.emailIssued)
             $("#issue-email-later").hide();
@@ -262,21 +263,21 @@ $(function() {
     function getEventString(entry) {
         switch (entry.event) {
             case "PIN_CHECK_REFUSED":
-                return "PIN verificatie in IRMA app geblokkeerd";
+                return "PIN verification blocked";
             case "IRMA_APP_AUTH_REFUSED":
-                return "IRMA sessie in IRMA-app geblokkeerd";
+                return "IRMA session blocked";
             case "PIN_CHECK_SUCCESS":
-                return "PIN geverifiëerd";
+                return "PIN verified";
             case "PIN_CHECK_FAILED":
-                return "PIN verkeerd, " + entry.param + " pogingen resterend";
+                return "PIN wrong, " + entry.param + " attempts remaining";
             case "PIN_CHECK_BLOCKED":
-                return "PIN te vaak verkeerd, geblokkeerd voor " + entry.param + " seconden";
+                return "PIN wrong too often, blocked " + entry.param + " seconds";
             case "IRMA_SESSION":
-                return "IRMA sessie uitgevoerd";
+                return "Performed IRMA session";
             case "IRMA_ENABLED":
-                return "MijnIRMA ingeschakeld";
+                return "MyIRMA enabled";
             case "IRMA_BLOCKED":
-                return "MijnIRMA geblokkeerd";
+                return "MyIRMA blocked";
 
             default:
                 showError("Received unexpected log entry type");
@@ -346,7 +347,7 @@ $(function() {
                         processUrlLogin(data, path);
                     },
                     error: function() {
-                        showError("Er is een fout opgetreden bij e-mailverificatie.");
+                        showError("An error occured during email verification.");
                     },
                 });
                 removeHashFromUrl();
@@ -481,5 +482,5 @@ $(function() {
         tryLoginFromCookie();
 
     if (!cookiesEnabled())
-        showError("MijnIRMA maakt gebruik van cookies. Schakel cookies in en probeer het nogmaals.");
+        showError("MyIRMA uses cookiues. Please enable cookies and retry.");
 });
