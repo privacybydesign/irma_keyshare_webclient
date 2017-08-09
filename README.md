@@ -21,7 +21,7 @@ by installing grunt and bower. Then run
 
 to install the node dependencies and JavaScript libraries. Finally run
 
-    grunt build --keyshare_server_url="http://<YOUR_SERVER>:8080/irma_keyshare_server/api/v1 \
+    grunt build --keyshare_server_url="http://<YOUR_SERVER>:8080/irma_keyshare_server/api/v1" \
       --scheme_manager_name="<NAME>" \
       --scheme_manager_url="<URL>" \
       --api_server_url="http://<YOUR_SERVER>:8081/irma_api_server"
