@@ -98,13 +98,13 @@ module.exports = function (grunt) {
                 files: [
                     "./src/**/*.html",
                 ],
-                tasks: ["string-replace"],
+                tasks: ["translate"],
             },
             translationfiles: {
                 files: [
                     "./src/languages/*",
                 ],
-                tasks: ["build"],
+                tasks: ["translate"],
             },
         },
         multi_lang_site_generator: {
@@ -138,6 +138,12 @@ module.exports = function (grunt) {
     grunt.registerTask("build", [
         "copy:source",
         "copy:bower_bundle",
+        "string-replace",
+        "multi_lang_site_generator",
+        "copy:translated",
+    ]);
+    grunt.registerTask("translate", [
+        "copy:source",
         "string-replace",
         "multi_lang_site_generator",
         "copy:translated",

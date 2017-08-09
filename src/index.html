@@ -41,47 +41,27 @@
 
         <div class="container" id="login-container" hidden>
             <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-                <h2 id="login-header">MyIRMA login</h2>
-                <p>
-                    This is the MyIRMA website of the <strong>[SCHEME_MANAGER_NAME]</strong>.
-                    Using this website you can view the activities of your IRMA app,
-                    and block or delete your account.
-                </p>
-
-                <p>
-                    The foundation knows when your IRMA app is used, but does not know
-                    where or with which attributes. In this way a combination of security
-                    and privacy is pursued. The MyIRMA usage log allows you to check if
-                    your IRMA app is being abused. If so, you can block your IRMA app here.
-                </p>
-
-                <p>Below you can log in to MyIRMA in two ways:</p>
+                <h2 id="login-header"><%= login_header %></h2>
+                <p><%= login_par1 %></p>
+                <p><%= login_par2 %></p>
+                <p><%= login_list %></p>
 
                 <ul>
-                    <li>
-                        Using IRMA, in particular using the attribute you received during
-                        registration containing your email address; this is the easiest way.
-                    </li>
-                    <li>
-                        Using the email address with which you registered. If you enter it
-                        below a link will be sent to it that will allow you to log in to
-                        MyIRMA. You can use this login method when you do not have your
-                        phone with you, or if your phone has been stolen and you want to
-                        prevent abuse of your IRMA app.
-                    </li>
+                    <li><%= login_list_1 %></li>
+                    <li><%= login_list_2 %></li>
                 </ul>
 
                 <div class="form-signin">
-                    <h3 class="form-signin-heading">Log in using</h3>
+                    <h3 class="form-signin-heading"><%= login_using  %></h3>
                     <form id="login-form-irma">
                         <button class="btn btn-lg btn-primary btn-block" type="submit" id="signin-button-irma">IRMA</button>
                     </form>
-                    <div id="login-separator">or</div>
+                    <div id="login-separator"><%= or %></div>
                     <form id="login-form-email">
                         <div class="input-group">
-                            <input type="email" id="input-email" class="form-control" placeholder="E-mailadres" required autofocus>
+                            <input type="email" id="input-email" class="form-control" placeholder="<%= login_email_address %>" required autofocus>
                             <span class="input-group-btn">
-                                <button class="btn btn-lg btn-primary" type="submit" id="signin-button-email">Email link</button>
+                                <button class="btn btn-lg btn-primary" type="submit" id="signin-button-email"><%= login_email_link %></button>
                             </span>
                         </div>
                     </form>
@@ -91,48 +71,33 @@
 
         <div class="container" id="login-done" hidden>
             <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-                <h2>Check your email</h2>
-                <p>Log in by clicking on the link that has been sent to your email address.</p>
+                <h2><%= login_check_email %></h2>
+                <p><%= login_check_email_text %></p>
             </div>
         </div> <!-- /container -->
 
         <div class="container" id="enrolment-container" hidden>
             <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-                <h2 class="text-center">Scheme manager QR</h2>
+                <h2 class="text-center"><%= scheme_manager_qr %></h2>
                 <div class="img-responsive center-block text-center">
                     <div id="enroll_qr"></div>
-                    <p>
-                        Scan the QR code with your IRMA app to install the scheme manager.
-                    </p>
+                    <p><%= scheme_manager_qr_text %></p>
                 </div>
             </div>
         </div>
 
         <div class="container" id="enrollment-email-issue" hidden>
             <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-                <h2>MyIRMA registration: step 4</h2>
+                <h2><%= enrollment_email_title %></h2>
 
-                <p>
-                    Your email address <span id="enrollment-email-address"></span> has been verified.
-                    Click below to load this address in your IRMA app as an attribute. You can use this
-                    attribute later to log in on MyIRMA. This is the final step in the registration
-                    process.
-                </p>
+                <p><%= enrollment_email_par1 %> <span id="enrollment-email-address"></span> <%= enrollment_email_par11 %></p>
+                <p><%= enrollment_email_par2 %></p>
 
-                <p>
-                    (Note: your browser must accept cookies in order for MyIRMA to work. If you do not
-                    load your email address as attribute now, you can still log in on MyIRMA later using
-                    your email address, and load it then.)
-                </p>
-
-                <button class="btn btn-primary" id="issue-email-btn">Load email adres attribute</button>
+                <button class="btn btn-primary" id="issue-email-btn"><%= enrollment_email_button %></button>
 
                 <div id="email-issue-help" hidden>
-                    <h3>What next?</h3>
-                    <p class="col-lg-6 col-md-6 col-xs-12">
-                        Get your phone, open the IRMA app, and tap "Tap to scan QR" on top of the screen.
-                        Scan the QR code and follow the on-screen instructions.
-                    </p>
+                    <h3><%= enrollment_email_whatnext %></h3>
+                    <p class="col-lg-6 col-md-6 col-xs-12"><%= enrollment_email_whatnext_text %></p>
                     <img src="img/irma-app.png" class="img-fluid img-thumbnail col-lg-6 col-md-6 col-xs-12" alt="IRMA app screenshot">
                 </div>
             </div>
@@ -140,18 +105,18 @@
 
         <div class="container" id="enrollment-finished" hidden>
             <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-                <h2>MyIRMA registration finished</h2>
+                <h2><%= enrollment_done %></h2>
                 <p>
-                    Congratulations! The MyIRMA registration is now finished, and your first IRMA attribute has been loaded in your IRMA app.
+                    <%= enrollment_done_text %>
                     <ul>
-                        <li><a href="/uitgifte">Load more attributes</a></li>
-                        <li><a id="show-main" href="#">Go to MyIRMA</a></li>
-                        <li><a id="enrollment-test-email-button" href="#">Test the email address attribute</a></li>
+                        <li><%= enrollment_done_list1 %></li>
+                        <li><a id="show-main" href="#"><%= enrollment_done_list2 %></a></li>
+                        <li><a id="enrollment-test-email-button" href="#"><%= enrollment_done_list3 %></a></li>
                     </ul>
                 </p>
                 <div id="email-issue-test" hidden>
-                    <h4>Verification succeeded</h4>
-                    Email adress: <span id="enrollment-test-email"></span>
+                    <h4><%= enrollment_done_verification %></h4>
+                    <%= enrollment_done_verification_text %>: <span id="enrollment-test-email"></span>
                 </div>
             </div>
         </div>
@@ -159,50 +124,40 @@
         <div class="container" id="user-container" hidden>
             <div class="col-xs-12 col-md-10 col-lg-8 col-md-offset-2 col-lg-offset-2">
                 <div class="clearfix" id="main-header-container">
-                    <h2 id="main-header">MyIRMA</h2>
-                    <button class="btn btn-primary pull-right" id="logout-btn">Log out</button>
+                    <h2 id="main-header"><%= myirma %></h2>
+                    <button class="btn btn-primary pull-right" id="logout-btn"><%= main_logout %></button>
                 </div>
-                <p><span id="username"></span></p>
+                <p><%= main_logged_in_as %><span id="username"></span></p>
 
                 <div id="issue-email-later" hidden>
-                    <h3>Load email address in your IRMA app</h3>
-                    <p>
-                        Click below to load your email address as an attribute in your IRMA app.
-                        You can use it later to log in on MyIRMA.
-                    </p>
-                    <button class="btn btn-primary issue-email-btn" id="issue-email-later-btn">Load email address attribute</button>
+                    <h3><%= main_issue_email %></h3>
+                    <p><%= main_issue_email_text  %></p>
+                    <button class="btn btn-primary issue-email-btn" id="issue-email-later-btn"><%= main_issue_email_button  %></button>
                 </div>
 
-                <h3>View usage of your IRMA app</h3>
-                <button class="btn" id="refresh-btn">Refresh</button>
-                <button class="btn" id="prev-btn"><span class="glyphicon glyphicon-chevron-left"></span> Previous</button>
-                <button class="btn" id="next-btn">Next <span class="glyphicon glyphicon-chevron-right"></span></button>
+                <h3><%= main_log  %></h3>
+                <button class="btn" id="refresh-btn"><%= main_log_refresh  %></button>
+                <button class="btn" id="prev-btn"><span class="glyphicon glyphicon-chevron-left"></span> <%= main_log_previous  %></button>
+                <button class="btn" id="next-btn"><%= main_log_next  %> <span class="glyphicon glyphicon-chevron-right"></span></button>
                 <table class="table" id="user-logs">
                     <thead>
                         <tr>
-                            <th>When</th>
-                            <th>Event</th>
+                            <th><%= main_when  %></th>
+                            <th><%= main_event  %></th>
                         </tr>
                     </thead>
                     <tbody id="user-logs-body">
                     </tbody>
                 </table>
 
-                <h3>Load or refresh attributes</h3>
-                Go to <a href="/issuance">this page</a> to load more attributes in your IRMA app, or refresh existing attributes.
+                <h3><%= main_issuance  %></h3>
+                <%= main_issuance_text  %>
 
-                <h3>Block or delete MyIRMA</h3>
-                <p>
-                    If you block your MyIRMA account all your attributes will become permanently unusable,
-                    but you can still view recent usage here. If you delete your MyIRMA account all events
-                    as well as your email address will additionally be permanently deleted.
-                </p>
-                <p>
-                    Blocking or deleting your MyIRMA account is permanent! If you want to use IRMA
-                    again afterwards you will have to re-register at MyIRMA and re-obtain all your attributes.
-                </p>
-                <button class="btn btn-danger" id="disable-btn" hidden>Block MyIRMA</button>
-                <button class="btn btn-danger" id="delete-btn" hidden>Delete MyIRMA</button>
+                <h3><%= main_block_or_delete  %></h3>
+                <p><%= main_block_or_par1  %></p>
+                <p><%= main_block_or_par2  %></p>
+                <button class="btn btn-danger" id="disable-btn" hidden><%= main_block  %></button>
+                <button class="btn btn-danger" id="delete-btn" hidden><%= main_delete  %></button>
             </div>
         </div>
 

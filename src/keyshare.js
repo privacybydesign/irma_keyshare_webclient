@@ -210,7 +210,7 @@ $(function() {
     }
 
     function updateUserContainer() {
-        $("#username").html("You are logged in as " + user.username);
+        $("#username").html(user.username);
         $("#disable-btn").prop("disabled", !user.enabled);
         if (user.emailIssued)
             $("#issue-email-later").hide();
