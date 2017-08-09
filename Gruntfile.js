@@ -41,9 +41,15 @@ module.exports = function (grunt) {
                 dest: "build/bower_components",
                 expand: "true",
             },
-            examples: {
+            source: {
                 cwd: "src",
                 src: ["**/*", "!**/*.html"],
+                dest: "build/",
+                expand: "true",
+            },
+            translated: {
+                cwd: "translated/english",
+                src: ["**/*"],
                 dest: "build/",
                 expand: "true",
             },
@@ -94,13 +100,46 @@ module.exports = function (grunt) {
                 ],
                 tasks: ["string-replace"],
             },
+            translationfiles: {
+                files: [
+                    "./src/languages/*",
+                ],
+                tasks: ["build"],
+            },
+        },
+        multi_lang_site_generator: {
+            default: {
+                options: {
+                    vocabs: ["english"],
+                    vocab_directory: "src/languages",
+                    output_directory: "translated",
+                },
+                files: {
+                    "index.html": ["build/index.html"],
+                    "keyshare.js": ["build/keyshare.js"],
+                },
+            },
         },
     });
 
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-string-replace");
+    grunt.loadNpmTasks("grunt-multi-lang-site-generator");
 
-    grunt.registerTask("default", ["copy", "string-replace", "watch"]);
-    grunt.registerTask("build", ["copy", "string-replace"]);
+    grunt.registerTask("default", [
+        "copy:source",
+        "copy:bower_bundle",
+        "string-replace",
+        "multi_lang_site_generator",
+        "copy:translated",
+        "watch",
+    ]);
+    grunt.registerTask("build", [
+        "copy:source",
+        "copy:bower_bundle",
+        "string-replace",
+        "multi_lang_site_generator",
+        "copy:translated",
+    ]);
 };
