@@ -1,15 +1,18 @@
 module.exports = function (grunt) {
     // Setup urls for the keyshare server, api server, and irma_js
     // these are used to configure the webclient
-    var keyshare_server_url, scheme_manager_url, api_server_url, api_web_url, irma_js_url;
+    var keyshare_server_url, scheme_manager_url, api_server_url, api_web_url, irma_js_url, language;
     if ( typeof(grunt.option("keyshare_server_url")) === "undefined") {
         console.log("INFO: set keyshare_server_url to create a working setup");
     }
     if ( typeof(grunt.option("scheme_manager_url")) === "undefined") {
-        console.log("INFO: set scheme_manager_url to create a working setup");
+        console.log("INFO: set scheme_manager_url to enable scheme manager QR");
     }
     if ( (typeof(grunt.option("api_server_url")) === "undefined") ) {
         console.log("INFO: set api_server_url (possibly also irma_js_url) to enable email issuing");
+    }
+    if ( (typeof(grunt.option("language")) === "undefined") ) {
+        console.log("INFO: No language chosen, assuming nl");
     }
 
     keyshare_server_url = grunt.option("keyshare_server_url");
@@ -19,6 +22,7 @@ module.exports = function (grunt) {
     api_web_url += "/server/";
     irma_js_url = grunt.option("irma_js_url") || grunt.option("api_server_url");
     irma_js_url += "/client/";
+    language = grunt.option("language") || "nl";
 
 
     console.log("keyshare server url:", keyshare_server_url);
@@ -26,6 +30,7 @@ module.exports = function (grunt) {
     console.log("api_server_url:", api_server_url);
     console.log("api_web_url:", api_web_url);
     console.log("irma_js_url:", irma_js_url);
+    console.log("language:", language);
 
     grunt.initConfig({
         copy: {
@@ -43,7 +48,7 @@ module.exports = function (grunt) {
                 expand: "true",
             },
             translated: {
-                cwd: "translated/en",
+                cwd: "translated/" + language,
                 src: ["**/*"],
                 dest: "build/",
                 expand: "true",
