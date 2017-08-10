@@ -43,7 +43,7 @@
 	"main_issuance_text": "Ga naar {URL=/uitgifte}deze pagina{/URL} om meer attributen in uw IRMA app te laden of om bestaande attributen te verversen.",
 	"main_block_or_delete": "Blokkeer of verwijder MijnIRMA",
 	"main_block_or_par1": "Als u uw MijnIRMA blokkeert worden al uw attributen permanent onbruikbaar, maar u kan nog steeds recent gebruik hier bekijken. Als u uw MijnIRMA verwijdert, worden alle gebeurtenissen en uw e-mailadres permanent gewist.",
-	"main_block_or_par2": "{I}Waarschuwing:{/I} uw MijnIRMA blokkeren of verwijderen is permanent! Als u daarna opnieuw IRMA wilt gaan gebruiken zal uw opnieuw bij MijnIRMA moeten registreren en al uw attributen opnieuw moeten verkrijgen.",
+	"main_block_or_par2": "{B}Waarschuwing:{/B} uw MijnIRMA blokkeren of verwijderen is permanent! Als u daarna opnieuw IRMA wilt gaan gebruiken zal uw opnieuw bij MijnIRMA moeten registreren en al uw attributen opnieuw moeten verkrijgen.",
 	"main_block": "Blokkeer MijnIRMA",
 	"main_delete": "Verwijder MijnIRMA",
 	"keyshare_error_occured": "Er is een fout opgetreden bij het inloggen.",

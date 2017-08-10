@@ -43,7 +43,7 @@
 	"main_issuance_text": "Go to {URL=/issuance}this page{/URL} to load more attributes in your IRMA app, or refresh existing attributes.",
 	"main_block_or_delete": "Block or delete MyIRMA",
 	"main_block_or_par1": "If you block your MyIRMA account all your attributes will become permanently unusable, but you can still view recent usage here. If you delete your MyIRMA account all events as well as your email address will additionally be permanently deleted.",
-	"main_block_or_par2": "{I}Warning{/I}: Blocking or deleting your MyIRMA account is permanent! If you want to use IRMA again afterwards you will have to re-register at MyIRMA and re-obtain all your attributes.",
+	"main_block_or_par2": "{B}Warning{/B}: Blocking or deleting your MyIRMA account is permanent! If you want to use IRMA again afterwards you will have to re-register at MyIRMA and re-obtain all your attributes.",
 	"main_block": "Block MyIRMA",
 	"main_delete": "Delete MyIRMA",
 	"keyshare_error_occured": "An error occured during login.",

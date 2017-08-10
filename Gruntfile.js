@@ -43,7 +43,7 @@ module.exports = function (grunt) {
             },
             translated: {
                 cwd: "translated/" + conf.language,
-                src: ["**/*"],
+                src: ["**/*.html"],
                 dest: "build/",
                 expand: "true",
             },

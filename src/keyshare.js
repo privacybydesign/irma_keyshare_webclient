@@ -1,7 +1,7 @@
 $(function() {
     var server, schememanager, conf, strings;
 
-    function getSetupFromJson() {
+    function getSetupFromJson(callback) {
         console.log("Running getSetupFromJson");
 
         $.getJSON("conf.json", function(json) {
@@ -14,6 +14,7 @@ $(function() {
             $.getJSON("languages/" + conf.language + ".json", function(text) {
                 strings = text;
                 console.log("Loaded language strings");
+                callback();
             });
         });
     }
@@ -452,13 +453,11 @@ $(function() {
 
     $("a.frontpage").attr("href", window.location.href.replace(window.location.hash, ""));
 
-    getSetupFromJson();
+    getSetupFromJson(function () {
+        if (!tryLoginFromUrl())
+            tryLoginFromCookie();
 
-    moment().locale("nl");
-
-    if (!tryLoginFromUrl())
-        tryLoginFromCookie();
-
-    if (!cookiesEnabled())
-        showError(strings.keyshare_cookies);
+        if (!cookiesEnabled())
+            showError(strings.keyshare_cookies);
+    });
 });
