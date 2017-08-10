@@ -1,7 +1,4 @@
 module.exports = function (grunt) {
-    // Setup urls for the keyshare server, api server, and irma_js
-    // these are used to configure the webclient
-    var keyshare_server_url, scheme_manager_url, api_server_url, api_web_url, irma_js_url, language;
     if ( typeof(grunt.option("keyshare_server_url")) === "undefined") {
         console.log("INFO: set keyshare_server_url to create a working setup");
     }
@@ -15,22 +12,19 @@ module.exports = function (grunt) {
         console.log("INFO: No language chosen, assuming nl");
     }
 
-    keyshare_server_url = grunt.option("keyshare_server_url");
-    scheme_manager_url = grunt.option("scheme_manager_url");
-    api_server_url = grunt.option("api_server_url") + "/api/v2/";
-    api_web_url = grunt.option("api_web_url") || grunt.option("api_server_url");
-    api_web_url += "/server/";
-    irma_js_url = grunt.option("irma_js_url") || grunt.option("api_server_url");
-    irma_js_url += "/client/";
-    language = grunt.option("language") || "nl";
+    var conf = {
+        keyshare_server_url: grunt.option("keyshare_server_url"),
+        scheme_manager_url: grunt.option("scheme_manager_url"),
+        api_server_url: grunt.option("api_server_url") + "/api/v2/",
+        api_web_url: grunt.option("api_web_url") || grunt.option("api_server_url"),
+        irma_js_url: grunt.option("irma_js_url") || grunt.option("api_server_url"),
+        language: grunt.option("language") || "nl",
+    };
 
+    conf.api_web_url += "/server/";
+    conf.irma_js_url += "/client/";
 
-    console.log("keyshare server url:", keyshare_server_url);
-    console.log("scheme manager url:", scheme_manager_url);
-    console.log("api_server_url:", api_server_url);
-    console.log("api_web_url:", api_web_url);
-    console.log("irma_js_url:", irma_js_url);
-    console.log("language:", language);
+    console.log("Configuration: ", conf);
 
     grunt.initConfig({
         copy: {
@@ -48,7 +42,7 @@ module.exports = function (grunt) {
                 expand: "true",
             },
             translated: {
-                cwd: "translated/" + language,
+                cwd: "translated/" + conf.language,
                 src: ["**/*"],
                 dest: "build/",
                 expand: "true",
@@ -65,21 +59,23 @@ module.exports = function (grunt) {
                 options: {
                     replacements: [{
                         pattern: /\[KEYSHARE_SERVER_URL\]/g,
-                        replacement: keyshare_server_url,
+                        replacement: conf.keyshare_server_url,
                     }, {
                         pattern: /\[SCHEME_MANAGER_URL\]/g,
-                        replacement: scheme_manager_url,
+                        replacement: conf.scheme_manager_url,
                     }, {
                         pattern: /\[API_SERVER_URL\]/g,
-                        replacement: api_server_url,
+                        replacement: conf.api_server_url,
                     }, {
                         pattern: /\[API_WEB_URL\]/g,
-                        replacement: api_web_url,
+                        replacement: conf.api_web_url,
                     }, {
                         pattern: /\[IRMA_JS_URL\]/g,
-                        replacement: irma_js_url,
-                    },
-                  ],
+                        replacement: conf.irma_js_url,
+                    }, {
+                        pattern: /\[LANGUAGE\]/g,
+                        replacement: conf.language,
+                    }],
                 },
             },
         },
@@ -116,15 +112,23 @@ module.exports = function (grunt) {
                 },
             },
         },
+        json_generator: {
+            configuration: {
+                dest: "build/conf.json",
+                options: conf,
+            },
+        },
     });
 
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-string-replace");
     grunt.loadNpmTasks("grunt-multi-lang-site-generator");
+    grunt.loadNpmTasks("grunt-json-generator");
 
     grunt.registerTask("default", [
         "copy:non_html",
+        "json_generator",
         "copy:bower_bundle",
         "string-replace",
         "multi_lang_site_generator",
@@ -133,6 +137,7 @@ module.exports = function (grunt) {
     ]);
     grunt.registerTask("build", [
         "copy:non_html",
+        "json_generator",
         "copy:bower_bundle",
         "string-replace",
         "multi_lang_site_generator",

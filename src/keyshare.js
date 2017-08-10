@@ -1,29 +1,21 @@
 $(function() {
-    var server, schememanager;
+    var server, schememanager, conf, strings;
 
-    function getSetupFromMetas() {
-        console.log("Running getSetupFromMetas");
-        var metas = document.getElementsByTagName("meta");
-        for (var i = 0; i < metas.length; i++) {
-            var meta_name = metas[i].getAttribute("name");
-            if (meta_name === null) {
-                continue;
-            }
+    function getSetupFromJson() {
+        console.log("Running getSetupFromJson");
 
-            meta_name = meta_name.toLowerCase();
-            console.log("Examining meta: ", meta_name);
-            if (meta_name === "keyshare-server-url") {
-                server = metas[i].getAttribute("value");
-                console.log("Keyshare Server set to", server);
-            }
-            if (meta_name === "scheme-mananger-url") {
-                var val = metas[i].getAttribute("value");
-                if (val !== "undefined") {
-                    schememanager = metas[i].getAttribute("value");
-                    console.log("Scheme manager set to", server);
-                }
-            }
-        }
+        $.getJSON("conf.json", function(json) {
+            conf = json;
+            server = conf.keyshare_server_url;
+            schememanager = conf.scheme_manager_url;
+            moment().locale(conf.language);
+            console.log("Configuration:", conf);
+
+            $.getJSON("languages/" + conf.language + ".json", function(text) {
+                strings = text;
+                console.log("Loaded language strings");
+            });
+        });
     }
 
     function loginSuccess() {
@@ -34,7 +26,7 @@ $(function() {
 
     function loginError(jqXHR, status, error) {
         console.log(jqXHR, status, error);
-        showError("An error occured during login.");
+        showError(strings.keyshare_error_occured);
     }
 
     function showError(message) {
@@ -108,7 +100,7 @@ $(function() {
             url: server + "/web/users/" + userId,
             success: showUserPortal,
             error: function() {
-                showError("Session has expired or is invalid, please login again.");
+                showError(strings.keyshare_session_expired);
                 Cookies.remove("sessionid", { path: "/" });
                 showLogin();
             },
@@ -119,19 +111,19 @@ $(function() {
 
     $("#disable-btn").on("click", function() {
         BootstrapDialog.show({
-            title: "Block MyIRMA?",
-            message: "If you proceed, all your attributes will become permanently unusable. Are you certain?",
+            title: strings.keyshare_block_question,
+            message: strings.keyshare_block_message,
             type: BootstrapDialog.TYPE_DANGER,
             buttons: [{
                 id: "disable-cancel",
-                label: "Cancel",
+                label: strings.keyshare_cancel,
                 cssClass: "btn-secondary",
                 action: function(dialogRef) {
                     dialogRef.close();
                 },
             }, {
                 id: "disable-confirm",
-                label: "Block",
+                label: strings.keyshare_block,
                 cssClass: "btn-danger",
                 action: function(dialogRef) {
                     $.ajax({
@@ -149,27 +141,26 @@ $(function() {
 
     $("#delete-btn").on("click", function() {
         BootstrapDialog.show({
-            title: "Delete MyIRMA?",
-            message: "If you proceed, all your attributes will become permanently unusable, "
-                   + "and your logs and email address will be deleted from MyIRMA. Are you certain?",
+            title: strings.keyshare_delete_question,
+            message: strings.keyshare_delete_message,
             type: BootstrapDialog.TYPE_DANGER,
             buttons: [{
                 id: "delete-cancel",
-                label: "Cancel",
+                label: strings.keyshare_cancel,
                 cssClass: "btn-secondary",
                 action: function(dialogRef) {
                     dialogRef.close();
                 },
             }, {
                 id: "delete-confirm",
-                label: "Delete",
+                label: strings.keyshare_delete,
                 cssClass: "btn-danger",
                 action: function(dialogRef) {
                     $.ajax({
                         type: "POST",
                         url: server + "/web/users/" + user.ID + "/delete",
                         success: function() {
-                            showLoginContainer("MyIRMA account deleted.");
+                            showLoginContainer(strings.keyshare_deleted);
                         },
                     });
                     dialogRef.close();
@@ -195,7 +186,7 @@ $(function() {
             type: "GET",
             url: server + "/web/logout",
             success: function() {
-                showLoginContainer("You are now logged out.");
+                showLoginContainer(strings.keyshare_loggedout);
             },
         });
     });
@@ -261,28 +252,15 @@ $(function() {
     }
 
     function getEventString(entry) {
-        switch (entry.event) {
-            case "PIN_CHECK_REFUSED":
-                return "PIN verification blocked";
-            case "IRMA_APP_AUTH_REFUSED":
-                return "IRMA session blocked";
-            case "PIN_CHECK_SUCCESS":
-                return "PIN verified";
-            case "PIN_CHECK_FAILED":
-                return "PIN wrong, " + entry.param + " attempts remaining";
-            case "PIN_CHECK_BLOCKED":
-                return "PIN wrong too often, blocked " + entry.param + " seconds";
-            case "IRMA_SESSION":
-                return "Performed IRMA session";
-            case "IRMA_ENABLED":
-                return "MyIRMA enabled";
-            case "IRMA_BLOCKED":
-                return "MyIRMA blocked";
-
-            default:
-                showError("Received unexpected log entry type");
-                return "";
+        if (typeof strings === "undefined") {
+            // If strings are not yet loaded, fail silently
+            return "";
         }
+        if (!("keyshare_event_" + entry.event in strings)) {
+            showError(strings.keyshare_event_error);
+            return "";
+        }
+        return strings["keyshare_event_" + entry.event].replace("{0}", entry.param);
     }
 
     $("#prev-btn").on("click", function() {
@@ -347,7 +325,7 @@ $(function() {
                         processUrlLogin(data, path);
                     },
                     error: function() {
-                        showError("An error occured during email verification.");
+                        showError(strings.keyshare_verification_error);
                     },
                 });
                 removeHashFromUrl();
@@ -379,7 +357,7 @@ $(function() {
                 break;
 
             default:
-                showError("Invalid path specified after #");
+                showError(strings.keyshare_invalid_path);
                 return false;
         }
 
@@ -474,7 +452,7 @@ $(function() {
 
     $("a.frontpage").attr("href", window.location.href.replace(window.location.hash, ""));
 
-    getSetupFromMetas();
+    getSetupFromJson();
 
     moment().locale("nl");
 
@@ -482,5 +460,5 @@ $(function() {
         tryLoginFromCookie();
 
     if (!cookiesEnabled())
-        showError("MyIRMA uses cookiues. Please enable cookies and retry.");
+        showError(strings.keyshare_cookies);
 });
