@@ -48,7 +48,7 @@ module.exports = function (grunt) {
                 expand: "true",
             },
             translated: {
-                cwd: "translated/english",
+                cwd: "translated/dutch",
                 src: ["**/*"],
                 dest: "build/",
                 expand: "true",
@@ -110,7 +110,7 @@ module.exports = function (grunt) {
         multi_lang_site_generator: {
             default: {
                 options: {
-                    vocabs: ["english"],
+                    vocabs: ["english", "dutch"],
                     vocab_directory: "src/languages",
                     output_directory: "translated",
                 },
