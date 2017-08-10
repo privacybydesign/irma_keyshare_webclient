@@ -41,7 +41,7 @@ module.exports = function (grunt) {
                 dest: "build/bower_components",
                 expand: "true",
             },
-            source: {
+            non_html: {
                 cwd: "src",
                 src: ["**/*", "!**/*.html"],
                 dest: "build/",
@@ -59,7 +59,7 @@ module.exports = function (grunt) {
                 files: [{
                     cwd: "./src",
                     src: ["**/*.html"],
-                    dest: "build/",
+                    dest: "translated/",
                     expand: "true",
                 }],
                 options: {
@@ -92,7 +92,7 @@ module.exports = function (grunt) {
                     "./src/**/*",
                     "!./src/**/*.html",
                 ],
-                tasks: ["copy"],
+                tasks: ["copy:non_html"],
             },
             htmlfiles: {
                 files: [
@@ -115,8 +115,7 @@ module.exports = function (grunt) {
                     output_directory: "translated",
                 },
                 files: {
-                    "index.html": ["build/index.html"],
-                    "keyshare.js": ["build/keyshare.js"],
+                    "index.html": ["translated/index.html"],
                 },
             },
         },
@@ -128,7 +127,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-multi-lang-site-generator");
 
     grunt.registerTask("default", [
-        "copy:source",
+        "copy:non_html",
         "copy:bower_bundle",
         "string-replace",
         "multi_lang_site_generator",
@@ -136,14 +135,13 @@ module.exports = function (grunt) {
         "watch",
     ]);
     grunt.registerTask("build", [
-        "copy:source",
+        "copy:non_html",
         "copy:bower_bundle",
         "string-replace",
         "multi_lang_site_generator",
         "copy:translated",
     ]);
     grunt.registerTask("translate", [
-        "copy:source",
         "string-replace",
         "multi_lang_site_generator",
         "copy:translated",
