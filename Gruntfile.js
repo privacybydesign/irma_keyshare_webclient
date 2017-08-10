@@ -1,12 +1,9 @@
 module.exports = function (grunt) {
     // Setup urls for the keyshare server, api server, and irma_js
     // these are used to configure the webclient
-    var keyshare_server_url, scheme_manager_name, scheme_manager_url, api_server_url, api_web_url, irma_js_url;
+    var keyshare_server_url, scheme_manager_url, api_server_url, api_web_url, irma_js_url;
     if ( typeof(grunt.option("keyshare_server_url")) === "undefined") {
         console.log("INFO: set keyshare_server_url to create a working setup");
-    }
-    if ( typeof(grunt.option("scheme_manager_name")) === "undefined") {
-        console.log("INFO: set scheme_manager_name to create a working setup");
     }
     if ( typeof(grunt.option("scheme_manager_url")) === "undefined") {
         console.log("INFO: set scheme_manager_url to create a working setup");
@@ -16,7 +13,6 @@ module.exports = function (grunt) {
     }
 
     keyshare_server_url = grunt.option("keyshare_server_url");
-    scheme_manager_name = grunt.option("scheme_manager_name");
     scheme_manager_url = grunt.option("scheme_manager_url");
     api_server_url = grunt.option("api_server_url") + "/api/v2/";
     api_web_url = grunt.option("api_web_url") || grunt.option("api_server_url");
@@ -26,7 +22,6 @@ module.exports = function (grunt) {
 
 
     console.log("keyshare server url:", keyshare_server_url);
-    console.log("scheme manager name:", scheme_manager_name);
     console.log("scheme manager url:", scheme_manager_url);
     console.log("api_server_url:", api_server_url);
     console.log("api_web_url:", api_web_url);
@@ -66,9 +61,6 @@ module.exports = function (grunt) {
                     replacements: [{
                         pattern: /\[KEYSHARE_SERVER_URL\]/g,
                         replacement: keyshare_server_url,
-                    }, {
-                        pattern: /\[SCHEME_MANAGER_NAME\]/g,
-                        replacement: scheme_manager_name,
                     }, {
                         pattern: /\[SCHEME_MANAGER_URL\]/g,
                         replacement: scheme_manager_url,
