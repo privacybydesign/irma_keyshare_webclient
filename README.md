@@ -1,7 +1,7 @@
 IRMA keyshare webclient
 ======================
 
-This project contains all the web sources to interact with an [IRMA keyshare server](https://github.com/credentials/irma_keyshare_server). Currently these pages should be considered a *prototype* implementation of a web interface for the keyshare server. In particular it allows users to
+This project contains all the web sources to interact with an [IRMA keyshare server](https://github.com/credentials/irma_keyshare_server). In particular it allows users to
 
  * register an account with a keyshare server, so that it can benefit from the extra security offered by this server;
  * inspect a log of recent actions; and
@@ -22,9 +22,9 @@ by installing grunt and bower. Then run
 to install the node dependencies and JavaScript libraries. Finally run
 
     grunt build --keyshare_server_url="http://<YOUR_SERVER>:8080/irma_keyshare_server/api/v1" \
-      --scheme_manager_name="<NAME>" \
       --scheme_manager_url="<URL>" \
-      --api_server_url="http://<YOUR_SERVER>:8081/irma_api_server"
+      --api_server_url="http://<YOUR_SERVER>:8081/irma_api_server" \
+      --language="en"
 
 to compile the web sources. See below for how to setup server URLs for a local or remote server. If you skip the `build` keyword, grunt keeps rebuilding the files as they change. (Make sure that you run `grunt build` at least once to make sure everything gets build, or just run `grunt build watch` to build and keep building.)
 
