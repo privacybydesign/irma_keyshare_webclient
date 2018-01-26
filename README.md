@@ -23,7 +23,7 @@ to install the node dependencies and JavaScript libraries. Finally run
 
     grunt build --keyshare_server_url="http://<YOUR_SERVER>:8080/irma_keyshare_server/api/v1" \
       --scheme_manager_url="<URL>" \
-      --api_server_url="http://<YOUR_SERVER>:8081/irma_api_server" \
+      --api_server_url="http://<YOUR_SERVER>:8088/irma_api_server" \
       --language="en"
 
 to compile the web sources. See below for how to setup server URLs for a local or remote server. If you skip the `build` keyword, grunt keeps rebuilding the files as they change. (Make sure that you run `grunt build` at least once to make sure everything gets build, or just run `grunt build watch` to build and keep building.)
