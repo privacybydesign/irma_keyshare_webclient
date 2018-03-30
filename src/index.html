@@ -95,12 +95,6 @@
                 <p><%= enrollment_email_par2 %></p>
 
                 <button class="btn btn-primary" id="issue-email-btn"><%= enrollment_email_button %></button>
-
-                <div id="email-issue-help" hidden>
-                    <h3><%= enrollment_email_whatnext %></h3>
-                    <p class="col-lg-6 col-md-6 col-xs-12"><%= enrollment_email_whatnext_text %></p>
-                    <img src="img/irma-app.png" class="img-fluid img-thumbnail col-lg-6 col-md-6 col-xs-12" alt="IRMA app screenshot">
-                </div>
             </div>
         </div>
 
@@ -112,13 +106,8 @@
                     <ul>
                         <li><%= enrollment_done_list1 %></li>
                         <li><a id="show-main" href="#"><%= enrollment_done_list2 %></a></li>
-                        <li><a id="enrollment-test-email-button" href="#"><%= enrollment_done_list3 %></a></li>
                     </ul>
                 </p>
-                <div id="email-issue-test" hidden>
-                    <h4><%= enrollment_done_verification %></h4>
-                    <%= enrollment_done_verification_text %>: <span id="enrollment-test-email"></span>
-                </div>
             </div>
         </div>
 
@@ -150,6 +139,20 @@
                     <tbody id="user-logs-body">
                     </tbody>
                 </table>
+
+                <div id="known-email-addresses">
+                    <h3>E-mailadressen</h3>
+                    <p id="known-email-addresses-text">De volgende e-mailadressen zijn geassocieerd met uw account. Met ieder van deze e-mailadressen kunt u inloggen op MijnIRMA.</p>
+                    <p id="no-known-email-addresses-text">Er zijn geen e-mailadressen geassocieerd met uw account. Dit betekent dat u niet op MijnIRMA in kunt loggen en uw attributen kunt blokkeren, mocht u uw telefoon kwijtraken.</p>
+                    <table class="table" id="email-addresses">
+                        <thead>
+                            <tr><th>E-mailadres</th></tr>
+                        </thead>
+                        <tbody id="email-addresses-body">
+                        </tbody>
+                    </table>
+                    <button class="btn btn-primary issue-email-btn" id="add-email-btn">Voeg e-mailadres toe</button>
+                </div>
 
                 <h3><%= main_issuance  %></h3>
                 <%= main_issuance_text  %>
