@@ -68,7 +68,7 @@ $(function() {
         $("#alert_box").empty();
 
         var email = $("#input-email").prop("value");
-        var loginObject = { "username": email };
+        var loginObject = { "email": email, "language": conf.language };
 
         $.ajax({
             type: "POST",
@@ -208,7 +208,47 @@ $(function() {
             $("#issue-email-later").hide();
         else
             $("#issue-email-later").show();
+        updateEmailAddresses();
         updateUserLogs();
+    }
+
+    function updateEmailAddresses() {
+        if (user.emailAddresses.length > 0) {
+            $("#no-known-email-addresses-text").hide();
+            $("#known-email-addresses-text").show();
+        } else {
+            $("#known-email-addresses-text").hide();
+            $("#no-known-email-addresses-text").show();
+        }
+
+        var tableContent = $("#email-addresses-body");
+        tableContent.empty();
+        for (var i = 0; i < user.emailAddresses.length; i++) {
+            tableContent.append("<tr><td>" + user.emailAddresses[i] + "</td></tr>");
+        }
+    }
+
+    $("#add-email-btn").on("click", function() {
+        $.ajax({
+            type: "GET",
+            url: server + "/web/users/" + user.ID + "/add_email",
+            success: function(data) {
+                IRMA.verify(data, showEmailSuccess, showWarning, showError);
+            },
+            error: showError,
+        });
+    });
+
+    function showEmailSuccess(jwt) {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            contentType: "text/plain",
+            url: server + "/web/users/" + user.ID + "/add_email",
+            data: jwt,
+            success: showUserPortal,
+            error: showError,
+        });
     }
 
     var logStart = 0, logNext = 0, logPrev = 0;
@@ -426,22 +466,6 @@ $(function() {
         issueEmail(function() {
             $("#issue-email-later").hide();
         });
-    });
-
-    $("#enrollment-test-email-button").on("click", function() {
-        $.ajax({
-            type: "GET",
-            url: server + "/web/users/" + user.ID + "/test_email",
-            success: function(verify_jwt) {
-                IRMA.verify(verify_jwt, function(result_jwt) {
-                    var email = jwt_decode(result_jwt).attributes["pbdf.pbdf.mijnirma.email"];
-                    $("#enrollment-test-email").html(email);
-                    $("#email-issue-test").show();
-                }, showWarning, showError);
-            },
-            error: showError,
-        });
-        return false;
     });
 
     $("#show-main").on("click", function() {
