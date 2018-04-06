@@ -197,6 +197,7 @@ $(function() {
         user = data;
 
         updateUserContainer();
+        $("#user-candidates-container").hide();
         $("#login-container").hide();
         $("#user-container").show();
     }
@@ -336,7 +337,7 @@ $(function() {
             || (document.cookie = "test").indexOf.call(document.cookie, "test") > -1));
     }
 
-    function tryLoginFromUrl() {
+    function tryLoginFromUrl(username) {
         if (!window.location.hash)
             return false;
 
@@ -359,9 +360,12 @@ $(function() {
                 if (parts.length !== 2)
                     return false;
 
+                var loginUrl = server + "/web/" + path + "/" + token;
+                if (username !== undefined)
+                    loginUrl += "/" + username;
                 $.ajax({
                     type: "GET",
-                    url: server + "/web/" + path + "/" + token,
+                    url: loginUrl,
                     success: function(data) {
                         processUrlLogin(data, path);
                     },
@@ -369,7 +373,6 @@ $(function() {
                         showError(strings.keyshare_verification_error);
                     },
                 });
-                removeHashFromUrl();
                 break;
 
             case "qr":
@@ -414,13 +417,46 @@ $(function() {
     }
 
     function processUrlLogin(data, path) {
-        user = data;
         if (path === "enroll") {
             $("#enrollment-email-issue").show();
-            $("span#enrollment-email-address").html(user.username);
+            $("span#enrollment-email-address").html(data.username);
+            return;
         }
-        else
-            showUserPortal(data);
+
+        if ("candidates" in data && Object.keys(data.candidates).length > 0) {
+            showUserCandidates(data.candidates);
+        } else {
+            user = data;
+            removeHashFromUrl();
+            showUserPortal(user);
+        }
+    }
+
+    function showUserCandidates(candidates) {
+        $("#user-candidates-container").show();
+        var tableContent = $("#user-candidates-body");
+        var candidate;
+        var relTime, absTime = "";
+        for (var i = 0; i < candidates.length; i++) {
+            candidate = candidates[i];
+            if (!Number.isInteger(candidate.lastActive) || candidate.lastActive === 0) {
+                relTime = "Never";
+            } else {
+                absTime = moment.unix(candidate.lastActive).format("dddd, D MMM YYYY, H:mm:ss");
+                relTime = moment.unix(candidate.lastActive).fromNow();
+            }
+            tableContent.append("<tr><td>" + candidate.username
+                + "</td><td title='" + absTime + "'>" + relTime
+                + "</td><td id=login-" + candidate.username + "></td></tr>");
+            $("#login-" + candidate.username).append($("<button>", {
+                class: "btn btn-primary btn-sm",
+                text: "Login",
+                // Ugly voodoo to capture the current value of candidate.username into the callback
+                click: (function (username) { return function() {
+                    tryLoginFromUrl(username);
+                };})(candidate.username),
+            }));
+        }
     }
 
     function showLogin() {
