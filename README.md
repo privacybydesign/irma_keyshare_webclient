@@ -22,7 +22,6 @@ by installing grunt and bower. Then run
 to install the node dependencies and JavaScript libraries. Finally run
 
     grunt build --keyshare_server_url="http://<YOUR_SERVER>:8080/irma_keyshare_server/api/v1" \
-      --scheme_manager_url="<URL>" \
       --api_server_url="http://<YOUR_SERVER>:8088/irma_api_server" \
       --language="en"
 
@@ -33,8 +32,6 @@ Typically, you want `<YOUR_SERVER>` to be publicly reachable, or at least reacha
 ### Arguments
 
  * `--keyshare_server_url`: specifies the URL of the keyshare server to use
- * `--scheme_manager_name`: name of the scheme manager that this keyshare server is associated to
- * `--scheme_manager_url` (optional): url of the scheme manager. Used to generate a QR that the IRMA app can scan to install this scheme mananger. (If absent, this QR will not be shown.)
  * `--api_server_url`: url of the [API server](https://github.com/privacybydesign/irma_api_server) to use for issuing and verifying email attributes
  * `--api_web_url` (optional): url of the disclosing or issuance HTML popup for for [irma_js](https://github.com/privacybydesign/irma_js). (If absent, will be derived from the `--api_server_url` parameter.)
  * `--irma_js` (optional): url of the [irma_js](https://github.com/privacybydesign/irma_js) client. (If absent, will be derived from the `--api_server_url` parameter.)

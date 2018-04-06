@@ -12,8 +12,6 @@
 	"login_email_link": "E-mail link",
 	"login_check_email": "Controleer uw e-mail",
 	"login_check_email_text": "Log in door te klikken op de link die naar uw e-mailadres is verstuurd.",
-	"scheme_manager_qr": "Scheme manager QR",
-	"scheme_manager_qr_text": "Scan de QR-code met uw IRMA app om de scheme manager te installeren.",
 	"enrollment_email_title": "MijnIRMA-registratie: stap 4",
 	"enrollment_email_par1": "Uw e-mailadres",
 	"enrollment_email_par11": "is nu gecontroleerd. Klik hieronder om dit adres in uw IRMA app te laden. U kunt deze later gebruiken om in te loggen op MijnIRMA. Dit is de laatste stap in het registratieproces.",

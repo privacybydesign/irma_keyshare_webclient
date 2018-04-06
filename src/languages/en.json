@@ -12,8 +12,6 @@
 	"login_email_link": "Email link",
 	"login_check_email": "Check your email",
 	"login_check_email_text": "Log in by clicking on the link that has been sent to your email address.",
-	"scheme_manager_qr": "Scheme manager QR",
-	"scheme_manager_qr_text": "Scan the QR code with your IRMA app to install the scheme manager.",
 	"enrollment_email_title": "MyIRMA registration: step 4",
 	"enrollment_email_par1": "Your email address",
 	"enrollment_email_par11": "has been verified. Click below to load this address in your IRMA app as an attribute. You can use this attribute later to log in on MyIRMA. This is the final step in the registration process.",

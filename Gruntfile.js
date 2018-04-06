@@ -2,9 +2,6 @@ module.exports = function (grunt) {
     if ( typeof(grunt.option("keyshare_server_url")) === "undefined") {
         console.log("INFO: set keyshare_server_url to create a working setup");
     }
-    if ( typeof(grunt.option("scheme_manager_url")) === "undefined") {
-        console.log("INFO: set scheme_manager_url to enable scheme manager QR");
-    }
     if ( (typeof(grunt.option("api_server_url")) === "undefined") ) {
         console.log("INFO: set api_server_url (possibly also irma_js_url) to enable email issuing");
     }
@@ -14,7 +11,6 @@ module.exports = function (grunt) {
 
     var conf = {
         keyshare_server_url: grunt.option("keyshare_server_url"),
-        scheme_manager_url: grunt.option("scheme_manager_url"),
         api_server_url: grunt.option("api_server_url") + "/api/v2/",
         api_web_url: grunt.option("api_web_url") || grunt.option("api_server_url"),
         irma_js_url: grunt.option("irma_js_url") || grunt.option("api_server_url"),
@@ -62,9 +58,6 @@ module.exports = function (grunt) {
                     replacements: [{
                         pattern: /\[KEYSHARE_SERVER_URL\]/g,
                         replacement: conf.keyshare_server_url,
-                    }, {
-                        pattern: /\[SCHEME_MANAGER_URL\]/g,
-                        replacement: conf.scheme_manager_url,
                     }, {
                         pattern: /\[API_SERVER_URL\]/g,
                         replacement: conf.api_server_url,

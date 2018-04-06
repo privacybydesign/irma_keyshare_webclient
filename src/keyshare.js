@@ -2,10 +2,9 @@ var strings = {};
 var conf = {};
 
 $(function() {
-    var server, schememanager;
+    var server;
 
     server = conf.keyshare_server_url;
-    schememanager = conf.scheme_manager_url;
     moment.locale(conf.language);
 
     function loginSuccess() {
@@ -433,8 +432,6 @@ $(function() {
 
     function showLogin() {
         $("#login-container").show();
-        if (typeof(schememanager) === "undefined")
-            $("#register").hide();
     }
 
     function issueEmail(successCallback) {
