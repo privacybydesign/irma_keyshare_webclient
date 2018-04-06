@@ -75,5 +75,8 @@
 	"login": "Log in",
 	"candidates_title": "Kies IRMA-account",
 	"candidates_username": "Gebruikersnaam",
-	"candidates_lastseen": "Laatst actief"
+	"candidates_lastseen": "Laatst actief",
+	"candidates_explanation": "Het e-mailadres waarmee u inlogt is gekoppeld aan meerdere IRMA-accounts, die in onderstaande tabel worden weergegeven. De betekenis van de kolommen is als volgt:",
+	"candidates_item_1": "uw IRMA gebruikersnaam. Deze staat in uw IRMA-app als het \"Username\"-attribuut onder \"MyIRMA login\".",
+	"candidates_item_2": "wanneer er voor het laatst attributen zijn ontvangen of vrijgegeven met dit account."
 }

@@ -75,5 +75,8 @@
 	"login": "Login",
 	"candidates_title": "Choose IRMA account",
 	"candidates_username": "Username",
-	"candidates_lastseen": "Last active"
+	"candidates_lastseen": "Last active",
+	"candidates_explanation": "The email address with which you are logging in is associated to multiple IRMA accounts, which are shown in the table below. The columns mean the following:",
+	"candidates_item_1": "Your IRMA username. You can find this in your IRMA app as the \"Username\"-attribute under \"MyIRMA login\".",
+	"candidates_item_2": "Time of the most recent attribute usage of this IRMA account."
 }

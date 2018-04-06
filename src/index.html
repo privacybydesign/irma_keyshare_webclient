@@ -104,6 +104,13 @@
         <div class="container" id="user-candidates-container" hidden>
             <div class="col-xs-12 col-md-10 col-lg-8 col-md-offset-2 col-lg-offset-2">
                 <h3><%= candidates_title %></h3>
+                <p>
+                    <%= candidates_explanation %>
+                </p>
+                <ul>
+                    <li><strong><%= candidates_username %>:</strong> <%= candidates_item_1 %></li>
+                    <li><strong><%= candidates_lastseen %>:</strong> <%= candidates_item_2 %></li>
+                </ul>
                 <table class="table" id="user-candidates">
                     <thead>
                         <tr>

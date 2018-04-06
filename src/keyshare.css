@@ -75,3 +75,7 @@ body {
 #refresh-btn, #disable-btn {
     margin-right: 1em;
 }
+
+#user-candidates {
+    margin-top: 2em;
+}
