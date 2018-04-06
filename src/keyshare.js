@@ -95,11 +95,11 @@ $(function() {
         });
     }
 
-    function getUserObject(userId) {
+    function getUserObject(userId, onDone) {
         $.ajax({
             type: "GET",
             url: server + "/web/users/" + userId,
-            success: showUserPortal,
+            success: onDone,
             error: function() {
                 showError(strings.keyshare_session_expired);
                 Cookies.remove("sessionid", { path: "/" });
@@ -191,6 +191,13 @@ $(function() {
             },
         });
     });
+
+    function showEnrolled(data) {
+        user = data;
+        Cookies.remove("enroll", { path: "/" });
+        $("#enrollment-email-issue").show();
+        $("span#enrollment-email-address").html(user.username);
+    }
 
     function showUserPortal(data) {
         console.log("Showing user Portal now");
@@ -322,11 +329,30 @@ $(function() {
     });
 
     function tryLoginFromCookie() {
+        var token = Cookies.get("token");
+        if (token !== undefined) {
+            // Multiple user candidates were found, and we are not yet logged in
+            // Fetch the candidates and render them in a table, allowing the user to choose one
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: server + "/web/candidates/" + token,
+                success: function(data) {
+                    showUserCandidates(token, data.candidates);
+                },
+                // TODO error
+            });
+            return;
+        }
+
         var sessionId = Cookies.get("sessionid");
         var userId = Cookies.get("userid");
-
         if (sessionId !== undefined) {
-            getUserObject(userId);
+            if (Cookies.get("enroll") === "true") {
+                getUserObject(userId, showEnrolled);
+            } else {
+                getUserObject(userId, showUserPortal);
+            }
         } else {
             showLogin();
         }
@@ -337,102 +363,7 @@ $(function() {
             || (document.cookie = "test").indexOf.call(document.cookie, "test") > -1));
     }
 
-    function tryLoginFromUrl(username) {
-        if (!window.location.hash)
-            return false;
-
-        var hash = window.location.hash.substring(1);
-        var parts = hash.split("/");
-        var path = parts[0];
-        var token = parts[1];
-
-        console.log("Path: ", path);
-        console.log("Token: ", token);
-
-        if (path !== "enroll" && path !== "login" && path !== "qr")
-            return false;
-
-        switch (path) {
-            case "enroll":
-            case "login":
-                if (!cookiesEnabled()) // Can't do anything in this case
-                    return false;
-                if (parts.length !== 2)
-                    return false;
-
-                var loginUrl = server + "/web/" + path + "/" + token;
-                if (username !== undefined)
-                    loginUrl += "/" + username;
-                $.ajax({
-                    type: "GET",
-                    url: loginUrl,
-                    success: function(data) {
-                        processUrlLogin(data, path);
-                    },
-                    error: function() {
-                        showError(strings.keyshare_verification_error);
-                    },
-                });
-                break;
-
-            case "qr":
-                var url = schememanager;
-                if (typeof token !== "undefined" && token.length > 0)
-                    url = decodeURIComponent(token);
-                if ( /Android/i.test(navigator.userAgent) ) {
-                    window.location.href = "intent://#Intent;package=org.irmacard.cardemu;scheme=schememanager;"
-                        + "S.url=" + encodeURIComponent(url) + ";"
-                        + "S.browser_fallback_url=http%3A%2F%2Fapp.irmacard.org%2Fschememanager;end";
-                }
-
-                else {
-                    $("#login-container").hide();
-                    $("#enrolment-container").show();
-                    var qr_data = {
-                        irmaqr: "schememanager",
-                        url: url,
-                    };
-                    console.log(qr_data);
-                    $("#enroll_qr").qrcode({
-                        text: JSON.stringify(qr_data),
-                        size: 256,
-                    });
-                }
-                break;
-
-            default:
-                showError(strings.keyshare_invalid_path);
-                return false;
-        }
-
-        return true;
-    }
-
-    function removeHashFromUrl() {
-        var loc = window.location;
-        if ("pushState" in history)
-            history.pushState("", document.title, loc.pathname + loc.search);
-        else // For IE9 and below. May cause the page to scroll up
-            loc.hash = "";
-    }
-
-    function processUrlLogin(data, path) {
-        if (path === "enroll") {
-            $("#enrollment-email-issue").show();
-            $("span#enrollment-email-address").html(data.username);
-            return;
-        }
-
-        if ("candidates" in data && Object.keys(data.candidates).length > 0) {
-            showUserCandidates(data.candidates);
-        } else {
-            user = data;
-            removeHashFromUrl();
-            showUserPortal(user);
-        }
-    }
-
-    function showUserCandidates(candidates) {
+    function showUserCandidates(token, candidates) {
         $("#user-candidates-container").show();
         var tableContent = $("#user-candidates-body");
         var candidate;
@@ -452,9 +383,16 @@ $(function() {
                 class: "btn btn-primary btn-sm",
                 text: "Login",
                 // Ugly voodoo to capture the current value of candidate.username into the callback
-                click: (function (username) { return function() {
-                    tryLoginFromUrl(username);
-                };})(candidate.username),
+                click: (function (token, username) { return function() {
+                    $.ajax({
+                        type: "GET",
+                        url: server + "/web/login/" + token + "/" + username,
+                        success: tryLoginFromCookie,
+                        error: function() {
+                            showError(strings.keyshare_verification_error);
+                        },
+                    });
+                };})(token, candidate.username),
             }));
         }
     }
@@ -514,10 +452,9 @@ $(function() {
     $("a.frontpage").attr("href", window.location.href.replace(window.location.hash, ""));
 
     getSetupFromJson(function () {
-        if (!tryLoginFromUrl())
-            tryLoginFromCookie();
-
         if (!cookiesEnabled())
             showError(strings.keyshare_cookies);
+        else
+            tryLoginFromCookie();
     });
 });
