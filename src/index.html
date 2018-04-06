@@ -157,11 +157,14 @@
                     </tbody>
                 </table>
 
+                <h3><%= main_issuance  %></h3>
+                <%= main_issuance_text  %>
+
                 <div id="known-email-addresses">
                     <h3>E-mailadressen</h3>
                     <p id="known-email-addresses-text">De volgende e-mailadressen zijn geassocieerd met uw account. Met ieder van deze e-mailadressen kunt u inloggen op MijnIRMA.</p>
                     <p id="no-known-email-addresses-text">Er zijn geen e-mailadressen geassocieerd met uw account. Dit betekent dat u niet op MijnIRMA in kunt loggen en uw attributen kunt blokkeren, mocht u uw telefoon kwijtraken.</p>
-                    <table class="table" id="email-addresses">
+                    <table class="table" id="email-addresses-table">
                         <thead>
                             <tr><th>E-mailadres</th></tr>
                         </thead>
@@ -170,9 +173,6 @@
                     </table>
                     <button class="btn btn-primary issue-email-btn" id="add-email-btn">Voeg e-mailadres toe</button>
                 </div>
-
-                <h3><%= main_issuance  %></h3>
-                <%= main_issuance_text  %>
 
                 <h3><%= main_block_or_delete  %></h3>
                 <p><%= main_block_or_par1  %></p>

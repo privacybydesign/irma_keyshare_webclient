@@ -223,17 +223,58 @@ $(function() {
     function updateEmailAddresses() {
         if (user.emailAddresses.length > 0) {
             $("#no-known-email-addresses-text").hide();
+            $("#email-addresses-table").show();
             $("#known-email-addresses-text").show();
         } else {
             $("#known-email-addresses-text").hide();
+            $("#email-addresses-table").hide();
             $("#no-known-email-addresses-text").show();
         }
 
         var tableContent = $("#email-addresses-body");
         tableContent.empty();
         for (var i = 0; i < user.emailAddresses.length; i++) {
-            tableContent.append("<tr><td>" + user.emailAddresses[i] + "</td></tr>");
+            var tr = $("<tr>").appendTo(tableContent);
+            tr.append($("<td>", { text: user.emailAddresses[i] }));
+            tr.append($("<button>", {
+                class: "btn btn-primary btn-sm",
+                text: "Verwijderen",
+                // Ugly voodoo to capture the current email address into the callback
+                click: (function (email) { return function() {
+                    confirmDeleteEmail(email);
+                };})(user.emailAddresses[i]),
+            }).wrap("<td>").parent());
+
         }
+    }
+
+    function confirmDeleteEmail(email) {
+        BootstrapDialog.show({
+            title: "E-mailadres verwijderen?",
+            message: "Weet u zeker dat u dit e-mailadres wilt verwijderen? U kunt dan niet meer inloggen met dit e-mailadres.",
+            type: BootstrapDialog.TYPE_PRIMARY,
+            buttons: [{
+                id: "delete-cancel",
+                label: strings.keyshare_cancel,
+                cssClass: "btn-secondary",
+                action: function(dialogRef) {
+                    dialogRef.close();
+                },
+            }, {
+                id: "delete-confirm",
+                label: strings.keyshare_delete,
+                cssClass: "btn-primary",
+                action: function(dialogRef) {
+                    $.ajax({
+                        type: "POST",
+                        url: server + "/web/users/" + user.ID + "/remove_email/" + email,
+                        success: showUserPortal,
+                        // TODO error
+                    });
+                    dialogRef.close();
+                },
+            }],
+        });
     }
 
     $("#add-email-btn").on("click", function() {

@@ -47,7 +47,7 @@
 	"keyshare_delete_question": "MijnIRMA verwijderen?",
 	"keyshare_block_message": "Als u dit doet worden al uw attributen permanent onbruikbaar. Weet u het zeker?",
 	"keyshare_delete_message": "Als u dit doet worden al uw attributen permanent onbruikbaar, en worden uw loggegevens en e-mailadres verwijderd uit MijnIRMA. Weet u het zeker?",
-	"keyshare_cancel": "Annulleren",
+	"keyshare_cancel": "Annuleren",
 	"keyshare_block": "Blokkeren",
 	"keyshare_delete": "Verwijderen",
 	"keyshare_deleted": "MijnIRMA account verwijderd.",
