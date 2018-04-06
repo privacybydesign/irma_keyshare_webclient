@@ -367,8 +367,8 @@ $(function() {
                 type: "GET",
                 dataType: "json",
                 url: server + "/web/candidates/" + token,
-                success: function(data) {
-                    showUserCandidates(token, data.candidates);
+                success: function(candidates) {
+                    showUserCandidates(token, candidates);
                 },
                 error: function() {
                     showError(strings.keyshare_session_expired);
