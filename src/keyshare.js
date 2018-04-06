@@ -1,23 +1,12 @@
+var strings = {};
+var conf = {};
+
 $(function() {
-    var server, schememanager, conf, strings;
+    var server, schememanager;
 
-    function getSetupFromJson(callback) {
-        console.log("Running getSetupFromJson");
-
-        $.getJSON("conf.json", function(json) {
-            conf = json;
-            server = conf.keyshare_server_url;
-            schememanager = conf.scheme_manager_url;
-            moment.locale(conf.language);
-            console.log("Configuration:", conf);
-
-            $.getJSON("languages/" + conf.language + ".json", function(text) {
-                strings = text;
-                console.log("Loaded language strings");
-                callback();
-            });
-        });
-    }
+    server = conf.keyshare_server_url;
+    schememanager = conf.scheme_manager_url;
+    moment.locale(conf.language);
 
     function loginSuccess() {
         console.log("Login success");
@@ -495,11 +484,8 @@ $(function() {
     });
 
     $("a.frontpage").attr("href", window.location.href.replace(window.location.hash, ""));
-
-    getSetupFromJson(function () {
-        if (!cookiesEnabled())
-            showError(strings.keyshare_cookies);
-        else
-            tryLoginFromCookie();
-    });
+    if (!cookiesEnabled())
+        showError(strings.keyshare_cookies);
+    else
+        tryLoginFromCookie();
 });

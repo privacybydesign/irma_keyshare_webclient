@@ -26,6 +26,8 @@ module.exports = function (grunt) {
 
     console.log("Configuration: ", conf);
 
+    var strings = grunt.file.readJSON("src/languages/" + conf.language + ".json");
+
     grunt.initConfig({
         copy: {
             // Copying the bower bundles is a bit of a hack
@@ -37,7 +39,7 @@ module.exports = function (grunt) {
             },
             non_html: {
                 cwd: "src",
-                src: ["**/*", "!**/*.html"],
+                src: ["**/*", "!**/*.html", "!**/*.js"],
                 dest: "build/",
                 expand: "true",
             },
@@ -49,7 +51,7 @@ module.exports = function (grunt) {
             },
         },
         "string-replace": {
-            examples: {
+            html: {
                 files: [{
                     cwd: "./src",
                     src: ["**/*.html"],
@@ -78,12 +80,30 @@ module.exports = function (grunt) {
                     }],
                 },
             },
+            javascript: {
+                files: [{
+                    cwd: "./src",
+                    src: ["**/*.js"],
+                    dest: "build/",
+                    expand: "true",
+                }],
+                options: {
+                    replacements: [{
+                        pattern: /var conf = \{\};/,
+                        replacement: "var conf = " + JSON.stringify(conf) + ";",
+                    }, {
+                        pattern: /var strings = \{\};/,
+                        replacement: "var strings = " + JSON.stringify(strings) + ";",
+                    }],
+                },
+            },
         },
         watch: {
             webfiles: {
                 files: [
                     "./src/**/*",
                     "!./src/**/*.html",
+                    "!./src/**/*.js",
                 ],
                 tasks: ["copy:non_html"],
             },
@@ -98,6 +118,12 @@ module.exports = function (grunt) {
                     "./src/languages/*",
                 ],
                 tasks: ["translate"],
+            },
+            javascriptfiles: {
+                files: [
+                    "./src/**/*.js",
+                ],
+                tasks: ["string-replace:javascript"],
             },
         },
         multi_lang_site_generator: {
