@@ -8,7 +8,7 @@ $(function() {
             conf = json;
             server = conf.keyshare_server_url;
             schememanager = conf.scheme_manager_url;
-            moment().locale(conf.language);
+            moment.locale(conf.language);
             console.log("Configuration:", conf);
 
             $.getJSON("languages/" + conf.language + ".json", function(text) {
@@ -238,7 +238,7 @@ $(function() {
             tr.append($("<td>", { text: user.emailAddresses[i] }));
             tr.append($("<button>", {
                 class: "btn btn-primary btn-sm",
-                text: "Verwijderen",
+                text: strings.keyshare_delete,
                 // Ugly voodoo to capture the current email address into the callback
                 click: (function (email) { return function() {
                     confirmDeleteEmail(email);
@@ -250,8 +250,8 @@ $(function() {
 
     function confirmDeleteEmail(email) {
         BootstrapDialog.show({
-            title: "E-mailadres verwijderen?",
-            message: "Weet u zeker dat u dit e-mailadres wilt verwijderen? U kunt dan niet meer inloggen met dit e-mailadres.",
+            title: strings.delete_email_title,
+            message: strings.delete_email_message,
             type: BootstrapDialog.TYPE_PRIMARY,
             buttons: [{
                 id: "delete-cancel",
@@ -412,7 +412,7 @@ $(function() {
         for (var i = 0; i < candidates.length; i++) {
             candidate = candidates[i];
             if (!Number.isInteger(candidate.lastActive) || candidate.lastActive === 0) {
-                relTime = "Never";
+                relTime = strings.never;
             } else {
                 absTime = moment.unix(candidate.lastActive).format("dddd, D MMM YYYY, H:mm:ss");
                 relTime = moment.unix(candidate.lastActive).fromNow();
@@ -422,7 +422,7 @@ $(function() {
                 + "</td><td id=login-" + candidate.username + "></td></tr>");
             $("#login-" + candidate.username).append($("<button>", {
                 class: "btn btn-primary btn-sm",
-                text: "Login",
+                text: strings.login,
                 // Ugly voodoo to capture the current value of candidate.username into the callback
                 click: (function (token, username) { return function() {
                     $.ajax({

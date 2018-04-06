@@ -77,16 +77,6 @@
             </div>
         </div> <!-- /container -->
 
-        <div class="container" id="enrolment-container" hidden>
-            <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-                <h2 class="text-center"><%= scheme_manager_qr %></h2>
-                <div class="img-responsive center-block text-center">
-                    <div id="enroll_qr"></div>
-                    <p><%= scheme_manager_qr_text %></p>
-                </div>
-            </div>
-        </div>
-
         <div class="container" id="enrollment-email-issue" hidden>
             <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
                 <h2><%= enrollment_email_title %></h2>
@@ -113,13 +103,13 @@
 
         <div class="container" id="user-candidates-container" hidden>
             <div class="col-xs-12 col-md-10 col-lg-8 col-md-offset-2 col-lg-offset-2">
-                <h3>Choose IRMA account</h3>
+                <h3><%= candidates_title %></h3>
                 <table class="table" id="user-candidates">
                     <thead>
                         <tr>
-                            <th>Username</th>
-                            <th>Last active</th>
-                            <th>Login</th>
+                            <th><%= candidates_username %></th>
+                            <th><%= candidates_lastseen %></th>
+                            <th><%= login %></th>
                         </tr>
                     </thead>
                     <tbody id="user-candidates-body">
@@ -161,17 +151,17 @@
                 <%= main_issuance_text  %>
 
                 <div id="known-email-addresses">
-                    <h3>E-mailadressen</h3>
-                    <p id="known-email-addresses-text">De volgende e-mailadressen zijn geassocieerd met uw account. Met ieder van deze e-mailadressen kunt u inloggen op MijnIRMA.</p>
-                    <p id="no-known-email-addresses-text">Er zijn geen e-mailadressen geassocieerd met uw account. Dit betekent dat u niet op MijnIRMA in kunt loggen en uw attributen kunt blokkeren, mocht u uw telefoon kwijtraken.</p>
+                    <h3><%= main_emailaddresses_title %></h3>
+                    <p id="known-email-addresses-text"><%= main_emailaddresses_text %></p>
+                    <p id="no-known-email-addresses-text"><%= main_emailaddresses_none_text %></p>
                     <table class="table" id="email-addresses-table">
                         <thead>
-                            <tr><th>E-mailadres</th></tr>
+                            <tr><th><%= email_address %></th></tr>
                         </thead>
                         <tbody id="email-addresses-body">
                         </tbody>
                     </table>
-                    <button class="btn btn-primary issue-email-btn" id="add-email-btn">Voeg e-mailadres toe</button>
+                    <button class="btn btn-primary issue-email-btn" id="add-email-btn"><%= main_emailaddresses_add %></button>
                 </div>
 
                 <h3><%= main_delete_title  %></h3>

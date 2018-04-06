@@ -41,6 +41,11 @@
 	"main_delete_par2": "{B}Waarschuwing:{/B} uw MijnIRMA verwijderen is permanent! Als u daarna opnieuw IRMA wilt gaan gebruiken zal uw opnieuw bij MijnIRMA moeten registreren en al uw attributen opnieuw moeten verkrijgen.",
 	"main_block": "Blokkeer MijnIRMA",
 	"main_delete": "Verwijder MijnIRMA",
+	"main_emailaddresses_title": "E-mailadressen",
+	"main_emailaddresses_text": "De volgende e-mailadressen zijn geassocieerd met uw account. Met ieder van deze e-mailadressen kunt u inloggen op MijnIRMA.",
+	"main_emailaddresses_none_text": "Er zijn geen e-mailadressen geassocieerd met uw account. Dit betekent dat u niet op MijnIRMA in kunt loggen en uw attributen kunt blokkeren, mocht u uw telefoon kwijtraken.",
+	"main_emailaddresses_add": "Voeg e-mailadres toe",
+	"email_address": "E-mailadres",
 	"keyshare_error_occured": "Er is een fout opgetreden bij het inloggen.",
 	"keyshare_session_expired": "Sessie is verlopen of ongeldig, log opnieuw in",
 	"keyshare_block_question": "MijnIRMA blokkeren?",
@@ -63,5 +68,12 @@
 	"keyshare_event_IRMA_BLOCKED": "MijnIRMA geblokkeerd",
 	"keyshare_verification_error": "Er is een fout opgetreden bij e-mailverificatie.",
 	"keyshare_invalid_path": "Ongeldig pad na #",
-	"keyshare_cookies": "MijnIRMA maakt gebruik van cookies. Schakel cookies in en probeer het nogmaals."
+	"keyshare_cookies": "MijnIRMA maakt gebruik van cookies. Schakel cookies in en probeer het nogmaals.",
+	"delete_email_title": "E-mailadres verwijderen?",
+	"delete_email_message": "Weet u zeker dat u dit e-mailadres wilt verwijderen? U kunt dan niet meer inloggen met dit e-mailadres.",
+	"never": "Nooit",
+	"login": "Log in",
+	"candidates_title": "Kies IRMA-account",
+	"candidates_username": "Gebruikersnaam",
+	"candidates_lastseen": "Laatst actief"
 }

@@ -41,6 +41,11 @@
 	"main_delete_par2": "{B}Warning{/B}: Blocking or deleting your MyIRMA account is permanent! If you want to use IRMA again afterwards you will have to re-register at MyIRMA and re-obtain all your attributes.",
 	"main_block": "Block MyIRMA",
 	"main_delete": "Delete MyIRMA",
+	"main_emailaddresses_title": "Email addresses",
+	"main_emailaddresses_text": "The following email addresses are associated to your account. You can login on MyIRMA using each of these addresses.",
+	"main_emailaddresses_none_text": "There are no email addresses associated to your account. This means that you will not be able to log in on MyIRMA and block your attributes, in case you lose your phone.",
+	"main_emailaddresses_add": "Add email address",
+	"email_address": "Email address",
 	"keyshare_error_occured": "An error occured during login.",
 	"keyshare_session_expired": "Session has expired or is invalid, please login again.",
 	"keyshare_block_question": "Block MyIRMA?",
@@ -63,5 +68,12 @@
 	"keyshare_event_IRMA_BLOCKED": "MyIRMA blocked",
 	"keyshare_verification_error": "An error occured during email verification.",
 	"keyshare_invalid_path": "Invalid path specified after #",
-	"keyshare_cookies": "MyIRMA uses cookiues. Please enable cookies and retry."
+	"keyshare_cookies": "MyIRMA uses cookies. Please enable cookies and retry.",
+	"delete_email_title": "Delete email address?",
+	"delete_email_message": "Are you certain you want to delete this email address? You will not be able to login with this email address anymore.",
+	"never": "Never",
+	"login": "Login",
+	"candidates_title": "Choose IRMA account",
+	"candidates_username": "Username",
+	"candidates_lastseen": "Last active"
 }
