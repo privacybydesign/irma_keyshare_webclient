@@ -381,7 +381,11 @@ $(function() {
                 success: function(data) {
                     showUserCandidates(token, data.candidates);
                 },
-                // TODO error
+                error: function() {
+                    showError(strings.keyshare_session_expired);
+                    Cookies.remove("token", { path: "/" });
+                    showLogin();
+                },
             });
             return;
         }
