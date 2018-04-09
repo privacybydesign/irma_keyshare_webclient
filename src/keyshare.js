@@ -411,8 +411,8 @@ $(function() {
             }
             tableContent.append("<tr><td>" + candidate.username
                 + "</td><td title='" + absTime + "'>" + relTime
-                + "</td><td id=login-" + candidate.username + "></td></tr>");
-            $("#login-" + candidate.username).append($("<button>", {
+                + "</td><td id=login-" + i + "></td></tr>");
+            $("#login-" + i).append($("<button>", {
                 class: "btn btn-primary btn-sm",
                 text: strings.login,
                 // Ugly voodoo to capture the current value of candidate.username into the callback
