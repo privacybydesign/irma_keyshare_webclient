@@ -7,6 +7,8 @@ $(function() {
     server = conf.keyshare_server_url;
     moment.locale(conf.language);
 
+    IRMA.init(conf.api_server_url, {lang: conf.language, newServer: conf.new_api_server});
+
     function loginSuccess() {
         console.log("Login success");
         $("#login-container").hide();

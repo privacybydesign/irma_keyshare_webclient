@@ -21,8 +21,9 @@ by installing grunt and bower. Then run
 
 to install the node dependencies and JavaScript libraries. Finally run
 
-    grunt build --keyshare_server_url="http://<YOUR_SERVER>:8080/irma_keyshare_server/api/v1" \
-      --api_server_url="http://<YOUR_SERVER>:8088/irma_api_server" \
+    grunt build --keyshare_server_url="<KEYSHARE_SERVER_URL>" \
+      --api_server_url="<IRMA_SERVER_URL>" \
+      --irma_js_url="<IRMA_JS_CLIENT_DIRECTORY>" \
       --language="en"
 
 to compile the web sources. See below for how to setup server URLs for a local or remote server. If you skip the `build` keyword, grunt keeps rebuilding the files as they change. (Make sure that you run `grunt build` at least once to make sure everything gets build, or just run `grunt build watch` to build and keep building.)
@@ -33,8 +34,8 @@ Typically, you want `<YOUR_SERVER>` to be publicly reachable, or at least reacha
 
  * `--keyshare_server_url`: specifies the URL of the keyshare server to use
  * `--api_server_url`: url of the [API server](https://github.com/privacybydesign/irma_api_server) to use for issuing and verifying email attributes
- * `--api_web_url` (optional): url of the disclosing or issuance HTML popup for for [irma_js](https://github.com/privacybydesign/irma_js). (If absent, will be derived from the `--api_server_url` parameter.)
- * `--irma_js` (optional): url of the [irma_js](https://github.com/privacybydesign/irma_js) client. (If absent, will be derived from the `--api_server_url` parameter.)
+ * `--irma_js_url`: url of the [irma_js](https://github.com/privacybydesign/irma_js) client.
+ * `--new_api_server`: (optional) boolean indicating whether we are talking to an old api server or the new irma server. Defaults to false, indicating the old api server.
 
 ## Running a local server
 
