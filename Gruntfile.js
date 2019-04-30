@@ -3,7 +3,7 @@ module.exports = function (grunt) {
         console.log("INFO: set keyshare_server_url to create a working setup");
     }
     if ( (typeof(grunt.option("api_server_url")) === "undefined") ) {
-        console.log("INFO: set api_server_url (possibly also irma_js_url) to enable email issuing");
+        console.log("INFO: set api_server_url (and also irma_js_url) to enable email issuing");
     }
     if ( (typeof(grunt.option("language")) === "undefined") ) {
         console.log("INFO: No language chosen, assuming nl");
@@ -11,14 +11,11 @@ module.exports = function (grunt) {
 
     var conf = {
         keyshare_server_url: grunt.option("keyshare_server_url"),
-        api_server_url: grunt.option("api_server_url") + "/api/v2/",
-        api_web_url: grunt.option("api_web_url") || grunt.option("api_server_url"),
-        irma_js_url: grunt.option("irma_js_url") || grunt.option("api_server_url"),
+        api_server_url: grunt.option("api_server_url"),
+        irma_js_url: grunt.option("irma_js_url"),
         language: grunt.option("language") || "nl",
+        new_api_server: Boolean(grunt.option("new_api_server")),
     };
-
-    conf.api_web_url += "/server/";
-    conf.irma_js_url += "/client/";
 
     console.log("Configuration: ", conf);
 
@@ -56,15 +53,6 @@ module.exports = function (grunt) {
                 }],
                 options: {
                     replacements: [{
-                        pattern: /\[KEYSHARE_SERVER_URL\]/g,
-                        replacement: conf.keyshare_server_url,
-                    }, {
-                        pattern: /\[API_SERVER_URL\]/g,
-                        replacement: conf.api_server_url,
-                    }, {
-                        pattern: /\[API_WEB_URL\]/g,
-                        replacement: conf.api_web_url,
-                    }, {
                         pattern: /\[IRMA_JS_URL\]/g,
                         replacement: conf.irma_js_url,
                     }, {
