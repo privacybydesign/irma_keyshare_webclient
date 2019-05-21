@@ -47,6 +47,9 @@ $(function() {
                 IRMA.verify(data, discloseSuccess, showWarning, showError);
             },
             error: showError,
+            xhrFields: {
+                withCredentials: true,
+            },
         });
 
         return false;
@@ -68,6 +71,9 @@ $(function() {
             data: JSON.stringify(loginObject),
             success: loginSuccess,
             error: loginError,
+            xhrFields: {
+                withCredentials: true,
+            },
         });
 
         return false;
@@ -82,6 +88,9 @@ $(function() {
             data: jwt,
             success: tryLoginFromCookie,
             error: loginError,
+            xhrFields: {
+                withCredentials: true,
+            },
         });
     }
 
@@ -94,6 +103,9 @@ $(function() {
                 showError(strings.keyshare_session_expired);
                 Cookies.remove("sessionid", { path: "/" });
                 showLogin();
+            },
+            xhrFields: {
+                withCredentials: true,
             },
         });
     }
@@ -123,6 +135,9 @@ $(function() {
                         contentType: "application/json;charset=utf-8",
                         url: server + "/web/users/" + user.ID + "/disable",
                         success: showUserPortal,
+                        xhrFields: {
+                            withCredentials: true,
+                        },
                     });
                     dialogRef.close();
                 },
@@ -153,6 +168,9 @@ $(function() {
                         success: function() {
                             showLoginContainer(strings.keyshare_deleted);
                         },
+                        xhrFields: {
+                            withCredentials: true,
+                        },
                     });
                     dialogRef.close();
                 },
@@ -178,6 +196,9 @@ $(function() {
             url: server + "/web/logout",
             success: function() {
                 showLoginContainer(strings.keyshare_loggedout);
+            },
+            xhrFields: {
+                withCredentials: true,
             },
         });
     });
@@ -260,6 +281,9 @@ $(function() {
                         url: server + "/web/users/" + user.ID + "/remove_email/" + email,
                         success: showUserPortal,
                         // TODO error
+                        xhrFields: {
+                            withCredentials: true,
+                        },
                     });
                     dialogRef.close();
                 },
@@ -275,6 +299,9 @@ $(function() {
                 IRMA.verify(data, showEmailSuccess, showWarning, showError);
             },
             error: showError,
+            xhrFields: {
+                withCredentials: true,
+            },
         });
     });
 
@@ -287,6 +314,9 @@ $(function() {
             data: jwt,
             success: showUserPortal,
             error: showError,
+            xhrFields: {
+                withCredentials: true,
+            },
         });
     }
 
@@ -300,6 +330,9 @@ $(function() {
             contentType: "application/json;charset=utf-8",
             url: server + "/web/users/" + user.ID + "/logs/" + logStart,
             success: processUserLogs,
+            xhrFields: {
+                withCredentials: true,
+            },
         });
     }
 
@@ -376,6 +409,9 @@ $(function() {
                     Cookies.remove("token", { path: "/" });
                     showLogin();
                 },
+                xhrFields: {
+                    withCredentials: true,
+                },
             });
             return;
         }
@@ -426,6 +462,9 @@ $(function() {
                         error: function() {
                             showError(strings.keyshare_verification_error);
                         },
+                        xhrFields: {
+                            withCredentials: true,
+                        },
                     });
                 };})(token, candidate.username),
             }));
@@ -452,11 +491,17 @@ $(function() {
                         success: function(data) {
                             user = data;
                         },
+                        xhrFields: {
+                            withCredentials: true,
+                        },
                     });
                     successCallback();
                 }, showWarning, showError);
             },
             error: showError,
+            xhrFields: {
+                withCredentials: true,
+            },
         });
     }
 
