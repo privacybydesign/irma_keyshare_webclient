@@ -206,8 +206,8 @@ $(function() {
     function showEnrolled(data) {
         user = data;
         Cookies.remove("enroll", { path: "/" });
-        $("#enrollment-email-issue").show();
-        $("span#enrollment-email-address").html(user.username);
+        $("#enrollment-finished").show();
+        $("span#enrollment-email-address").html(user.username); // TODO: check with sietse if this does anything
     }
 
     function showUserPortal(data) {
@@ -223,10 +223,6 @@ $(function() {
     function updateUserContainer() {
         $("#username").html(user.username);
         $("#disable-btn").prop("disabled", !user.enabled);
-        if (user.emailIssued)
-            $("#issue-email-later").hide();
-        else
-            $("#issue-email-later").show();
         updateEmailAddresses();
         updateUserLogs();
     }
@@ -474,51 +470,6 @@ $(function() {
     function showLogin() {
         $("#login-container").show();
     }
-
-    function issueEmail(successCallback) {
-        // Clear errors
-        $(".form-group").removeClass("has-error");
-        $("#alert_box").empty();
-
-        $.ajax({
-            type: "GET",
-            url: server + "/web/users/" + user.ID + "/issue_email",
-            success: function(data) {
-                IRMA.issue(data, function() {
-                    $.ajax({ // Notify server of email issuance success
-                        type: "POST",
-                        url: server + "/web/users/" + user.ID + "/email_issued",
-                        success: function(data) {
-                            user = data;
-                        },
-                        xhrFields: {
-                            withCredentials: true,
-                        },
-                    });
-                    successCallback();
-                }, showWarning, showError);
-            },
-            error: showError,
-            xhrFields: {
-                withCredentials: true,
-            },
-        });
-    }
-
-    $("#issue-email-btn").on("click", function() {
-        $("#email-issue-help").show();
-
-        issueEmail(function() {
-            $("#enrollment-email-issue").hide();
-            $("#enrollment-finished").show();
-        });
-    });
-
-    $("#issue-email-later-btn").on("click", function() {
-        issueEmail(function() {
-            $("#issue-email-later").hide();
-        });
-    });
 
     $("#show-main").on("click", function() {
         updateUserContainer();

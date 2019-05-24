@@ -73,17 +73,6 @@
             </div>
         </div> <!-- /container -->
 
-        <div class="container" id="enrollment-email-issue" hidden>
-            <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-                <h2><%= enrollment_email_title %></h2>
-
-                <p><%= enrollment_email_par1 %></p>
-                <p><%= enrollment_email_par2 %></p>
-
-                <button class="btn btn-primary" id="issue-email-btn"><%= enrollment_email_button %></button>
-            </div>
-        </div>
-
         <div class="container" id="enrollment-finished" hidden>
             <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
                 <h2><%= enrollment_done %></h2>
@@ -128,12 +117,6 @@
                     <button class="btn btn-primary pull-right" id="logout-btn"><%= main_logout %></button>
                 </div>
                 <p><%= main_logged_in_as %><span id="username"></span></p>
-
-                <div id="issue-email-later" hidden>
-                    <h3><%= main_issue_email %></h3>
-                    <p><%= main_issue_email_text  %></p>
-                    <button class="btn btn-primary issue-email-btn" id="issue-email-later-btn"><%= main_issue_email_button  %></button>
-                </div>
 
                 <h3><%= main_log  %></h3>
                 <button class="btn" id="refresh-btn"><%= main_log_refresh  %></button>
