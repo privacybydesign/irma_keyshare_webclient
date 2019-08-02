@@ -101,7 +101,7 @@ $(function() {
             success: onDone,
             error: function() {
                 showError(strings.keyshare_session_expired);
-                Cookies.remove("sessionid", { path: "/" });
+                Cookies.remove("sessionid", { path: "/", domain: conf.cookie_domain });
                 showLogin();
             },
             xhrFields: {
@@ -205,7 +205,7 @@ $(function() {
 
     function showEnrolled(data) {
         user = data;
-        Cookies.remove("enroll", { path: "/" });
+        Cookies.remove("enroll", { path: "/", domain: conf.cookie_domain });
         $("#enrollment-finished").show();
         $("span#enrollment-email-address").html(user.username); // TODO: check with sietse if this does anything
     }
@@ -398,11 +398,12 @@ $(function() {
                 dataType: "json",
                 url: server + "/web/candidates/" + token,
                 success: function(candidates) {
+                    Cookies.remove("token", { path: "/", domain: conf.cookie_domain });
                     showUserCandidates(token, candidates);
                 },
                 error: function() {
                     showError(strings.keyshare_session_expired);
-                    Cookies.remove("token", { path: "/" });
+                    Cookies.remove("token", { path: "/", domain: conf.cookie_domain });
                     showLogin();
                 },
                 xhrFields: {
