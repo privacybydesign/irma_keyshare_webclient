@@ -12,12 +12,10 @@ This project contains all the web sources to interact with an [IRMA keyshare ser
 First setup the development environment:
 
     npm install -g grunt-cli
-    npm install -g bower
 
 by installing grunt and bower. Then run
 
     npm install
-    bower install
 
 to install the node dependencies and JavaScript libraries. Finally run
 

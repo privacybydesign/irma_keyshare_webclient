@@ -4,8 +4,7 @@ var conf = {};
 const irma_server_conf = {
     lang: conf.language,
     server: conf.irma_server_url,
-    resultJwt: true,
-    legacy: true,
+    legacyResultJwt: true,
 };
 
 $(function() {

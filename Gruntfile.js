@@ -26,10 +26,22 @@ module.exports = function (grunt) {
     grunt.initConfig({
         copy: {
             // Copying the bower bundles is a bit of a hack
-            bower_bundle: {
-                cwd: "bower_components",
-                src: ["**/*"],
-                dest: "build/bower_components",
+            node_modules: {
+                cwd: "node_modules",
+                src: [
+                    "bootstrap/dist/**",
+                    "bootstrap3-dialog/src/css/bootstrap-dialog.css",
+                    "jquery/dist/jquery.min.js",
+                    "js-cookie/src/js.cookie.js",
+                    "moment/moment.js",
+                    "moment/locale/nl.js",
+                    "moment/locale/en-gb.js",
+                    "bootstrap/js/modal.js",
+                    "bootstrap3-dialog/src/js/bootstrap-dialog.js",
+                    "jwt-decode/build/jwt-decode.js",
+                    "@privacybydesign/irmajs/dist/irma.js",
+                ],
+                dest: "build/assets/",
                 expand: "true",
             },
             non_html: {
@@ -138,7 +150,7 @@ module.exports = function (grunt) {
     grunt.registerTask("default", [
         "copy:non_html",
         "json_generator",
-        "copy:bower_bundle",
+        "copy:node_modules",
         "string-replace",
         "multi_lang_site_generator",
         "copy:translated",
@@ -147,7 +159,7 @@ module.exports = function (grunt) {
     grunt.registerTask("build", [
         "copy:non_html",
         "json_generator",
-        "copy:bower_bundle",
+        "copy:node_modules",
         "string-replace",
         "multi_lang_site_generator",
         "copy:translated",
