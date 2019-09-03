@@ -1,13 +1,18 @@
 var strings = {};
 var conf = {};
 
+const irma_server_conf = {
+    lang: conf.language,
+    server: conf.irma_server_url,
+    resultJwt: true,
+    legacy: true,
+};
+
 $(function() {
     var server;
 
     server = conf.keyshare_server_url;
     moment.locale(conf.language);
-
-    IRMA.init(conf.api_server_url, {lang: conf.language, newServer: conf.new_api_server});
 
     function loginSuccess() {
         console.log("Login success");
@@ -35,6 +40,14 @@ $(function() {
                               + msg + "</div>");
     };
 
+    let irmaSessionFailed = function(msg) {
+        if(msg === 'CANCELLED') {
+            showWarning(msg);
+        } else {
+            showError(msg);
+        }
+    };
+
     $("#login-form-irma").on("submit", function() {
         console.log("IRMA signin button pressed");
         $(".form-group").removeClass("has-error");
@@ -44,7 +57,9 @@ $(function() {
             type: "GET",
             url: server + "/web/login-irma",
             success: function(data) {
-                IRMA.verify(data, discloseSuccess, showWarning, showError);
+                irma.startSession(conf.irma_server_url, data, "publickey")
+                    .then(({ sessionPtr, token }) => irma.handleSession(sessionPtr, {...irma_server_conf, token}))
+                    .then(discloseSuccess, irmaSessionFailed);
             },
             error: showError,
             xhrFields: {
@@ -292,7 +307,9 @@ $(function() {
             type: "GET",
             url: server + "/web/users/" + user.ID + "/add_email",
             success: function(data) {
-                IRMA.verify(data, showEmailSuccess, showWarning, showError);
+                irma.startSession(conf.irma_server_url, data, "publickey")
+                    .then(({ sessionPtr, token }) => irma.handleSession(sessionPtr, {...irma_server_conf, token}))
+                    .then(showEmailSuccess, irmaSessionFailed)
             },
             error: showError,
             xhrFields: {
