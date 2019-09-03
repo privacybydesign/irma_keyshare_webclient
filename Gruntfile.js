@@ -2,11 +2,8 @@ module.exports = function (grunt) {
     if ( typeof(grunt.option("keyshare_server_url")) === "undefined") {
         console.log("INFO: set keyshare_server_url to create a working setup");
     }
-    if ( (typeof(grunt.option("api_server_url")) === "undefined") ) {
-        console.log("INFO: set api_server_url to enable email manipulation");
-    }
-    if ( (typeof(grunt.option("irma_js_url")) === "undefined") ) {
-        console.log("INFO: set irma_js_url to create a working setup");
+    if ( (typeof(grunt.option("irma_server_url")) === "undefined") ) {
+        console.log("INFO: set irma_server_url to enable email manipulation");
     }
     if ( (typeof(grunt.option("language")) === "undefined") ) {
         console.log("INFO: No language chosen, assuming nl");
@@ -17,10 +14,8 @@ module.exports = function (grunt) {
 
     var conf = {
         keyshare_server_url: grunt.option("keyshare_server_url"),
-        api_server_url: grunt.option("api_server_url"),
-        irma_js_url: grunt.option("irma_js_url"),
+        irma_server_url: grunt.option("irma_server_url"),
         language: grunt.option("language") || "nl",
-        new_api_server: Boolean(grunt.option("new_api_server")),
         cookie_domain: grunt.option("cookie_domain")
     };
 
