@@ -76,8 +76,8 @@ module.exports = function (grunt) {
                 },
                 options: {
                     replacements: [{
-                        pattern: /language: null,/,
-                        replacement: "language: \"" + language + "\",",
+                        pattern: /}/,
+                        replacement: "    language: \"" + language + "\",\n}",
                     }],
                 },
             },
