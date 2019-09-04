@@ -1,0 +1,24 @@
+image: privacybydesign/node_yarn:latest
+
+stages:
+  - build
+
+before_script:
+  - set -euxo pipefail
+  - yarn install
+
+build-en:
+  stage: build
+  script:
+    - yarn run grunt --language="en"
+  artifacts:
+    paths:
+      - build/*
+
+build-nl:
+  stage: build
+  script:
+    - yarn run grunt --language="nl"
+  artifacts:
+    paths:
+      - build/*

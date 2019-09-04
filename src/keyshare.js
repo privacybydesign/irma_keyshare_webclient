@@ -1,16 +1,13 @@
 var strings = {};
-var conf = {};
 
-const irma_server_conf = {
-    lang: conf.language,
-    server: conf.irma_server_url,
-    legacyResultJwt: true,
-};
+$.getScript("./config.js", function() {
+    const irma_server_conf = {
+        lang: conf.language,
+        server: conf.irma_server_url,
+        legacyResultJwt: true,
+    };
 
-$(function() {
-    var server;
-
-    server = conf.keyshare_server_url;
+    var server = conf.keyshare_server_url;
     moment.locale(conf.language);
 
     function loginSuccess() {
