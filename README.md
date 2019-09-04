@@ -19,18 +19,22 @@ by installing grunt and bower. Then run
 
 to install the node dependencies and JavaScript libraries. Finally run
 
-    grunt build --keyshare_server_url="<KEYSHARE_SERVER_URL>" \
-      --irma_server_url="<IRMA_SERVER_URL>" \
-      --language="en"
+    grunt build --language="en"
 
-to compile the web sources. See below for how to setup server URLs for a local or remote server. If you skip the `build` keyword, grunt keeps rebuilding the files as they change. (Make sure that you run `grunt build` at least once to make sure everything gets build, or just run `grunt build watch` to build and keep building.)
+to compile the web sources. See below for how to setup server URLs for a local or remote server in `config.js`. If you skip the `build` keyword, grunt keeps rebuilding the files as they change. (Make sure that you run `grunt build` at least once to make sure everything gets build, or just run `grunt build watch` to build and keep building.)
 
-Typically, you want `<YOUR_SERVER>` to be publicly reachable, or at least reachable by the IRMA-app that you are using.
+Typically, you want the IRMA server (see arguments) to be publicly reachable, or at least reachable by the IRMA-app that you are using.
 
 ### Arguments
+#### Grunt
+ * `--language`: specifies the language that should be used for the build
+ 
+#### Configuration file `config.js`
+The options in this file can be changed either globally, before build, or after build in the build directory for that single build.
 
- * `--keyshare_server_url`: specifies the URL of the keyshare server to use
- * `--irma_server_url`: url of the [IRMA server](https://irma.app/docs/irma-server/) to use for issuing and verifying email attributes
+ * `keyshare_server_url`: specifies the URL of the keyshare server to use
+ * `irma_server_url`: url of the [IRMA server](https://irma.app/docs/irma-server/) to use for issuing and verifying email attributes
+ * `cookie_domain`: domain name cookie origin of keyshare server (w.r.t. cookie deletion)
 
 ## Running a local server
 
