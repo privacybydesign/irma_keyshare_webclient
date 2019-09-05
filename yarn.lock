@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@privacybydesign/irmajs@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@privacybydesign/irmajs/-/irmajs-0.1.4.tgz#095ab09bf34d34f887809eec7d6a8594b84b7ce0"
-  integrity sha512-42A7eUQIXnJ50oO4GChSS+R6cfZ2BFqbGEXQ48lz2QWTDhMTWbLAv3y96RBtBZdyqIAYiG9adqorq00Za2QVEA==
+"@privacybydesign/irmajs@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@privacybydesign/irmajs/-/irmajs-0.1.5.tgz#56631e0351bab3aef11105bbe0b7d8b5bffe5064"
+  integrity sha512-F11rcle1yKir6J4T0WIWCElBdOC0JqPxn4ym1bqSzNI7Yvs5iJ6cGpPgyBOIb0J8J1ASt8HI+pMGD/zJ3wpoDw==
   dependencies:
     es6-object-assign "^1.1.0"
     es6-promise "^4.2.5"
@@ -608,11 +608,6 @@ grunt-contrib-watch@^0.6.1:
     gaze "~0.5.1"
     lodash "~2.4.1"
     tiny-lr-fork "0.0.5"
-
-grunt-json-generator@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/grunt-json-generator/-/grunt-json-generator-0.1.0.tgz#cfc5e3d78545bb15561128b7a5829719ab2296cd"
-  integrity sha1-z8Xj14VFuxVWESi3pYKXGasils0=
 
 grunt-known-options@~1.1.0:
   version "1.1.1"
