@@ -10,7 +10,7 @@ before_script:
 build-en:
   stage: build
   script:
-    - yarn run grunt --language="en"
+    - yarn run grunt build --language="en"
   artifacts:
     paths:
       - build/*
@@ -18,7 +18,7 @@ build-en:
 build-nl:
   stage: build
   script:
-    - yarn run grunt --language="nl"
+    - yarn run grunt build --language="nl"
   artifacts:
     paths:
       - build/*
