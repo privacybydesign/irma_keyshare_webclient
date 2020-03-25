@@ -12,6 +12,8 @@ build-en:
   script:
     - yarn run grunt build --language="en"
   artifacts:
+    # Disabling artifact expiry is not supported yet, so make
+    expire_in: 100 year
     paths:
       - build/*
 
@@ -20,5 +22,7 @@ build-nl:
   script:
     - yarn run grunt build --language="nl"
   artifacts:
+    # Disabling artifact expiry is not supported yet, so make
+    expire_in: 100 year
     paths:
       - build/*
