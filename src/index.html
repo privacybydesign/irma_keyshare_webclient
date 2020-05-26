@@ -30,7 +30,8 @@
     </head>
 
     <body>
-
+    <header><h1 id="header"></h1></header>
+    <main>
         <div class="container" id="alert_box">
         </div>
 
@@ -66,14 +67,14 @@
 
         <div class="container" id="login-done" hidden>
             <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-                <h2><%= login_check_email %></h2>
+                <h2 id="login-done-header"><%= login_check_email %></h2>
                 <p><%= login_check_email_text %></p>
             </div>
         </div> <!-- /container -->
 
         <div class="container" id="enrollment-finished" hidden>
             <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-                <h2><%= enrollment_done %></h2>
+                <h2 id="enrollment-done-header"><%= enrollment_done %></h2>
                 <p>
                     <%= enrollment_done_text %>
                     <ul>
@@ -154,6 +155,6 @@
                 <button class="btn btn-danger" id="delete-btn" hidden><%= main_delete  %></button>
             </div>
         </div>
-
+    </main>
     </body>
 </html>
