@@ -1,4 +1,4 @@
-var strings = {};
+var strings = {"myirma":"MyIRMA","login_header":"MyIRMA login","login_par1":"This is the MyIRMA website of the Privacy by Design Foundation. Using this website you can view the activities of your IRMA app, and block or delete your account.","login_par2":"The foundation knows when your IRMA app is used, but does not know where or with which attributes. In this way a combination of security and privacy is pursued. The MyIRMA usage log allows you to check if your IRMA app is being abused. If so, you can block your IRMA app here.","login_list":"Below you can log in to MyIRMA in two ways:","login_list_1":"Using IRMA, in particular using the attribute you received during registration containing your username; this is the easiest way.","login_list_2":"Using the email address with which you registered. If you enter it below a link will be sent to it that will allow you to log in to MyIRMA. You can use this login method when you do not have your phone with you, or if your phone has been stolen and you want to prevent abuse of your IRMA app.","login_using":"Log in using","or":"or","login_email_address":"Email address","login_email_link":"Email link","login_check_email":"Check your email","login_check_email_text":"Log in by clicking on the link that has been sent to your email address.","enrollment_done":"MyIRMA registration finished","enrollment_done_text":"Congratulations! The MyIRMA registration is now finished.","enrollment_done_list1":"{URL=/issuance}Load attributes{/URL}","enrollment_done_list2":"Go to MyIRMA","main_logout":"Log out","main_logged_in_as":"You are logged in as ","main_log":"View usage of your IRMA app","main_log_refresh":"Refresh","main_log_previous":"Previous","main_log_next":"Next","main_when":"When","main_event":"Event","main_issuance":"Load or refresh attributes","main_issuance_text":"Go to {URL=/issuance}this page{/URL} to load more attributes in your IRMA app, or refresh existing attributes.","main_delete_title":"Block or delete MyIRMA","main_delete_par1":"If you delete your MyIRMA account, all your attributes become permanently unusable, and all events as well as your email address will be permanently deleted.","main_delete_par2":"{B}Warning{/B}: Blocking or deleting your MyIRMA account is permanent! If you want to use IRMA again afterwards you will have to re-register at MyIRMA and re-obtain all your attributes.","main_block":"Block MyIRMA","main_delete":"Delete MyIRMA","main_emailaddresses_title":"Email addresses","main_emailaddresses_text":"The following email addresses are associated to your account. You can login on MyIRMA using each of these addresses. If you have already {URL=/issuance/email}loaded your email address as IRMA attribute{/URL} you can associate it to your account using the button below.","main_emailaddresses_none_text":"There are no email addresses associated to your account. This means that you will not be able to log in on MyIRMA and block your attributes, in case you lose your phone.","main_emailaddresses_add":"Add email address","email_address":"Email address","keyshare_error_occured":"An error occured during login.","keyshare_session_expired":"Session has expired or is invalid, please login again.","keyshare_block_question":"Block MyIRMA?","keyshare_delete_question":"Delete MyIRMA?","keyshare_block_message":"If you proceed, all your attributes will become permanently unusable. Are you certain?","keyshare_delete_message":"If you proceed, all your attributes will become permanently unusable, and your logs and email address will be deleted from MyIRMA. Are you certain?","keyshare_cancel":"Cancel","keyshare_block":"Block","keyshare_delete":"Delete","keyshare_deleted":"MyIRMA account deleted.","keyshare_loggedout":"You are now logged out.","keyshare_event_error":"Received unexpected log entry type","keyshare_event_PIN_CHECK_REFUSED":"PIN verification blocked","keyshare_event_IRMA_APP_AUTH_REFUSED":"IRMA session blocked","keyshare_event_PIN_CHECK_SUCCESS":"PIN verified","keyshare_event_PIN_CHECK_FAILED":"PIN wrong, {0} attempts remaining","keyshare_event_PIN_CHECK_BLOCKED":"PIN wrong too often, blocked {0}} seconds","keyshare_event_IRMA_SESSION":"Performed IRMA session","keyshare_event_IRMA_ENABLED":"MyIRMA enabled","keyshare_event_IRMA_BLOCKED":"MyIRMA blocked","keyshare_verification_error":"An error occured during email verification.","keyshare_invalid_path":"Invalid path specified after #","keyshare_cookies":"MyIRMA uses cookies. Please enable cookies and retry.","delete_email_title":"Delete email address?","delete_email_message":"Are you certain you want to delete this email address? You will not be able to login with this email address anymore.","never":"Never","login":"Login","candidates_title":"Choose IRMA account","candidates_username":"Username","candidates_lastseen":"Last active","candidates_explanation":"The email address with which you are logging in is associated to multiple IRMA accounts, which are shown in the table below. The columns mean the following:","candidates_item_1":"Your IRMA username. You can find this in your IRMA app as the \"Username\"-attribute under \"MyIRMA login\".","candidates_item_2":"Time of the most recent attribute usage of this IRMA account."};
 
 $.getScript("./config.js", function() {
     const irma_server_conf = {
@@ -14,6 +14,7 @@ $.getScript("./config.js", function() {
         console.log("Login success");
         $("#login-container").hide();
         $("#login-done").show();
+        updateHeader();
     }
 
     function loginError(jqXHR, status, error) {
@@ -22,18 +23,39 @@ $.getScript("./config.js", function() {
     }
 
     function showError(message) {
-      $("#alert_box").html("<div class=\"alert alert-danger\" role=\"alert\">"
-                               + "<strong>" + message + "</strong></div>");
+        $("#alert_box").html("<div class=\"alert alert-danger\" role=\"alert\">"
+          + "<strong>" + message + "</strong></div>");
+    }
+
+    function updateHeader() {
+        var headers = [
+            '#main-header',
+            '#login-header',
+            '#enrollment-done-header',
+            '#login-done-header',
+        ];
+        var headerElement = $('#header');
+        // First undo potential hide from earlier run of updateHeader
+        headers.forEach(id => $(id).show());
+        for (let id of headers) {
+            let h = $(id);
+            if (h.is(':visible')) {
+                h.hide();
+                headerElement.html(h.html());
+                return;
+            }
+        }
+        headerElement.html($(headers[0]).html());
     }
 
     var showWarning = function(msg) {
         $("#alert_box").html("<div class=\"alert alert-warning\" role=\"alert\">"
-                             + "<strong>Warning:</strong> " + msg + "</div>");
+          + "<strong>Warning:</strong> " + msg + "</div>");
     };
 
     var showSuccess = function(msg) {
         $("#alert_box").html("<div class=\"alert alert-success\" role=\"alert\">"
-                              + msg + "</div>");
+          + msg + "</div>");
     };
 
     let irmaSessionFailed = function(msg) {
@@ -54,8 +76,8 @@ $.getScript("./config.js", function() {
             url: server + "/web/login-irma",
             success: function(data) {
                 irma.startSession(conf.irma_server_url, data, "publickey")
-                    .then(({ sessionPtr, token }) => irma.handleSession(sessionPtr, {...irma_server_conf, token}))
-                    .then(discloseSuccess, irmaSessionFailed);
+                  .then(({ sessionPtr, token }) => irma.handleSession(sessionPtr, {...irma_server_conf, token}))
+                  .then(discloseSuccess, irmaSessionFailed);
             },
             error: showError,
             xhrFields: {
@@ -197,6 +219,7 @@ $.getScript("./config.js", function() {
     function showLoginContainer(message) {
         $("#user-container").hide();
         $("#login-container").show();
+        updateHeader();
         if (typeof message !== "undefined")
             showSuccess(message);
     }
@@ -218,6 +241,7 @@ $.getScript("./config.js", function() {
         user = data;
         Cookies.remove("enroll", { path: "/", domain: conf.cookie_domain });
         $("#enrollment-finished").show();
+        updateHeader();
         $("span#enrollment-email-address").html(user.username); // TODO: check with sietse if this does anything
     }
 
@@ -229,6 +253,7 @@ $.getScript("./config.js", function() {
         $("#user-candidates-container").hide();
         $("#login-container").hide();
         $("#user-container").show();
+        updateHeader();
     }
 
     function updateUserContainer() {
@@ -248,6 +273,7 @@ $.getScript("./config.js", function() {
             $("#email-addresses-table").hide();
             $("#no-known-email-addresses-text").show();
         }
+        updateHeader();
 
         var tableContent = $("#email-addresses-body");
         tableContent.empty();
@@ -304,8 +330,8 @@ $.getScript("./config.js", function() {
             url: server + "/web/users/" + user.ID + "/add_email",
             success: function(data) {
                 irma.startSession(conf.irma_server_url, data, "publickey")
-                    .then(({ sessionPtr, token }) => irma.handleSession(sessionPtr, {...irma_server_conf, token}))
-                    .then(showEmailSuccess, irmaSessionFailed)
+                  .then(({ sessionPtr, token }) => irma.handleSession(sessionPtr, {...irma_server_conf, token}))
+                  .then(showEmailSuccess, irmaSessionFailed)
             },
             error: showError,
             xhrFields: {
@@ -365,11 +391,11 @@ $.getScript("./config.js", function() {
         for (var i = 0; i < data.entries.length; i++) {
             var entry = data.entries[i];
             tableContent.append("<tr><td title=\""
-                    + moment(entry.time).format("dddd, D MMM YYYY, H:mm:ss")
-                    + "\">"
-                    + moment(entry.time).fromNow()
-                    + "</td><td>"
-                    + getEventString(entry) + "</td></tr>");
+              + moment(entry.time).format("dddd, D MMM YYYY, H:mm:ss")
+              + "\">"
+              + moment(entry.time).fromNow()
+              + "</td><td>"
+              + getEventString(entry) + "</td></tr>");
         }
     }
 
@@ -441,11 +467,12 @@ $.getScript("./config.js", function() {
 
     function cookiesEnabled() {
         return ("cookie" in document && (document.cookie.length > 0
-            || (document.cookie = "test").indexOf.call(document.cookie, "test") > -1));
+          || (document.cookie = "test").indexOf.call(document.cookie, "test") > -1));
     }
 
     function showUserCandidates(token, candidates) {
         $("#user-candidates-container").show();
+        updateHeader();
         var tableContent = $("#user-candidates-body");
         var candidate;
         var relTime, absTime = "";
@@ -458,8 +485,8 @@ $.getScript("./config.js", function() {
                 relTime = moment.unix(candidate.lastActive).fromNow();
             }
             tableContent.append("<tr><td>" + candidate.username
-                + "</td><td title='" + absTime + "'>" + relTime
-                + "</td><td id=login-" + i + "></td></tr>");
+              + "</td><td title='" + absTime + "'>" + relTime
+              + "</td><td id=login-" + i + "></td></tr>");
             $("#login-" + i).append($("<button>", {
                 class: "btn btn-primary btn-sm",
                 text: strings.login,
@@ -483,12 +510,14 @@ $.getScript("./config.js", function() {
 
     function showLogin() {
         $("#login-container").show();
+        updateHeader();
     }
 
     $("#show-main").on("click", function() {
         updateUserContainer();
         $("#enrollment-finished").hide();
         $("#user-container").show();
+        updateHeader();
         return false;
     });
 
