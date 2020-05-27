@@ -28,10 +28,10 @@ module.exports = function (grunt) {
                 dest: "build/assets/",
                 expand: "true",
             },
-            fonts: {
-                cwd: "fonts",
+            assets: {
+                cwd: "assets",
                 src: ["*"],
-                dest: "build/assets/fonts/",
+                dest: "build/assets/",
                 expand: "true",
             },
             non_html: {
@@ -138,7 +138,7 @@ module.exports = function (grunt) {
     grunt.registerTask("default", [
         "copy:non_html",
         "copy:node_modules",
-        "copy:fonts",
+        "copy:assets",
         "string-replace",
         "multi_lang_site_generator",
         "copy:translated",
@@ -147,7 +147,7 @@ module.exports = function (grunt) {
     grunt.registerTask("build", [
         "copy:non_html",
         "copy:node_modules",
-        "copy:fonts",
+        "copy:assets",
         "string-replace",
         "multi_lang_site_generator",
         "copy:translated",

@@ -22,13 +22,6 @@
     font-style: normal;
 }
 
-@font-face {
-    font-family: 'IrmaIcons';
-    src: url('./assets/fonts/irma-icons.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-}
-
 #main-header-container {
     margin: 1em 0 1rem 0;
 }
@@ -149,4 +142,50 @@ main {
 
 #user-candidates {
     margin-top: 2em;
+}
+
+#return-button {
+    margin: 0 auto 0 auto;
+    background-color: #004C92;
+    border: 3px solid #FFF;
+    border-radius: 40px;
+    color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    font-weight: bold;
+    padding: 12px 22px;
+}
+
+#return-button:hover {
+    background-color: #285985;
+    cursor: pointer;
+}
+
+#return-button:active {
+    box-shadow: none;
+    top: 5px;
+}
+
+#return-button img {
+    max-height: 50px;
+    margin-right: 10px;
+}
+
+.icon {
+    width: 50%;
+    max-width: 200px;
+}
+
+.success-text {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.enrollment-done {
+    text-align: center;
+}
+
+.enrollment-done > * {
+    margin-bottom: 30px;
 }

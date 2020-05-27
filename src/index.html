@@ -73,15 +73,17 @@
         </div> <!-- /container -->
 
         <div class="container" id="enrollment-finished" hidden>
-            <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
+            <div class="enrollment-done col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
                 <h2 id="enrollment-done-header"><%= enrollment_done %></h2>
+                <img class="icon" src="assets/success.svg" alt="Success">
+                <p class="success-text"><%= enrollment_done_success %></p>
                 <p>
                     <%= enrollment_done_text %>
-                    <ul>
-                        <li><%= enrollment_done_list1 %></li>
-                        <li><a id="show-main" href="#"><%= enrollment_done_list2 %></a></li>
-                    </ul>
                 </p>
+                <div><a id="return-button" href="https://irma.app/-/"><img src="assets/logo.png" alt="Logo"><span>
+                    <%= enrollment_done_to_app %>
+                </span></a></div>
+                <p><a id="show-main" href="#"><%= enrollment_done_continue %></a></p>
             </div>
         </div>
 
