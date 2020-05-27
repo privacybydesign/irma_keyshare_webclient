@@ -30,7 +30,7 @@ module.exports = function (grunt) {
             },
             assets: {
                 cwd: "assets",
-                src: ["*"],
+                src: ["**/*"],
                 dest: "build/assets/",
                 expand: "true",
             },
