@@ -2,7 +2,7 @@
 	"myirma": "MijnIRMA",
 	"login_header": "MijnIRMA login",
 	"login_par1": "Dit is de MijnIRMA website van de Privacy by Design Foundation. Als u IRMA gebruiker bent kunt u via deze pagina de activiteiten van uw IRMA-app controleren en eventueel beëindigen.",
-	"login_par2": "De stichting ziet wanneer uw IRMA-app gebruikt wordt, maar ziet niet waar of met welke attributen. Hiermee wordt een combinatie van beveiliging (security) en privacy nagestreefd. Als er misbruik van uw IRMA-app gemaakt wordt kunt u dat bij MijnIRMA zien in de gebruiksgegevens. Vervolgens kunt u het gebruik van de IRMA-app stoppen.",
+	"login_par2": "De stichting ziet wanneer uw IRMA-app gebruikt wordt, maar ziet niet waar of met welke informatie. Hiermee wordt een combinatie van beveiliging (security) en privacy nagestreefd. Als er misbruik van uw IRMA-app gemaakt wordt kunt u dat bij MijnIRMA zien in de gebruiksgegevens. Vervolgens kunt u het gebruik van de IRMA-app stoppen.",
 	"login_list": "U kunt hieronder op twee manieren inloggen bij mijnIRMA:",
 	"login_list_1": "Met IRMA zelf, via het kaartje dat u bij registratie gekregen heeft met daarin uw gebruikersnaam; dit is de makkelijkste manier.",
 	"login_list_2": "Met het email adres waarmee u zich geregistreerd heeft. Als u dit hieronder invult krijgt u een link toegestuurd waarmee u op uw mijnIRMA pagina komt. Deze optie kunt u gebruiken als u uw telefoon niet bij de hand heeft, of erger, als uw telefoon gestolen is en u misbruik van uw IRMA-app uit wil sluiten.",
