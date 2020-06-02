@@ -17,6 +17,7 @@
 	"enrollment_done_text": "Je emailadres is nu aan je IRMA-app gekoppeld.",
 	"enrollment_done_to_app": "Terug naar IRMA",
 	"enrollment_done_continue": "Ga naar MijnIRMA",
+	"enrollment_done_return": "Je IRMA-app is nu klaar voor verder gebruik.",
 	"main_logout": "Log uit",
 	"main_logged_in_as": "U bent ingelogd als ",
 	"main_log": "Bekijk het gebruik van uw IRMA-app",
