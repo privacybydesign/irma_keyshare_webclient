@@ -16,6 +16,16 @@ export default function(state = initialState, action) {
                 ...state,
                 sessionState: 'waitSendEmail',
             };
+        case 'startRegistrationVerify':
+            return {
+                ...state,
+                sessionState: 'waitVerifyEmail',
+            };
+        case 'registrationVerified':
+            return {
+                ...state,
+                sessionState: 'showPostRegistration',
+            };
         case 'emailSent':
             return {
                 ...state,
