@@ -159,6 +159,25 @@ function handleIrmaLogin({dispatch}) {
     };
 }
 
+function handleRegistrationVerify({dispatch}) {
+    return next => action => {
+        if (action.type == 'startRegistrationVerify') {
+            fetch(globalThis.server + '/verify', {
+                method: 'POST',
+                body: action.token,
+                credentials: 'include',
+            }).then(res => {
+                if (res.status != 204) throw res.status;
+                dispatch({type: 'registrationVerified'});
+            }).catch(err => {
+                dispatch({type: 'raiseError', errorMessage: 'Error on verifying email. ('+err+')'});
+                dispatch({type: 'loggedOut'});
+            });
+        }
+        return next(action);
+    };
+}
+
 export default function() {
     return createStore(
         combineReducers(
@@ -174,6 +193,7 @@ export default function() {
             handleDeleteAccount,
             handleTokenLogin,
             handleIrmaLogin,
+            handleRegistrationVerify,
         ),
     );
 }
