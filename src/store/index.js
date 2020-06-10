@@ -178,6 +178,33 @@ function handleRegistrationVerify({dispatch}) {
     };
 }
 
+function handleVerifySession({dispatch}) {
+    return next => action => {
+        if (action.type == 'verifySession') {
+            fetch(globalThis.server + '/checkSession', {
+                method: 'POST',
+                credentials: 'include',
+            }).then (res => {
+                if (res.status != 200) throw res.status;
+                return res.text();
+            }).then (res => {
+                if (res == 'ok') {
+                    dispatch({type: 'loggedIn'});
+                    dispatch({type: 'startUpdateInfo'});
+                } else if (res == 'expired') {
+                    dispatch({type: 'loggedOut'});
+                } else {
+                    throw res;
+                }
+            }).catch(err => {
+                dispatch({type: 'raiseError', errorMessage: err});
+                dispatch({type: 'loggedOut'});
+            });
+        }
+        return next(action);
+    }
+}
+
 export default function() {
     return createStore(
         combineReducers(
@@ -194,6 +221,7 @@ export default function() {
             handleTokenLogin,
             handleIrmaLogin,
             handleRegistrationVerify,
+            handleVerifySession,
         ),
     );
 }
