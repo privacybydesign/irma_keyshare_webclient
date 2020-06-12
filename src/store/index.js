@@ -1,13 +1,14 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
+import globalThis from 'core-js/internals/global';
 
-import login from 'loginstate';
-import logs from 'logs';
-import userdata from 'userdata';
+import login from './loginstate';
+import logs from './logs';
+import userdata from './userdata';
 
 // Catch and deal with log loading
 function handleLoadLogs({getState, dispatch}) {
     return next => action => {
-        if (action.type == 'loadLogs' && !getState.logs.loading()) {
+        if (action.type === 'loadLogs' && !getState.logs.loading()) {
             // load logs if needed
             const result = next(action)
             const offset = getState().logs.currentIndex;
@@ -15,7 +16,7 @@ function handleLoadLogs({getState, dispatch}) {
                 method: 'GET',
                 credentials: 'include',
             }).then(res => {
-                if (res.status != 200)
+                if (res.status !== 200)
                     throw res.status;
                 return res.json();
             }).then(resjson => {
@@ -34,12 +35,12 @@ function handleLoadLogs({getState, dispatch}) {
 
 function handleUpdateData({getState, dispatch}) {
     return next => action => {
-        if (action.type == 'startUpdateInfo' && !getState.userdata.fetching) {
+        if (action.type === 'startUpdateInfo' && !getState.userdata.fetching) {
             fetch(globalThis.server + '/user', {
                 method: 'GET',
                 credentials: 'include',
             }).then(res => {
-                if (res.status != 200)
+                if (res.status !== 200)
                     throw res.status;
                 return res.json();
             }).then(resjson => {
@@ -47,7 +48,7 @@ function handleUpdateData({getState, dispatch}) {
             }).catch(err => {
                 dispatch({type: 'errorUpdateInfo'});
                 dispatch({type: 'raiseError', errorMessage: 'Error on loading user data. ('+err+')'});
-            }); 
+            });
         }
         return next(action);
     };
@@ -55,25 +56,25 @@ function handleUpdateData({getState, dispatch}) {
 
 function handleEmail({dispatch}) {
     return next => action => {
-        if (action.type == 'addEmail') {
+        if (action.type === 'addEmail') {
             fetch(globalThis.server + '/email/add', {
                 method: 'POST',
                 credentials: 'include',
             }).then(res => {
-                if (res.status != 200)
+                if (res.status !== 200)
                     throw res.status;
                 // TODO: Decide how to use info here to start irma session
             }).catch(err => {
                 dispatch({type: 'raiseError', errorMessage: 'Error on starting irma session to add email. ('+err+')'});
             });
         }
-        if (action.type == 'removeEmail') {
+        if (action.type === 'removeEmail') {
             fetch(globalThis.server + '/email/remove', {
                 method: 'POST',
                 body: action.email,
                 credentials: 'include',
             }).then(res => {
-                if (res.status != 204) throw res.status;
+                if (res.status !== 204) throw res.status;
                 dispatch({type: 'startUpdateInfo'});
             }).catch(err => {
                 dispatch({type: 'raiseError', errorMessage: 'Error on removing email. ('+err+')'});
@@ -85,12 +86,12 @@ function handleEmail({dispatch}) {
 
 function handleDeleteAccount({dispatch}) {
     return next => action => {
-        if (action.type == 'removeAccount') {
+        if (action.type === 'removeAccount') {
             fetch(globalThis.server + '/user/delete', {
                 method: 'POST',
                 credentials: 'include',
             }).then(res => {
-                if (res.status != 204) throw res.status;
+                if (res.status !== 204) throw res.status;
                 dispatch({type: 'startUpdateInfo'});
             }).catch(err => {
                 dispatch({type: 'raiseError', errorMessage: 'Error on deleting account. ('+err+')'});
@@ -102,19 +103,19 @@ function handleDeleteAccount({dispatch}) {
 
 function handleTokenLogin({dispatch}) {
     return next => action => {
-        if (action.type == 'startTokenLogin') {
+        if (action.type === 'startTokenLogin') {
             fetch(globalThis.server + '/login/token/candidates', {
                 method: 'POST',
                 body: action.token,
                 credentials: 'include',
             }).then(res => {
-                if (res.status != 200) throw res.status;
+                if (res.status !== 200) throw res.status;
                 return res.json();
             }).then(resjson => {
-                if (resjson.length == 1) {
+                if (resjson.length === 1) {
                     dispatch({type: 'finishTokenLogin', token: action.token, username: resjson[0].username});
-                } else if (resjson.length == 0) {
-                    throw 'no candidates returned';
+                } else if (resjson.length === 0) {
+                    throw Error('no candidates returned');
                 } else {
                     dispatch({type: 'setCandidates', candidates: resjson});
                 }
@@ -123,13 +124,13 @@ function handleTokenLogin({dispatch}) {
                 dispatch({type: 'loggedOut'});
             });
         }
-        if (action.type == 'finishTokenLogin') {
+        if (action.type === 'finishTokenLogin') {
             fetch(globalThis.server + '/login/token/candidates', {
                 method: 'POST',
                 body: JSON.stringify({token: action.token, username: action.username}),
                 credentials: 'include',
             }).then(res => {
-                if (res.status != 204) throw res.status;
+                if (res.status !== 204) throw res.status;
                 dispatch({type: 'loggedIn'});
                 dispatch({type: 'startUpdateInfo'});
             }).catch(err => {
@@ -143,12 +144,12 @@ function handleTokenLogin({dispatch}) {
 
 function handleIrmaLogin({dispatch}) {
     return next => action => {
-        if (action.type == 'startIrmaLogin') {
+        if (action.type === 'startIrmaLogin') {
             fetch(globalThis.server + '/login/irma', {
                 method: 'POST',
                 credentials: 'include',
             }).then(res => {
-                if (res.status != 200) throw res.status;
+                if (res.status !== 200) throw res.status;
                 // TODO: Decide how to use info here to start irma session
             }).catch(err => {
                 dispatch({type: 'raiseError', errorMessage: 'Error on fetching irma login session. ('+err+')'});
@@ -161,13 +162,13 @@ function handleIrmaLogin({dispatch}) {
 
 function handleRegistrationVerify({dispatch}) {
     return next => action => {
-        if (action.type == 'startRegistrationVerify') {
+        if (action.type === 'startRegistrationVerify') {
             fetch(globalThis.server + '/verify', {
                 method: 'POST',
                 body: action.token,
                 credentials: 'include',
             }).then(res => {
-                if (res.status != 204) throw res.status;
+                if (res.status !== 204) throw res.status;
                 dispatch({type: 'registrationVerified'});
             }).catch(err => {
                 dispatch({type: 'raiseError', errorMessage: 'Error on verifying email. ('+err+')'});
@@ -180,18 +181,18 @@ function handleRegistrationVerify({dispatch}) {
 
 function handleVerifySession({dispatch}) {
     return next => action => {
-        if (action.type == 'verifySession') {
-            fetch(globalThis.server + '/checkSession', {
+        if (action.type === 'verifySession') {
+            fetch(globalThis.server + '/checksession', {
                 method: 'POST',
                 credentials: 'include',
             }).then (res => {
-                if (res.status != 200) throw res.status;
+                if (res.status !== 200) throw res.status;
                 return res.text();
             }).then (res => {
-                if (res == 'ok') {
+                if (res === 'ok') {
                     dispatch({type: 'loggedIn'});
                     dispatch({type: 'startUpdateInfo'});
-                } else if (res == 'expired') {
+                } else if (res === 'expired') {
                     dispatch({type: 'loggedOut'});
                 } else {
                     throw res;
@@ -207,12 +208,11 @@ function handleVerifySession({dispatch}) {
 
 export default function() {
     return createStore(
-        combineReducers(
-            login,
-            logs,
-            userdata,
-        ),
-        null,
+        combineReducers({
+            login: login,
+            logs: logs,
+            userdata: userdata,
+        }),
         applyMiddleware(
             handleLoadLogs,
             handleUpdateData,
