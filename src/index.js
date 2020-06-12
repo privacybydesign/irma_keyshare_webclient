@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import globalThis from 'core-js/internals/global';
 
 import buildStore from './store';
 
-store = buildStore()
+// TODO: Put in config file
+globalThis.server = 'http://localhost:8080';
+
+const store = buildStore();
 
 const fragment = window.location.hash
 if (fragment.startsWith('#token=')) {
