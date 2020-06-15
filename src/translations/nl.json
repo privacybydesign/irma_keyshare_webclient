@@ -1,0 +1,16 @@
+{
+  "login": {
+    "title": "MijnIRMA login",
+    "intro-par1": "Dit is de MijnIRMA website van de Privacy by Design Foundation. Als je IRMA gebruiker bent, kun je via deze pagina de activiteiten van je IRMA-app controleren en eventueel beëindigen.",
+    "intro-par2": "De stichting ziet wanneer je IRMA-app gebruikt wordt, maar ziet niet waar of met welke informatie. Hiermee wordt een combinatie van beveiliging (security) en privacy nagestreefd. Als er misbruik van je IRMA-app gemaakt wordt kun je dat bij MijnIRMA zien in de gebruiksgegevens. Vervolgens kun je het gebruik van de IRMA-app stoppen.",
+    "login-methods": "Je kunt hieronder op twee manieren inloggen bij MijnIRMA:",
+    "login-method-irma": "Met IRMA zelf, via het scannen van een QR code; dit is de makkelijkste manier.",
+    "login-method-email": "Met het emailadres waarmee je jezelf geregistreerd hebt. Als je dit hieronder invult, krijg je een link toegestuurd waarmee je op de MijnIRMA pagina komt. Deze optie kun je gebruiken als je je telefoon niet bij de hand hebt, of erger, als je telefoon gestolen is en je misbruik van je IRMA-app uit wil sluiten.",
+    "login-using": "Log in met",
+    "or": "of",
+    "email-address": "E-mailadres",
+    "email-link": "E-mail link",
+    "check-email": "Controleer je e-mail",
+    "check-email-text": "Log in door te klikken op de link die naar je e-mailadres is verstuurd."
+  }
+}

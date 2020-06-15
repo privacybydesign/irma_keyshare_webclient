@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'Montserrat';
+    src: url('./fonts/subset-Montserrat-Regular.woff2') format('woff2'),
+    url('./fonts/subset-Montserrat-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Karla';
+    src: url('./fonts/subset-Karla-Bold.woff2') format('woff2'),
+    url('./fonts/subset-Karla-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('./fonts/subset-Montserrat-SemiBold.woff2') format('woff2'),
+    url('./fonts/subset-Montserrat-SemiBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}

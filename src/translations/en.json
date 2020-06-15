@@ -1,0 +1,16 @@
+{
+  "login": {
+    "title": "MyIRMA login",
+    "intro-par1": "This is the MyIRMA website of the Privacy by Design Foundation. Using this website you can view the activities of your IRMA app, and block or delete your account.",
+    "intro-par2": "The foundation knows when your IRMA app is used, but does not know where or with what information. In this way a combination of security and privacy is pursued. The MyIRMA usage log allows you to check if your IRMA app is being abused. If so, you can block your IRMA app here.",
+    "login-methods": "Below you can log in to MyIRMA in two ways:",
+    "login-method-irma": "Using IRMA, by scanning a QR code with the IRMA app; this is the easiest way.",
+    "login-method-email": "Using the email address with which you registered. If you enter it below a link will be sent to it that will allow you to log in to MyIRMA. You can use this login method when you do not have your phone with you, or if your phone has been stolen and you want to prevent abuse of your IRMA app.",
+    "login-using": "Log in using",
+    "or": "or",
+    "email-address": "Email address",
+    "email-link": "Email link",
+    "check-email": "Check your email",
+    "check-email-text": "Log in by clicking on the link that has been sent to your email address."
+  }
+}
