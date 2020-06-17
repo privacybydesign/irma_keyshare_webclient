@@ -1,5 +1,4 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
-import globalThis from 'core-js/internals/global';
 
 import login from './loginstate';
 import logs from './logs';
@@ -12,7 +11,7 @@ function handleLoadLogs({getState, dispatch}) {
             // load logs if needed
             const result = next(action)
             const offset = getState().logs.currentIndex;
-            fetch(globalThis.server + '/user/logs/' + offset, {
+            fetch(window.config.server + '/user/logs/' + offset, {
                 method: 'GET',
                 credentials: 'include',
             }).then(res => {
@@ -36,7 +35,7 @@ function handleLoadLogs({getState, dispatch}) {
 function handleUpdateData({getState, dispatch}) {
     return next => action => {
         if (action.type === 'startUpdateInfo' && !getState.userdata.fetching) {
-            fetch(globalThis.server + '/user', {
+            fetch(window.config.server + '/user', {
                 method: 'GET',
                 credentials: 'include',
             }).then(res => {
@@ -57,7 +56,7 @@ function handleUpdateData({getState, dispatch}) {
 function handleEmail({dispatch}) {
     return next => action => {
         if (action.type === 'addEmail') {
-            fetch(globalThis.server + '/email/add', {
+            fetch(window.config.server + '/email/add', {
                 method: 'POST',
                 credentials: 'include',
             }).then(res => {
@@ -69,7 +68,7 @@ function handleEmail({dispatch}) {
             });
         }
         if (action.type === 'removeEmail') {
-            fetch(globalThis.server + '/email/remove', {
+            fetch(window.config.server + '/email/remove', {
                 method: 'POST',
                 body: action.email,
                 credentials: 'include',
@@ -87,7 +86,7 @@ function handleEmail({dispatch}) {
 function handleDeleteAccount({dispatch}) {
     return next => action => {
         if (action.type === 'removeAccount') {
-            fetch(globalThis.server + '/user/delete', {
+            fetch(window.config.server + '/user/delete', {
                 method: 'POST',
                 credentials: 'include',
             }).then(res => {
@@ -104,7 +103,7 @@ function handleDeleteAccount({dispatch}) {
 function handleTokenLogin({dispatch}) {
     return next => action => {
         if (action.type === 'startTokenLogin') {
-            fetch(globalThis.server + '/login/token/candidates', {
+            fetch(window.config.server + '/login/token/candidates', {
                 method: 'POST',
                 body: action.token,
                 credentials: 'include',
@@ -125,7 +124,7 @@ function handleTokenLogin({dispatch}) {
             });
         }
         if (action.type === 'finishTokenLogin') {
-            fetch(globalThis.server + '/login/token/candidates', {
+            fetch(window.config.server + '/login/token/candidates', {
                 method: 'POST',
                 body: JSON.stringify({token: action.token, username: action.username}),
                 credentials: 'include',
@@ -145,7 +144,7 @@ function handleTokenLogin({dispatch}) {
 function handleIrmaLogin({dispatch}) {
     return next => action => {
         if (action.type === 'startIrmaLogin') {
-            fetch(globalThis.server + '/login/irma', {
+            fetch(window.config.server + '/login/irma', {
                 method: 'POST',
                 credentials: 'include',
             }).then(res => {
@@ -163,7 +162,7 @@ function handleIrmaLogin({dispatch}) {
 function handleRegistrationVerify({dispatch}) {
     return next => action => {
         if (action.type === 'startRegistrationVerify') {
-            fetch(globalThis.server + '/verify', {
+            fetch(window.config.server + '/verify', {
                 method: 'POST',
                 body: action.token,
                 credentials: 'include',
@@ -182,7 +181,7 @@ function handleRegistrationVerify({dispatch}) {
 function handleVerifySession({dispatch}) {
     return next => action => {
         if (action.type === 'verifySession') {
-            fetch(globalThis.server + '/checksession', {
+            fetch(window.config.server + '/checksession', {
                 method: 'POST',
                 credentials: 'include',
             }).then (res => {
