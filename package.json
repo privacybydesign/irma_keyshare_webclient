@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "core-js": "^3.6.5",
     "i18next": "^19.4.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
