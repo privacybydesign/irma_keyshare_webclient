@@ -2,13 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import globalThis from 'core-js/internals/global';
-import {ThemeProvider, CssBaseline} from '@material-ui/core';
 
 import buildStore from './store';
 import App from './app';
 import './i18n';
 import './index.css';
-import theme from './theme';
 
 // TODO: Put in config file
 globalThis.server = 'http://localhost:8080';
@@ -30,10 +28,7 @@ if (fragment.startsWith('#token=')) {
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store} context={context}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App context={context}/>
-      </ThemeProvider>
+      <App context={context}/>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

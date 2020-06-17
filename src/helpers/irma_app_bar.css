@@ -1,0 +1,24 @@
+@font-face {
+    font-family: 'Karla';
+    src: url('../fonts/subset-Karla-Bold.woff2') format('woff2'),
+    url('../fonts/subset-Karla-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+header {
+    position: relative;
+    background-color: #004C92;
+    color: white;
+    text-align: center;
+}
+
+header h1 {
+    text-align: center;
+    margin: 0;
+    font-size: 18px;
+    line-height: 22px;
+    padding: 16px 0;
+    font-weight: bold;
+    font-family: 'Karla', Verdana, Arial, sans-serif;
+}
