@@ -7,17 +7,21 @@
 }
 
 @font-face {
-    font-family: 'Karla';
-    src: url('./fonts/subset-Karla-Bold.woff2') format('woff2'),
-    url('./fonts/subset-Karla-Bold.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face {
     font-family: 'Montserrat';
     src: url('./fonts/subset-Montserrat-SemiBold.woff2') format('woff2'),
     url('./fonts/subset-Montserrat-SemiBold.woff') format('woff');
     font-weight: bold;
     font-style: normal;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+
+    background-color: #F2F5F8;
+
+    font-size: 16px;
+    line-height: 24px;
+    font-family: 'Montserrat', Verdana, Arial, sans-serif;
 }
