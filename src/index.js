@@ -1,15 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import globalThis from 'core-js/internals/global';
 
 import buildStore from './store';
 import App from './app';
 import './i18n';
 import './index.css';
-
-// TODO: Put in config file
-globalThis.server = 'http://localhost:8080';
 
 const store = buildStore();
 const context = React.createContext();
