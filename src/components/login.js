@@ -2,7 +2,8 @@ import React from 'react';
 import connect from 'react-redux/lib/connect/connect';
 import {useTranslation} from 'react-i18next';
 import IrmaAppBar from '../helpers/irma_app_bar';
-import {Box, Container} from '@material-ui/core';
+
+import '../templates/column.css';
 
 const mapStateToProps = state => {
   return {
@@ -15,19 +16,19 @@ const Login = () => {
 
   const renderLoginMethods = () => {
     return (
-      <Container maxWidth={'md'} style={{textAlign: 'center'}}>
+      <div className={'container'} style={{textAlign: 'center'}}>
         <h2>{t('login-using')}</h2>
         <div>IRMA (TODO)</div>
         <div>{t('or')}</div>
         <div>Email (TODO)</div>
-      </Container>
+      </div>
     )
   };
 
   return (
-    <Box>
+    <div>
       <IrmaAppBar title={t('title')}/>
-      <Container maxWidth={'sm'}>
+      <div className={'column'}>
         <p>{t('intro-par1')}</p>
         <p>{t('intro-par2')}</p>
 
@@ -37,8 +38,8 @@ const Login = () => {
           <li key={'login-method-email'}>{t('login-method-email')}</li>
         </ul>
         { renderLoginMethods() }
-      </Container>
-    </Box>
+      </div>
+    </div>
   );
 };
 
