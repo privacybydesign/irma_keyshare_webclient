@@ -1,3 +1,5 @@
+@import "src/templates/theme";
+
 @font-face {
     font-family: 'Karla';
     src: url('../fonts/subset-Karla-Bold.woff2') format('woff2'),
@@ -7,9 +9,8 @@
 }
 
 header {
+    @include primaryTheme;
     position: relative;
-    background-color: #004C92;
-    color: white;
     text-align: center;
 }
 
