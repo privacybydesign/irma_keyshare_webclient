@@ -6,11 +6,6 @@ const initialState = {
 
 export default function(state = initialState, action) {
     switch(action.type) {
-        case 'startIrmaLogin':
-            return {
-                ...state,
-                sessionState: 'waitIrmaLoginSession',
-            };
         case 'startSendMail':
             return {
                 ...state,
@@ -51,6 +46,16 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 sessionState: 'loggedOut',
+                irmaSession: {
+                    url: window.config.server,
+                    start: {
+                        url: o => `${o.url}/login/irma`,
+                    },
+                    mapping: {
+                        sessionPtr: r => r,
+                    },
+                    result: false,
+                },
             };
         case 'raiseError':
             return {

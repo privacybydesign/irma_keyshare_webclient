@@ -13,7 +13,7 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: "nl", // TODO: Set to en when english version is requested or use language detector.
+    lng: window.config.lang,
 
     keySeparator: false, // we do not use keys in form messages.welcome
 

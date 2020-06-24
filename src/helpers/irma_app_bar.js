@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './irma_app_bar.css'
+import './irma_app_bar.scss'
 
 const IrmaAppBar = (props) => {
   return (
