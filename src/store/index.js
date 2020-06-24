@@ -7,7 +7,7 @@ import userdata from './userdata';
 // Catch and deal with log loading
 function handleLoadLogs({getState, dispatch}) {
     return next => action => {
-        if (action.type === 'loadLogs' && !getState.logs.loading()) {
+        if (action.type === 'loadLogs' && !getState().logs.loading) {
             // load logs if needed
             const result = next(action)
             const offset = getState().logs.currentIndex;
@@ -34,7 +34,7 @@ function handleLoadLogs({getState, dispatch}) {
 
 function handleUpdateData({getState, dispatch}) {
     return next => action => {
-        if (action.type === 'startUpdateInfo' && !getState.userdata.fetching) {
+        if (action.type === 'startUpdateInfo' && !getState().userdata.fetching) {
             fetch(window.config.server + '/user', {
                 method: 'GET',
                 credentials: 'include',
@@ -124,7 +124,7 @@ function handleTokenLogin({dispatch}) {
             });
         }
         if (action.type === 'finishTokenLogin') {
-            fetch(window.config.server + '/login/token/candidates', {
+            fetch(window.config.server + '/login/token', {
                 method: 'POST',
                 body: JSON.stringify({token: action.token, username: action.username}),
                 credentials: 'include',
@@ -141,17 +141,21 @@ function handleTokenLogin({dispatch}) {
     };
 }
 
-function handleIrmaLogin({dispatch}) {
+function handleEmailLogin({dispatch}) {
     return next => action => {
-        if (action.type === 'startIrmaLogin') {
-            fetch(window.config.server + '/login/irma', {
+        if (action.type === 'startEmailLogin') {
+            fetch(window.config.server + '/login/email', {
                 method: 'POST',
                 credentials: 'include',
+                body: JSON.stringify({
+                    email: action.email,
+                    language: window.config.lang,
+                }),
             }).then(res => {
-                if (res.status !== 200) throw res.status;
-                // TODO: Decide how to use info here to start irma session
+                if (res.status !== 204) throw res.status;
+                dispatch({type: 'emailSent'});
             }).catch(err => {
-                dispatch({type: 'raiseError', errorMessage: 'Error on fetching irma login session. ('+err+')'});
+                dispatch({type: 'raiseError', errorMessage: 'Error on logging in with email. ('+err+')'});
                 dispatch({type: 'loggedOut'});
             });
         }
@@ -218,7 +222,7 @@ export default function() {
             handleEmail,
             handleDeleteAccount,
             handleTokenLogin,
-            handleIrmaLogin,
+            handleEmailLogin,
             handleRegistrationVerify,
             handleVerifySession,
         ),
