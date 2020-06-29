@@ -1,8 +1,6 @@
 {
-  "login": {
-    "title": "MijnIRMA login"
-  },
   "login-select-method": {
+    "title": "MijnIRMA login",
     "intro-par1": "Dit is de MijnIRMA website van de Privacy by Design Foundation. Als je IRMA gebruiker bent, kun je via deze pagina de activiteiten van je IRMA-app controleren en eventueel beëindigen.",
     "intro-par2": "De stichting ziet wanneer je IRMA-app gebruikt wordt, maar ziet niet waar of met welke informatie. Hiermee wordt een combinatie van beveiliging (security) en privacy nagestreefd. Als er misbruik van je IRMA-app gemaakt wordt kun je dat bij MijnIRMA zien in de gebruiksgegevens. Vervolgens kun je het gebruik van de IRMA-app stoppen.",
     "login-methods": "Je kunt hieronder op twee manieren inloggen bij MijnIRMA:",
@@ -16,11 +14,16 @@
     "check-email-text": "Log in door te klikken op de link die naar je e-mailadres is verstuurd."
   },
   "login-select-candidate": {
+    "title": "Kies IRMA-account",
     "username": "Gebruikersnaam",
     "last-seen": "Laatst actief",
     "login": "Log in",
     "explanation": "Het e-mailadres waarmee u inlogt is gekoppeld aan meerdere IRMA-accounts, die in onderstaande tabel worden weergegeven. De betekenis van de kolommen is als volgt:",
     "candidates-item-1": "uw IRMA gebruikersnaam. Deze staat in uw IRMA-app als u inlogt bij MijnIRMA.",
     "candidates-item-2": "wanneer er voor het laatst kaartjes zijn ontvangen of vrijgegeven met dit account."
+  },
+  "login-email-sent": {
+    "title": "Controleer uw e-mail",
+    "explanation": "Log in door te klikken op de link die naar uw e-mailadres is verstuurd."
   }
 }
