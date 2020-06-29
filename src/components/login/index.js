@@ -4,6 +4,7 @@ import {withTranslation} from 'react-i18next';
 import IrmaAppBar from '../../helpers/irma_app_bar';
 import SelectMethod from './select_method';
 import SelectCandidate from './select_candidate';
+import LoadingSpinner from '../../helpers/loading_spinner';
 
 const mapStateToProps = state => {
   return {
@@ -20,7 +21,7 @@ const Login = (props) => {
         return <SelectCandidate dispatch={props.dispatch} candidates={props.candidates} token={props.token}/>
       default:
         // TODO: Other pages still have to be implemented.
-        return <div className={'column'}>{props.sessionState}</div>
+        return <LoadingSpinner/>
     }
   }
 
