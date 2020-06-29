@@ -1,7 +1,13 @@
 @import "src/templates/buttons";
 
-.candidate-table, .candidate-table th {
+.candidate-table, .candidate-table th, .candidate-table td {
+  text-align: left;
   border-bottom: 2px solid $borderColor;
   border-collapse: collapse;
   padding: 20px 0;
+}
+
+.button-td {
+  white-space: nowrap;
+  width: 1px;
 }
