@@ -1,0 +1,42 @@
+@import "src/templates/theme";
+
+.form-sign-in {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#input-email {
+  @include mainTheme;
+  position: relative;
+  height: auto;
+  flex: 1;
+  padding: 10px;
+  border-radius: 4px 0 0 4px;
+  border: 1px solid $inputBorderColor;
+  outline-color: $primaryColor;
+}
+
+#input-email:focus {
+  z-index: 2;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: row;
+  justify-items: inherit;
+  width: 80%;
+  min-width: 262px;
+  max-width: 400px;
+}
+
+.input-group-btn {
+  display: table-cell;
+}
+
+.btn-primary {
+  @include primaryTheme;
+  padding: 16px;
+  border-radius: 0 6px 6px 0;
+  border: 1px solid transparent;
+}
