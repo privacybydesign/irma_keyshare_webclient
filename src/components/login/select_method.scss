@@ -1,4 +1,6 @@
+@import "src/templates/column";
 @import "src/templates/theme";
+@import "src/templates/buttons";
 
 .form-sign-in {
   display: flex;
@@ -34,9 +36,7 @@
   display: table-cell;
 }
 
-.btn-primary {
-  @include primaryTheme;
-  padding: 16px;
+.btn-email {
+  @extend .btn-primary;
   border-radius: 0 6px 6px 0;
-  border: 1px solid transparent;
 }

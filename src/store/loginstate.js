@@ -35,6 +35,7 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 candidates: action.candidates,
+                token: action.token,
                 sessionState: 'selectCandidate',
             };
         case 'loggedIn':

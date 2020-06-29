@@ -15,7 +15,7 @@ i18n
     resources,
     lng: window.config.lang,
 
-    keySeparator: false, // we do not use keys in form messages.welcome
+    keySeparator: false,
 
     interpolation: {
       escapeValue: false // react already safes from xss

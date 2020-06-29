@@ -116,7 +116,7 @@ function handleTokenLogin({dispatch}) {
                 } else if (resjson.length === 0) {
                     throw Error('no candidates returned');
                 } else {
-                    dispatch({type: 'setCandidates', candidates: resjson});
+                    dispatch({type: 'setCandidates', candidates: resjson, token: action.token});
                 }
             }).catch(err => {
                 dispatch({type: 'raiseError', errorMessage: 'Error whilst fetching login candidates. ('+err+')'});
