@@ -1,20 +1,11 @@
 import React from 'react';
-import connect from 'react-redux/lib/connect/connect';
 import {withTranslation} from 'react-i18next';
-import IrmaAppBar from '../helpers/irma_app_bar';
 import irmaFrontend from '@privacybydesign/irma-frontend';
 
-import './login.scss';
-import '../templates/column.scss';
+import './select_login_method.scss';
+import '../../templates/column.scss';
 
-const mapStateToProps = state => {
-  return {
-    sessionState: state.login.sessionState,
-    irmaSession: state.login.irmaSession,
-  };
-};
-
-class Login extends React.Component {
+class SelectLoginMethod extends React.Component {
   t = this.props.t;
 
   componentDidMount() {
@@ -85,7 +76,7 @@ class Login extends React.Component {
     );
   }
 
-  renderLogin() {
+  render() {
     return (
       <div className={'column'}>
         <p>{this.t('intro-par1')}</p>
@@ -100,25 +91,6 @@ class Login extends React.Component {
       </div>
     );
   }
-
-  renderState() {
-    switch (this.props.sessionState) {
-      case 'loggedOut':
-        return this.renderLogin();
-      default:
-        // TODO: Other pages still have to be implemented.
-        return <div className={'column'}>{this.props.sessionState}</div>
-    }
-  }
-
-  render() {
-    return (
-      <div>
-        <IrmaAppBar title={this.t('title')}/>
-        {this.renderState()}
-      </div>
-    );
-  }
 }
 
-export default connect(mapStateToProps)(withTranslation('login')(Login));
+export default withTranslation('login')(SelectLoginMethod);
