@@ -1,6 +1,5 @@
 import React from 'react';
 import connect from 'react-redux/lib/connect/connect';
-import {withTranslation} from 'react-i18next';
 import SelectMethod from './select_method';
 import SelectCandidate from './select_candidate';
 import LoadingSpinner from '../../helpers/loading_spinner';
@@ -26,4 +25,4 @@ const Login = (props) => {
   }
 }
 
-export default connect(mapStateToProps)(withTranslation('login')(Login));
+export default connect(mapStateToProps)(Login);
