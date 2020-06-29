@@ -2,10 +2,9 @@ import React from 'react';
 import {withTranslation} from 'react-i18next';
 import irmaFrontend from '@privacybydesign/irma-frontend';
 
-import './select_login_method.scss';
-import '../../templates/column.scss';
+import './select_method.scss';
 
-class SelectLoginMethod extends React.Component {
+class SelectMethod extends React.Component {
   t = this.props.t;
 
   componentDidMount() {
@@ -30,6 +29,12 @@ class SelectLoginMethod extends React.Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    // Never update this element, since IrmaFrontend handles state changes itself.
+    // When updates need to be enabled, make sure the irma-web-form is excluded from re-render.
+    return false;
+  }
+
   handleEmailLogin(event) {
     event.preventDefault();
     let emailInput = document.getElementById('input-email');
@@ -50,7 +55,7 @@ class SelectLoginMethod extends React.Component {
   renderIrmaLogin() {
     let prevElement = document.getElementById('irma-web-form');
     if (prevElement) {
-      return prevElement.outerHTML;
+      return React.createElement('section', {id: 'irma-web-form', innerHTML: prevElement.innerHTML})
     } else {
       return (
         <section id={'irma-web-form'}/>
@@ -68,7 +73,7 @@ class SelectLoginMethod extends React.Component {
                required autoFocus
         />
         <span className={'input-group-btn'}>
-          <button className={'btn-primary'} type={'submit'} id={'sign-in-button-email'}>
+          <button className={'btn-email'} type={'submit'} id={'sign-in-button-email'}>
             {this.t('email-link')}
           </button>
         </span>
@@ -93,4 +98,4 @@ class SelectLoginMethod extends React.Component {
   }
 }
 
-export default withTranslation('login')(SelectLoginMethod);
+export default withTranslation('login-select-method')(SelectMethod);
