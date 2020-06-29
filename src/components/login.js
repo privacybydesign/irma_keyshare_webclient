@@ -18,14 +18,6 @@ class Login extends React.Component {
   t = this.props.t;
 
   componentDidMount() {
-    this.initIrma();
-  }
-
-  componentDidUpdate() {
-    this.initIrma();
-  }
-
-  initIrma() {
     let irmaElement = document.querySelector('#irma-web-form');
     if (irmaElement != null && !irmaElement.hasChildNodes()) {
       irmaFrontend.newWeb({
@@ -65,9 +57,14 @@ class Login extends React.Component {
   };
 
   renderIrmaLogin() {
-    return (
-      <section id={'irma-web-form'}/>
-    );
+    let prevElement = document.getElementById('irma-web-form');
+    if (prevElement) {
+      return prevElement.outerHTML;
+    } else {
+      return (
+        <section id={'irma-web-form'}/>
+      );
+    }
   }
 
   renderEmailLogin() {
