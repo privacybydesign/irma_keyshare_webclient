@@ -3,6 +3,7 @@ import {withTranslation} from 'react-i18next';
 import irmaFrontend from '@privacybydesign/irma-frontend';
 
 import './select_method.scss';
+import IrmaAppBar from '../../helpers/irma_app_bar';
 
 class SelectMethod extends React.Component {
   t = this.props.t;
@@ -83,17 +84,20 @@ class SelectMethod extends React.Component {
 
   render() {
     return (
-      <div className={'column'}>
-        <p>{this.t('intro-par1')}</p>
-        <p>{this.t('intro-par2')}</p>
+      <>
+        <IrmaAppBar title={this.t('title')}/>
+        <div className={'column'}>
+          <p>{this.t('intro-par1')}</p>
+          <p>{this.t('intro-par2')}</p>
 
-        <p>{this.t('login-methods')}</p>
-        <ul>
-          <li key={'login-method-irma'}>{this.t('login-method-irma')}</li>
-          <li key={'login-method-email'}>{this.t('login-method-email')}</li>
-        </ul>
-        {this.renderLoginMethods()}
-      </div>
+          <p>{this.t('login-methods')}</p>
+          <ul>
+            <li key={'login-method-irma'}>{this.t('login-method-irma')}</li>
+            <li key={'login-method-email'}>{this.t('login-method-email')}</li>
+          </ul>
+          {this.renderLoginMethods()}
+        </div>
+      </>
     );
   }
 }
