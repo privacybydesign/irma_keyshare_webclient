@@ -1,4 +1,7 @@
 {
+  "common": {
+    "title": "MijnIRMA"
+  },
   "login-select-method": {
     "title": "MijnIRMA login",
     "intro-par1": "Dit is de MijnIRMA website van de Privacy by Design Foundation. Als je IRMA gebruiker bent, kun je via deze pagina de activiteiten van je IRMA-app controleren en eventueel beëindigen.",
@@ -25,5 +28,13 @@
   "login-email-sent": {
     "title": "Controleer uw e-mail",
     "explanation": "Log in door te klikken op de link die naar uw e-mailadres is verstuurd."
+  },
+  "login-registration-verified": {
+    "title": "MijnIRMA-registratie klaar",
+    "success": "Gelukt",
+    "explanation": "Je emailadres is nu aan je IRMA-app gekoppeld.",
+    "return-to-irma": "Terug naar IRMA",
+    "continue=to-myirma": "Ga naar MijnIRMA",
+    "app-is-ready": "Je IRMA-app is nu klaar voor verder gebruik."
   }
 }
