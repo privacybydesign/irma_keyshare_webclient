@@ -1,0 +1,28 @@
+@import "src/templates/column";
+@import "src/templates/buttons";
+
+.column-center {
+  @extend .column;
+  align-items: center;
+  text-align: center;
+}
+
+.success-icon {
+  width: 40%;
+}
+
+.return-button {
+  @extend .btn-primary;
+  margin: 0 auto 0 auto;
+  border-radius: 40px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  font-weight: bold;
+  padding: 5px 20px;
+}
+
+.irma-logo {
+  max-height: 50px;
+  margin-right: 10px;
+}

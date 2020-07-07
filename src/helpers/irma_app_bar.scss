@@ -8,13 +8,23 @@
     font-style: normal;
 }
 
-header {
+.irma-app-bar {
+    width: 100%;
     @include primaryTheme;
     position: relative;
-    text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
-header h1 {
+.irma-app-bar-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-basis: 600px;
+}
+
+.irma-app-bar-content h1 {
+    width: 100%;
     text-align: center;
     margin: 0;
     font-size: 18px;
@@ -22,4 +32,19 @@ header h1 {
     padding: 16px 0;
     font-weight: bold;
     font-family: 'Karla', Verdana, Arial, sans-serif;
+}
+
+.log-out-button {
+    @include primaryTheme;
+    border: 1px solid transparent;
+    margin-right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+}
+
+.log-out-icon {
+    fill: white;
+    height: 22px;
 }
