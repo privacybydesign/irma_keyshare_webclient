@@ -10,12 +10,12 @@ const IrmaAppBar = ({title, onLogout}) => {
       <h1>
         {title}
       </h1>
-        {onLogout
-          ? <button className={'log-out-button'} onClick={onLogout}>
-              <LogoutIcon className={'log-out-icon'}/>
-            </button>
-          : null
-        }
+      {onLogout
+        ? <button className={'log-out-button'} onClick={onLogout}>
+            <LogoutIcon className={'log-out-icon'}/>
+          </button>
+        : null
+      }
       </div>
     </header>
   );
