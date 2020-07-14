@@ -1,7 +1,4 @@
 {
-  "common": {
-    "title": "MijnIRMA"
-  },
   "login-select-method": {
     "title": "MijnIRMA login",
     "intro-par1": "Dit is de MijnIRMA website van de Privacy by Design Foundation. Als je IRMA gebruiker bent, kun je via deze pagina de activiteiten van je IRMA-app controleren en eventueel beëindigen.",
@@ -36,5 +33,29 @@
     "return-to-irma": "Terug naar IRMA",
     "continue=to-myirma": "Ga naar MijnIRMA",
     "app-is-ready": "Je IRMA-app is nu klaar voor verder gebruik."
+  },
+  "account-overview": {
+    "title": "MijnIRMA",
+    "logged-in-as": "Je bent ingelogd als"
+  },
+  "logs": {
+    "header": "Bekijk het gebruik van uw IRMA-app",
+    "refresh": "Ververs",
+    "previous": "Vorige",
+    "next": "Volgende"
+  },
+  "logs-table": {
+    "when": "Wanneer",
+    "event": "Gebeurtenis"
+  },
+  "logs-events": {
+    "PIN_CHECK_REFUSED": "PIN verificatie geblokkeerd",
+    "IRMA_APP_AUTH_REFUSED": "IRMA sessie geblokkeerd",
+    "PIN_CHECK_SUCCESS": "PIN geverifieerd",
+    "PIN_CHECK_FAILED": "PIN verkeerd, {{param}} pogingen resterend",
+    "PIN_CHECK_BLOCKED": "PIN te vaak verkeerd, geblokkeerd voor {{param}} seconden",
+    "IRMA_SESSION": "IRMA sessie uitgevoerd",
+    "IRMA_ENABLED": "MijnIRMA ingeschakeld",
+    "IRMA_BLOCKED": "MijnIRMA geblokkeerd"
   }
 }

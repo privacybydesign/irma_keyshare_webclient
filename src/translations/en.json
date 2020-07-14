@@ -1,7 +1,4 @@
 {
-  "common": {
-    "title": "MyIRMA"
-  },
   "login-select-method": {
     "title": "MyIRMA login",
     "intro-par1": "This is the MyIRMA website of the Privacy by Design Foundation. Using this website you can view the activities of your IRMA app, and block or delete your account.",
@@ -36,5 +33,29 @@
     "return-to-irma": "Return to IRMA",
     "continue-to-myirma": "Go to MyIRMA",
     "app-is-ready": "Your IRMA app is now ready for further usage."
+  },
+  "account-overview": {
+    "title": "MyIRMA",
+    "logged-in-as": "You are logged in as"
+  },
+  "logs": {
+    "header": "View usage of your IRMA app",
+    "refresh": "Refresh",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "logs-table": {
+    "when": "When",
+    "event": "Event"
+  },
+  "logs-events": {
+    "PIN_CHECK_REFUSED": "PIN verification blocked",
+    "IRMA_APP_AUTH_REFUSED": "IRMA session blocked",
+    "PIN_CHECK_SUCCESS": "PIN verified",
+    "PIN_CHECK_FAILED": "PIN wrong, {{param}} attempts remaining",
+    "PIN_CHECK_BLOCKED": "PIN wrong too often, blocked {{param}} seconds",
+    "IRMA_SESSION": "Performed IRMA session",
+    "IRMA_ENABLED": "MyIRMA enabled",
+    "IRMA_BLOCKED": "MyIRMA blocked"
   }
 }
