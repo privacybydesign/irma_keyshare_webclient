@@ -16,6 +16,7 @@
 
 $backgroundColor:  #F2F5F8;
 $primaryColor:     #004C92;
+$plainTheme:       #EFEFEF;
 $borderColor:      #CCC;
 
 @mixin mainTheme {
@@ -28,6 +29,14 @@ $borderColor:      #CCC;
     @include mainTheme;
     background-color: $primaryColor;
     color: white;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+@mixin plainTheme {
+    @include mainTheme;
+    background-color: $plainTheme;
+    color: black;
     font-family: inherit;
     font-size: inherit;
 }

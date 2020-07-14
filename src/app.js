@@ -16,7 +16,7 @@ const App = (props) => {
   if (props.loading) {
     return <LoadingSpinner/>;
   } else if (props.loggedIn) {
-    return <AccountOverview context={props.context} dispatch={props.dispatch}/>;
+    return <AccountOverview context={props.context}/>;
   } else {
     return <Login context={props.context}/>;
   }
