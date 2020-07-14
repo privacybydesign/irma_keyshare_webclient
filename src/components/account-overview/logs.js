@@ -39,7 +39,6 @@ class Logs extends React.Component {
     if (this.mounting || this.props.loading) {
       return <LoadingSpinner/>;
     } else {
-      console.log(this.props);
       return (
         <>
           <div className={'button-row'}>
