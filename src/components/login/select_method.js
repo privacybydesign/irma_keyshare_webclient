@@ -39,7 +39,6 @@ class SelectMethod extends React.Component {
   handleEmailLogin(event) {
     event.preventDefault();
     let emailInput = document.getElementById('input-email');
-    console.log();
     this.props.dispatch({type: 'startEmailLogin', email: emailInput.value});
   }
 

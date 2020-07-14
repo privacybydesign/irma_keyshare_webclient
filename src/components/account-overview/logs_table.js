@@ -19,7 +19,6 @@ const LogsTable = (props) => {
   }
 
   const renderLogEntry = (logEntry, index) => {
-    console.log(logEntry);
     return (
       <tr key={index}>
         {renderLogEntryTime(logEntry.timestamp)}
