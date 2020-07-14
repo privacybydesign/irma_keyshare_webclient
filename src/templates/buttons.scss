@@ -1,9 +1,24 @@
 @import "src/templates/theme";
 
-.btn-primary {
-  @include primaryTheme;
-  padding: 16px;
+.btn {
   border-radius: 6px;
   border: 1px solid transparent;
+  cursor: pointer;
   outline-color: $backgroundColor;
+  &:disabled {
+    cursor: not-allowed;
+    opacity: .65;
+  }
+}
+
+.btn-primary {
+  @extend .btn;
+  @include primaryTheme;
+  padding: 16px;
+}
+
+.btn-plain {
+  @extend .btn;
+  @include plainTheme;
+  padding: 10px;
 }
