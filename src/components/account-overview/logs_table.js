@@ -4,6 +4,7 @@ import moment from 'moment';
 import 'moment/locale/nl';
 
 import './logs_table.scss';
+import IrmaTable from '../../helpers/irma_table';
 
 const LogsTable = (props) => {
 
@@ -29,7 +30,7 @@ const LogsTable = (props) => {
   }
 
   return (
-    <table className={'logs-table'}>
+    <IrmaTable>
       <thead>
       <tr>
         <th className={'when-column'}>{props.t('when')}</th>
@@ -39,7 +40,7 @@ const LogsTable = (props) => {
       <tbody>
       {props.logEntries.map((entry, index) => renderLogEntry(entry, index))}
       </tbody>
-    </table>
+    </IrmaTable>
   );
 }
 

@@ -6,7 +6,6 @@ import './irma_button.scss';
 class IrmaButton extends React.Component {
     static propTypes = {
         theme: p.oneOf(['primary', 'secondary', 'plain']).isRequired,
-        className: p.string,
     };
 
     render() {
