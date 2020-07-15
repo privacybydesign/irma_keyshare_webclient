@@ -42,6 +42,10 @@
     align-items: center;
     justify-content: center;
     width: 50px;
+    cursor: pointer;
+    &:hover {
+        background-color: black;
+    }
 }
 
 .log-out-icon {

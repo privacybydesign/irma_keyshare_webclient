@@ -1,0 +1,34 @@
+@import "src/templates/theme";
+
+@mixin irma-button {
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  outline-color: $backgroundColor;
+  &:disabled {
+    cursor: not-allowed;
+    opacity: .65;
+  }
+  &:hover:enabled {
+    border-color: black;
+    box-shadow: 0 0 0 2px black inset;
+  }
+}
+
+.irma-button-primary {
+  @include irma-button;
+  @include primaryTheme;
+  padding: 16px;
+}
+
+.irma-button-secondary {
+  @include irma-button;
+  @include secondaryTheme;
+  padding: 16px;
+}
+
+.irma-button-plain {
+  @include irma-button;
+  @include plainTheme;
+  padding: 10px;
+}

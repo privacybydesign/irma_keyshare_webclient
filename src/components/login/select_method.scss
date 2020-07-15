@@ -1,6 +1,5 @@
 @import "src/templates/column";
 @import "src/templates/theme";
-@import "src/templates/buttons";
 
 .form-sign-in {
   display: flex;
@@ -37,6 +36,5 @@
 }
 
 .btn-email {
-  @extend .btn-primary;
   border-radius: 0 6px 6px 0;
 }
