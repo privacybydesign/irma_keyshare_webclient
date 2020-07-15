@@ -1,5 +1,5 @@
 @import "src/templates/column";
-@import "src/templates/buttons";
+@import "src/templates/theme";
 
 .column-center {
   @extend .column;
@@ -12,9 +12,12 @@
 }
 
 .return-button {
-  @extend .btn-primary;
+  @include primaryTheme;
   margin: 0 auto 0 auto;
   border-radius: 40px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  outline-color: $backgroundColor;
   text-decoration: none;
   display: inline-flex;
   align-items: center;

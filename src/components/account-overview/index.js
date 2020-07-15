@@ -4,10 +4,8 @@ import {withTranslation} from 'react-i18next';
 
 import IrmaAppBar from '../../helpers/irma_app_bar';
 import LoadingSpinner from '../../helpers/loading_spinner';
-
 import Emails from '../emails';
 import Logs from './logs';
-
 import '../../templates/column.scss';
 
 const mapStateToProps = state => {

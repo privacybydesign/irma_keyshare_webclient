@@ -1,14 +1,20 @@
 import React from 'react';
 import p from 'prop-types';
 
+import './irma_button.scss';
+
 class IrmaButton extends React.Component {
-    propTypes = {
-        onClick: p.func,
+    static propTypes = {
+        theme: p.oneOf(['primary', 'secondary', 'plain']).isRequired,
+        className: p.string,
     };
 
     render() {
+        let { theme, children, className, ...buttonProps} = this.props;
         return (
-            <button onClick={this.props.onClick}>{this.props.children}</button>
+            <button {...buttonProps} className={`irma-button-${theme} ${className}`}>
+                {children}
+            </button>
         );
     }
 }

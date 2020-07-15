@@ -4,10 +4,10 @@ import {withTranslation} from 'react-i18next';
 
 import LoadingSpinner from '../../helpers/loading_spinner';
 import LogsTable from './logs_table';
-
-import './logs.scss';
 import ChevronLeftIcon from '../../helpers/chevron-left-icon';
 import ChevronRightIcon from '../../helpers/chevron-right-icon';
+import IrmaButton from '../../helpers/irma_button';
+import './logs.scss';
 
 const LOGS_PER_PAGE = 10;
 
@@ -42,26 +42,32 @@ class Logs extends React.Component {
       return (
         <>
           <div className={'button-row'}>
-            <button className={'btn-plain refresh'}
-                    disabled={this.props.currentIndex > 0}
-                    onClick={() => this.loadLogs(0)}
+            <IrmaButton
+              theme={'plain'}
+              className={'refresh'}
+              disabled={this.props.currentIndex > 0}
+              onClick={() => this.loadLogs(0)}
             >
               {this.t('refresh')}
-            </button>
-            <button className={'btn-plain previous'}
-                    disabled={this.props.currentIndex === 0}
-                    onClick={() => this.loadLogs(-LOGS_PER_PAGE)}
+            </IrmaButton>
+            <IrmaButton
+              theme={'plain'}
+              className={'previous'}
+              disabled={this.props.currentIndex === 0}
+              onClick={() => this.loadLogs(-LOGS_PER_PAGE)}
             >
               <ChevronLeftIcon/>
               {this.t('previous')}
-            </button>
-            <button className={'btn-plain next'}
-                    disabled={!this.props.haveMore}
-                    onClick={() => this.loadLogs(LOGS_PER_PAGE)}
+            </IrmaButton>
+            <IrmaButton
+              theme={'plain'}
+              className={'next'}
+              disabled={!this.props.haveMore}
+              onClick={() => this.loadLogs(LOGS_PER_PAGE)}
             >
               {this.t('next')}
               <ChevronRightIcon/>
-            </button>
+            </IrmaButton>
           </div>
           <LogsTable logEntries={this.props.logEntries}/>
         </>

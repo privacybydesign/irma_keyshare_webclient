@@ -22,14 +22,14 @@ class Emails extends React.Component {
 
     render_email_header = () => {
         return (<thead>
-            <tr><th>{this.t('emailaddress')}</th><th></th></tr>
+            <tr><th>{this.t('emailaddress')}</th></tr>
         </thead>);
     }
 
     render_email_row = (address) => {
         return (<tr>
             <td>{address.email}</td>
-            <td>{address.delete_in_progress?this.t('delete_in_progress'):<IrmaButton onClick={this.delete_email(address.email)}>{this.t('delete')}</IrmaButton>}</td>
+            <td>{address.delete_in_progress?this.t('delete_in_progress'):<IrmaButton theme={'secondary'} onClick={this.delete_email(address.email)}>{this.t('delete')}</IrmaButton>}</td>
         </tr>);
     }
 
