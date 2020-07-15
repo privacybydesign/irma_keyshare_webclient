@@ -1,11 +1,14 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
+
 import IrmaAppBar from '../../helpers/irma_app_bar';
+import LoadingSpinner from '../../helpers/loading_spinner';
+
+import Emails from '../emails';
+import Logs from './logs';
 
 import '../../templates/column.scss';
-import {connect} from 'react-redux';
-import LoadingSpinner from '../../helpers/loading_spinner';
-import Logs from './logs';
 
 const mapStateToProps = state => {
   return {
@@ -33,7 +36,8 @@ class AccountOverview extends React.Component {
       return (
         <div className={'column'}>
           {this.renderUsername()}
-          <Logs context={this.props.context}/>
+          <Logs/>
+          <Emails/>
         </div>
       );
     }
