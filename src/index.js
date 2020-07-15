@@ -8,7 +8,6 @@ import './i18n';
 import './index.scss';
 
 const store = buildStore();
-const context = React.createContext();
 
 function checkUrlHash() {
   const fragment = window.location.hash
@@ -28,8 +27,8 @@ checkUrlHash();
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store} context={context}>
-      <App context={context}/>
+    <Provider store={store}>
+      <App/>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

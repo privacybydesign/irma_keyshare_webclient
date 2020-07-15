@@ -1,5 +1,5 @@
 import React from 'react';
-import connect from 'react-redux/lib/connect/connect';
+import { connect } from 'react-redux';
 import SelectMethod from './select_method';
 import SelectCandidate from './select_candidate';
 import LoadingSpinner from '../../helpers/loading_spinner';

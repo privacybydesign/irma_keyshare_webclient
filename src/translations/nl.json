@@ -57,5 +57,10 @@
     "IRMA_SESSION": "IRMA sessie uitgevoerd",
     "IRMA_ENABLED": "MijnIRMA ingeschakeld",
     "IRMA_BLOCKED": "MijnIRMA geblokkeerd"
+  },
+  "emails": {
+    "emailaddress": "Email",
+    "delete": "Verwijder",
+    "delete_in_progress": "Wordt verwijderd"
   }
 }

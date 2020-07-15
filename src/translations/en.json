@@ -57,5 +57,10 @@
     "IRMA_SESSION": "Performed IRMA session",
     "IRMA_ENABLED": "MyIRMA enabled",
     "IRMA_BLOCKED": "MyIRMA blocked"
+  },
+  "emails": {
+    "emailaddress": "Email",
+    "delete": "Delete",
+    "delete_in_progress": "Being deleted"
   }
 }
