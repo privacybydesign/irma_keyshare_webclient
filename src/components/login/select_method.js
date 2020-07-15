@@ -4,6 +4,7 @@ import irmaFrontend from '@privacybydesign/irma-frontend';
 
 import './select_method.scss';
 import IrmaAppBar from '../../helpers/irma_app_bar';
+import IrmaButton from '../../helpers/irma_button';
 
 class SelectMethod extends React.Component {
   t = this.props.t;
@@ -73,9 +74,9 @@ class SelectMethod extends React.Component {
                required autoFocus
         />
         <span className={'input-group-btn'}>
-          <button className={'btn-email'} type={'submit'} id={'sign-in-button-email'}>
+          <IrmaButton theme={'primary'} className={'btn-email'} type={'submit'} id={'sign-in-button-email'}>
             {this.t('email-link')}
-          </button>
+          </IrmaButton>
         </span>
       </form>
     );

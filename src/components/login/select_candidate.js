@@ -5,6 +5,7 @@ import 'moment/locale/nl';
 
 import './select_candidate.scss';
 import IrmaAppBar from '../../helpers/irma_app_bar';
+import IrmaButton from '../../helpers/irma_button';
 
 class SelectCandidate extends React.Component {
   t = this.props.t;
@@ -25,9 +26,9 @@ class SelectCandidate extends React.Component {
             {lastActive.fromNow()}
           </td>
           <td className={'button-td'}>
-            <button className={'btn-primary'} onClick={() => this.handleSelectCandidate(candidate['username'])}>
+            <IrmaButton theme={'primary'} onClick={() => this.handleSelectCandidate(candidate['username'])}>
               {this.t('login')}
-            </button>
+            </IrmaButton>
           </td>
         </tr>
       );
