@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import p from 'prop-types';
 import {withTranslation} from 'react-i18next';
 import IrmaButton from '../../helpers/irma_button';
+import IrmaTable from '../../helpers/irma_table';
+import './index.scss';
 
 function mapStateToProps(state) {
   return {
@@ -25,19 +27,20 @@ class Emails extends React.Component {
       <thead>
       <tr>
         <th>{this.t('emailaddress')}</th>
+        <th/>
       </tr>
       </thead>
     );
   }
 
-  renderEmailRow (address) {
+  renderEmailRow(address) {
     return (
       <tr key={address.email}>
         <td>{address.email}</td>
-        <td>{
+        <td className={'delete-column'}>{
           address.delete_in_progress
             ? this.t('delete_in_progress')
-            : <IrmaButton theme={'secondary'} onClick={this.deleteEmail(address.email)}>{this.t('delete')}</IrmaButton>
+            : <IrmaButton theme={'secondary'} onClick={() => this.deleteEmail(address.email)}>{this.t('delete')}</IrmaButton>
         }</td>
       </tr>
     );
@@ -46,12 +49,12 @@ class Emails extends React.Component {
   render = () => {
     return (
       <div>
-        <table>
+        <IrmaTable>
           {this.renderEmailHeader()}
           <tbody>
-          {this.props.emails.map(this.renderEmailRow)}
+          {this.props.emails.map((email) => this.renderEmailRow(email))}
           </tbody>
-        </table>
+        </IrmaTable>
       </div>
     );
   }
@@ -63,4 +66,4 @@ Emails.propTypes = {
   emails: p.arrayOf(p.object.isRequired).isRequired,
 };
 
-export default withTranslation(['emails', 'common'])(connect(mapStateToProps)(Emails));
+export default withTranslation('emails')(connect(mapStateToProps)(Emails));
