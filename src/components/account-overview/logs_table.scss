@@ -1,27 +1,7 @@
-@import "src/templates/theme";
+.when-column {
+  width: 40%;
+}
 
-.logs-table {
-  border-collapse: collapse;
-
-  td {
-    border-top: 1px solid $borderColor;
-  }
-
-  th {
-    border-bottom: 2px solid $borderColor;
-  }
-
-  .when-column {
-    width: 40%;
-  }
-
-  .event-column {
-    width: 60%;
-  }
-
-  .when-column, .event-column {
-    border-spacing: 0;
-    text-align: left;
-    padding: 8px;
-  }
+.event-column {
+  width: 60%;
 }

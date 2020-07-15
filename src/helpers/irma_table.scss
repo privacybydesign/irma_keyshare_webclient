@@ -1,0 +1,20 @@
+@import "src/templates/theme";
+
+.irma-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  td {
+    border-top: 1px solid $borderColor;
+  }
+
+  th {
+    border-bottom: 2px solid $borderColor;
+  }
+
+  td, th {
+    border-spacing: 0;
+    text-align: left;
+    padding: 8px;
+  }
+}

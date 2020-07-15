@@ -1,6 +1,7 @@
 @import "src/templates/theme";
 
 @mixin irma-button {
+  padding: 10px;
   border-radius: 6px;
   border: 1px solid transparent;
   cursor: pointer;
@@ -18,17 +19,14 @@
 .irma-button-primary {
   @include irma-button;
   @include primaryTheme;
-  padding: 16px;
 }
 
 .irma-button-secondary {
   @include irma-button;
   @include secondaryTheme;
-  padding: 16px;
 }
 
 .irma-button-plain {
   @include irma-button;
   @include plainTheme;
-  padding: 10px;
 }
