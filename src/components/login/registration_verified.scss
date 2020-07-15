@@ -1,8 +1,6 @@
-@import "src/templates/column";
 @import "src/templates/theme";
 
-.column-center {
-  @extend .column;
+.center {
   align-items: center;
   text-align: center;
 }

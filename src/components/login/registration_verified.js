@@ -4,6 +4,7 @@ import {withTranslation} from 'react-i18next';
 import './registration_verified.scss';
 import IrmaAppBar from '../../helpers/irma_app_bar';
 import SuccessIcon from '../../helpers/success_icon';
+import Column from '../../helpers/column';
 
 const RegistrationVerified = (props) => {
   const continueToMyIrma = (event) => {
@@ -37,7 +38,7 @@ const RegistrationVerified = (props) => {
   return (
     <>
       <IrmaAppBar title={props.t('title')}/>,
-      <div className={'column-center'}>
+      <Column className={'center'}>
         <SuccessIcon className={'success-icon'}/>
         <h2>
           {props.t('success')}
@@ -62,7 +63,7 @@ const RegistrationVerified = (props) => {
         <p><a href={'/#'} onClick={continueToMyIrma}>
           {props.t('continue-to-myirma')}
         </a></p>
-      </div>
+      </Column>
     </>
   );
 }
