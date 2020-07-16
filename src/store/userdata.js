@@ -3,6 +3,16 @@ const initialState = {
     emails: [],
     deleting: false,
     fetching: false,
+    addEmailIrmaSession: {
+        url: window.config.server,
+            start: {
+                url: o => `${o.url}/email/add`,
+        },
+        mapping: {
+            sessionPtr: r => r,
+        },
+        result: false,
+    },
 };
 
 export default function(state = initialState, action) {
@@ -23,7 +33,7 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 fetching: false,
-            }; 
+            };
         case 'updateInfo':
             return {
                 ...state,
