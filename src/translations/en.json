@@ -61,9 +61,10 @@
   "emails": {
     "header": "Email addresses",
     "explanation": "The following email addresses are associated to your account. You can login on MyIRMA using each of these addresses. If you have already <0>loaded your email address as IRMA card</0> you can associate it to your account using the button below.",
-    "explanation-no-email": "There are no email addresses associated to your account. This means that you will not be able to log in on MyIRMA and block your cards, in case you lose your phone.",
+    "no-email-addresses": "There are no email addresses associated to your account. This means that you will not be able to log in on MyIRMA and block your cards, in case you lose your phone.",
     "emailaddress": "Email",
     "delete": "Delete",
-    "delete_in_progress": "Being deleted"
+    "delete-in-progress": "Being deleted",
+    "add-email": "Add email address"
   }
 }

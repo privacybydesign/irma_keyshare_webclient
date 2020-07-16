@@ -55,18 +55,6 @@ function handleUpdateData({getState, dispatch}) {
 
 function handleEmail({dispatch}) {
     return next => action => {
-        if (action.type === 'addEmail') {
-            fetch(window.config.server + '/email/add', {
-                method: 'POST',
-                credentials: 'include',
-            }).then(res => {
-                if (res.status !== 200)
-                    throw res.status;
-                // TODO: Decide how to use info here to start irma session
-            }).catch(err => {
-                dispatch({type: 'raiseError', errorMessage: 'Error on starting irma session to add email. ('+err+')'});
-            });
-        }
         if (action.type === 'removeEmail') {
             fetch(window.config.server + '/email/remove', {
                 method: 'POST',
