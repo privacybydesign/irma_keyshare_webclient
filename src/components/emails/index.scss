@@ -1,7 +1,5 @@
-.delete-column {
-  margin-right: 0;
-  display: flex;
-  justify-content: flex-end;
+.delete-column > * {
+  float: right;
 }
 
 .add-email {
