@@ -59,6 +59,9 @@
     "IRMA_BLOCKED": "MijnIRMA geblokkeerd"
   },
   "emails": {
+    "header": "E-mailadressen",
+    "explanation": "De volgende e-mailadressen zijn geassocieerd met uw account. Met ieder van deze e-mailadressen kunt u inloggen op MijnIRMA. Als u uw e-mailadres al <0>geladen heeft als IRMA-kaartje</0>, kunt u hem associëren aan uw account met onderstaande knop.",
+    "explanation-no-email": "Er zijn geen e-mailadressen geassocieerd met uw account. Dit betekent dat u niet op MijnIRMA in kunt loggen en uw kaartjes kunt blokkeren, mocht u uw telefoon kwijtraken.",
     "emailaddress": "Email",
     "delete": "Verwijder",
     "delete_in_progress": "Wordt verwijderd"
