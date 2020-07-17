@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Login from './components/login/';
 import LoadingSpinner from './helpers/loading_spinner';
-import AccountOverview from './components/account-overview';
+import AccountOverview from './components/account_overview';
 
 const mapStateToProps = state => {
   return {
