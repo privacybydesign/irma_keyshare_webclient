@@ -1,6 +1,7 @@
 @import "src/theme";
 
 @mixin irma-button {
+  width: fit-content;
   padding: 10px;
   border-radius: 6px;
   border: 1px solid transparent;

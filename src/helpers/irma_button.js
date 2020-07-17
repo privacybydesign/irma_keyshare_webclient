@@ -11,7 +11,7 @@ class IrmaButton extends React.Component {
     render() {
         let { theme, children, className, ...buttonProps} = this.props;
         return (
-            <button {...buttonProps} className={`irma-button-${theme} ${className}`}>
+            <button {...buttonProps} className={[`irma-button-${theme}`, className].filter(x => x).join(' ')}>
                 {children}
             </button>
         );

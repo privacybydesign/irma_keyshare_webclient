@@ -10,10 +10,17 @@
 
 .irma-app-bar {
     width: 100%;
-    @include primaryTheme;
     position: relative;
     display: flex;
     justify-content: center;
+}
+
+.theme-primary {
+    @include primaryTheme;
+}
+
+.theme-secondary {
+    @include secondaryTheme;
 }
 
 .irma-app-bar-content {

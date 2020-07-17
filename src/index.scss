@@ -3,8 +3,11 @@
 html, body {
     margin: 0;
     padding: 0;
-    height: 100%;
 
     @include mainTheme;
     background-color: $backgroundColor;
+}
+
+body {
+    padding-bottom: 60px;
 }
