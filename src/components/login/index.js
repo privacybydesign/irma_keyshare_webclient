@@ -4,7 +4,6 @@ import SelectMethod from './select_method';
 import SelectCandidate from './select_candidate';
 import LoadingSpinner from '../../helpers/loading_spinner';
 import EmailSent from './email_sent';
-import RegistrationVerified from './registration_verified';
 
 const mapStateToProps = state => {
   return {
@@ -20,8 +19,6 @@ const Login = (props) => {
       return <SelectCandidate dispatch={props.dispatch} candidates={props.candidates} token={props.token}/>
     case 'emailSent':
       return <EmailSent/>
-    case 'showPostRegistration':
-      return <RegistrationVerified dispatch={props.dispatch}/>
     default:
       return <LoadingSpinner/>
   }

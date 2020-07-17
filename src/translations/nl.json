@@ -26,7 +26,7 @@
     "title": "Controleer uw e-mail",
     "explanation": "Log in door te klikken op de link die naar uw e-mailadres is verstuurd."
   },
-  "login-registration-verified": {
+  "registration-verified": {
     "title": "MijnIRMA-registratie klaar",
     "success": "Gelukt",
     "explanation": "Je emailadres is nu aan je IRMA-app gekoppeld.",
