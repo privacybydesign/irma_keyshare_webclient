@@ -5,9 +5,9 @@ import {withTranslation} from 'react-i18next';
 import IrmaAppBar from '../../helpers/irma_app_bar';
 import LoadingSpinner from '../../helpers/loading_spinner';
 import Emails from '../emails';
-import Logs from './logs';
+import Logs from '../logs';
 import Column from '../../helpers/column';
-import DeleteAccount from './delete_account';
+import DeleteAccount from '../delete_account';
 
 const mapStateToProps = state => {
   return {

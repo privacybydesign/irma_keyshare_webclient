@@ -7,7 +7,7 @@ import LogsTable from './logs_table';
 import ChevronLeftIcon from '../../helpers/chevron-left-icon';
 import ChevronRightIcon from '../../helpers/chevron-right-icon';
 import IrmaButton from '../../helpers/irma_button';
-import './logs.scss';
+import './index.scss';
 
 const LOGS_PER_PAGE = 10;
 
