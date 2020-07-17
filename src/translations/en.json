@@ -81,5 +81,11 @@
   "load-cards": {
     "header": "Load or refresh cards",
     "explanation": "Go to <0>this page</0> to load more cards in your IRMA app, or refresh existing cards."
+  },
+  "error-message": {
+    "header": "An error occurred",
+    "explanation": "The requested action could not be processed. Please check your internet connection and try again. If the problem keeps occurring, please contact IRMA.",
+    "error-details": "The following error occurred:",
+    "retry": "Go to login page"
   }
 }
