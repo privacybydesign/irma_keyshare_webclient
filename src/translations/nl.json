@@ -81,5 +81,11 @@
   "load-cards": {
     "header": "Laad of ververs kaartjes",
     "explanation": "Ga naar <0>deze pagina</0> om meer kaartjes in uw IRMA-app te laden of om bestaande kaartjes te verversen."
+  },
+  "error-message": {
+    "header": "Er is een fout opgetreden",
+    "explanation": "De gevraagde actie kon niet worden verwerkt. Controleer je internetverbinding en probeer het opnieuw. Als de fout blijft aanhouden, neem dan contact op met IRMA.",
+    "error-details": "De volgende fout trad op:",
+    "retry": "Ga terug naar loginpagina"
   }
 }

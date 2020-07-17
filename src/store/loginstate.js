@@ -63,6 +63,11 @@ export default function(state = initialState, action) {
                 ...state,
                 error: action.errorMessage,
             };
+        case 'resolveError':
+            return {
+                ...state,
+                error: '',
+            };
         default:
             return state;
     }
