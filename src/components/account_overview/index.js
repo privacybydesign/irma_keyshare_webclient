@@ -8,6 +8,7 @@ import Emails from '../emails';
 import Logs from '../logs';
 import Column from '../../helpers/column';
 import DeleteAccount from '../delete_account';
+import LoadCards from '../load_cards';
 
 const mapStateToProps = state => {
   return {
@@ -37,6 +38,7 @@ class AccountOverview extends React.Component {
         <Column>
           {this.renderUsername()}
           <Logs/>
+          <LoadCards/>
           <Emails/>
           <DeleteAccount/>
         </Column>

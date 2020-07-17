@@ -77,5 +77,9 @@
     "alert-cancel": "Annuleren",
     "alert-delete": "Verwijderen",
     "deleted": "MijnIRMA account verwijderd."
+  },
+  "load-cards": {
+    "header": "Laad of ververs kaartjes",
+    "explanation": "Ga naar <0>deze pagina</0> om meer kaartjes in uw IRMA-app te laden of om bestaande kaartjes te verversen."
   }
 }
