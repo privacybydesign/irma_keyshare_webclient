@@ -26,7 +26,7 @@
     "title": "Check your email",
     "explanation": "Log in by clicking on the link that has been sent to your email address."
   },
-  "login-registration-verified": {
+  "registration-verified": {
     "title": "MyIRMA registration finished",
     "success": "Done",
     "explanation": "Your email address has been linked to your IRMA app successfully.",

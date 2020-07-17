@@ -1,7 +1,7 @@
 import React from 'react';
 import {withTranslation} from 'react-i18next';
 
-import './registration_verified.scss';
+import './index.scss';
 import IrmaAppBar from '../../helpers/irma_app_bar';
 import SuccessIcon from '../../helpers/success_icon';
 import Column from '../../helpers/column';
@@ -68,4 +68,4 @@ const RegistrationVerified = (props) => {
   );
 }
 
-export default withTranslation('login-registration-verified')(RegistrationVerified);
+export default withTranslation('registration-verified')(RegistrationVerified);
