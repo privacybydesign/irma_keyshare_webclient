@@ -66,5 +66,16 @@
     "delete": "Verwijder",
     "delete-in-progress": "Wordt verwijderd",
     "add-email": "Voeg e-mailadres toe"
+  },
+  "delete-account": {
+    "header": "Verwijder MijnIRMA",
+    "explanation-par1": "Als u uw MijnIRMA verwijdert, worden al uw kaartjes permanent onbruikbaar, en worden alle gebeurtenissen en uw e-mailadres permanent gewist.",
+    "explanation-par2": "<0>Waarschuwing:</0> uw MijnIRMA verwijderen is permanent! Als u daarna opnieuw IRMA wilt gaan gebruiken zal u zich opnieuw bij MijnIRMA moeten registreren en al uw kaartjes opnieuw moeten verkrijgen.",
+    "delete": "Verwijder MijnIRMA",
+    "alert-header": "MijnIRMA verwijderen?",
+    "alert-explanation": "Als u dit doet worden al uw kaartjes permanent onbruikbaar, en worden uw loggegevens en e-mailadres verwijderd uit MijnIRMA. Weet u het zeker?",
+    "alert-cancel": "Annuleren",
+    "alert-delete": "Verwijderen",
+    "deleted": "MijnIRMA account verwijderd."
   }
 }

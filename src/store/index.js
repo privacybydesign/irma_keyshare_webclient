@@ -79,7 +79,7 @@ function handleDeleteAccount({dispatch}) {
                 credentials: 'include',
             }).then(res => {
                 if (res.status !== 204) throw res.status;
-                dispatch({type: 'startUpdateInfo'});
+                dispatch({type: 'loggedOut'});
             }).catch(err => {
                 dispatch({type: 'raiseError', errorMessage: 'Error on deleting account. ('+err+')'});
             });
