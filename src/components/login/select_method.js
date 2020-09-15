@@ -10,31 +10,34 @@ class SelectMethod extends React.Component {
   t = this.props.t;
 
   componentDidMount() {
-    let irmaElement = document.querySelector('#irma-web-form');
-    if (irmaElement != null && !irmaElement.hasChildNodes()) {
-      irmaFrontend.newWeb({
-        element: '#irma-web-form',
-        language: this.props.i18n.language,
-        translations: {
-          header: `${this.t('login-using')} <i class="irma-web-logo">IRMA</i>`,
-        },
+    this._irmaWeb = irmaFrontend.newWeb({
+      element: '#irma-web-form',
+      language: this.props.i18n.language,
+      translations: {
+        header: `${this.t('login-using')} <i class="irma-web-logo">IRMA</i>`,
+      },
 
-        session: this.props.irmaSession,
-      })
-      .start()
-      .then(() => {
-        // Delay dispatch to make IRMA success animation visible.
-        setTimeout(() => {
-          this.props.dispatch({type: 'verifySession'});
-        }, 1000);
-      });
-    }
+      session: this.props.irmaSession,
+    });
+    this._irmaWeb.start()
+    .then(() => {
+      // Delay dispatch to make IRMA success animation visible.
+      setTimeout(() => {
+        this.props.dispatch({type: 'verifySession'});
+      }, 1000);
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     // Never update this element, since IrmaFrontend handles state changes itself.
     // When updates need to be enabled, make sure the irma-web-form is excluded from re-render.
     return false;
+  }
+
+  componentWillUnmount() {
+    if (this._irmaWeb) {
+      this._irmaWeb.abort();
+    }
   }
 
   handleEmailLogin(event) {
