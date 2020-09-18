@@ -13,26 +13,42 @@ const RegistrationVerified = (props) => {
     props.dispatch({type: 'loggedIn'});
   }
 
-  const isMobile = () => {
+  const userAgent = () => {
     // IE11 doesn't have window.navigator, test differently
     // https://stackoverflow.com/questions/21825157/internet-explorer-11-detection
     if (!!window.MSInputMethodContext && !!document.documentMode)
-      return false;
+      return 'Desktop';
 
     if (/Android/i.test(window.navigator.userAgent)) {
-      return true;
+      return 'Android';
     }
 
     // https://stackoverflow.com/questions/9038625/detect-if-device-is-ios
     if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream)
-      return true;
+      return 'iOS';
 
     // https://stackoverflow.com/questions/57776001/how-to-detect-ipad-pro-as-ipad-using-javascript
     if (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints && navigator.maxTouchPoints > 2)
-      return true;
+      return 'iOS';
 
     // Neither Android nor iOS, assuming desktop
-    return false;
+    return 'Desktop';
+  }
+
+  const isMobile = () => {
+    const agent = userAgent();
+    return agent === 'iOS' || agent === 'Android';
+  }
+
+  const getReturnUrl = () => {
+    let universalLink = "https://irma.app/-/";
+    if (userAgent() === 'Android') {
+      // Universal links are not stable in Android webviews and custom tabs, so always use intent links.
+      let intent = `Intent;package=org.irmacard.cardemu;scheme=irma;l.timestamp=${Date.now()}`;
+      let fallback = `S.browser_fallback_url=${encodeURIComponent(universalLink)}`;
+      return `intent://#${intent};${fallback};end`;
+    }
+    return universalLink;
   }
 
   return (
@@ -48,7 +64,7 @@ const RegistrationVerified = (props) => {
         </p>
         <p>
           {isMobile()
-            ? <a className={'return-button'} href={'https://irma.app/-/'}>
+            ? <a className={'return-button'} href={getReturnUrl()}>
                 <img src={process.env.PUBLIC_URL + '/assets/irma-logo.svg'}
                      className={'irma-logo'}
                      alt={'irma-logo'}
