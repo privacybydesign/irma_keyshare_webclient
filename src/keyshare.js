@@ -36,12 +36,25 @@ $.getScript("./config.js", function() {
 
     function updateUserAgent() {
         let userAgent = getUserAgent();
-        if (userAgent === "Desktop") {
-            $("#return-button").hide();
-            $("#return-text").show();
+        const returnButton = $("#return-button");
+        const returnText = $("#return-text");
+
+        let universalLink = "https://irma.app/-/";
+        if (userAgent === "Android") {
+            // Universal links are not stable in Android webviews and custom tabs, so always use intent links.
+            let intent = `Intent;package=org.irmacard.cardemu;scheme=irma;l.timestamp=${Date.now()}`;
+            let fallback = `S.browser_fallback_url=${encodeURIComponent(universalLink)}`;
+            returnButton.attr("href", `intent://#${intent};${fallback};end`);
         } else {
-            $("#return-button").show();
-            $("#return-text").hide();
+            returnButton.attr("href", universalLink);
+        }
+
+        if (userAgent === "Desktop") {
+            returnButton.hide();
+            returnText.show();
+        } else {
+            returnButton.show();
+            returnText.hide();
         }
     }
 
