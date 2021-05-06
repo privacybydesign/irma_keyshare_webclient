@@ -29,9 +29,14 @@ class Emails extends React.Component {
       language: this.props.i18n.language,
       session: this.props.addEmailIrmaSession,
     });
-    irma.start().then(() =>
+    irma.start()
+    .then(() =>
       this.props.dispatch({type: 'startUpdateInfo'})
-    );
+    )
+    .catch((err) => {
+      if (err !== "Aborted")
+        console.error(err); // TODO: show in error page
+    });
   }
 
   renderEmailHeader() {
