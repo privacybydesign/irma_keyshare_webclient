@@ -25,6 +25,10 @@ class SelectMethod extends React.Component {
       setTimeout(() => {
         this.props.dispatch({type: 'verifySession'});
       }, 1000);
+    })
+    .catch((err) => {
+      if (err !== "Aborted")
+        console.error(err); // TODO: show in error page
     });
   }
 
