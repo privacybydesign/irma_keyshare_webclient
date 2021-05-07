@@ -7,6 +7,7 @@ const initialState = {
         url: window.config.server,
             start: {
                 url: o => `${o.url}/email/add`,
+                credentials: 'include',
         },
         mapping: {
             sessionPtr: r => r,
