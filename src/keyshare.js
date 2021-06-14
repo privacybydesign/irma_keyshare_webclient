@@ -43,8 +43,7 @@ $.getScript("./config.js", function() {
         if (userAgent === "Android") {
             // Universal links are not stable in Android webviews and custom tabs, so always use intent links.
             let intent = `Intent;package=org.irmacard.cardemu;scheme=irma;l.timestamp=${Date.now()}`;
-            let fallback = `S.browser_fallback_url=${encodeURIComponent(universalLink)}`;
-            returnButton.attr("href", `intent://#${intent};${fallback};end`);
+            returnButton.attr("href", `intent://#${intent};end`);
         } else {
             returnButton.attr("href", universalLink);
         }
