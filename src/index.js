@@ -10,13 +10,15 @@ import './index.scss';
 const store = buildStore();
 
 function checkUrlHash() {
-  const fragment = window.location.hash
+  const fragment = window.location.hash;
   if (fragment.startsWith('#token=')) {
     const token = fragment.substr(7);
     store.dispatch({type: 'startTokenLogin', token: token});
+    window.location.hash = '';
   } else if (fragment.startsWith('#verify=')) {
     const token = fragment.substr(8);
     store.dispatch({type: 'startRegistrationVerify', token: token});
+    window.location.hash = '';
   } else {
     store.dispatch({type: 'verifySession'});
   }
