@@ -53,9 +53,6 @@ export default function(state = initialState, action) {
                         url: o => `${o.url}/login/irma`,
                         credentials: 'include',
                     },
-                    mapping: {
-                        sessionPtr: r => r,
-                    },
                     result: false,
                 },
             };
