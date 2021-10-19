@@ -9,9 +9,6 @@ const initialState = {
                 url: o => `${o.url}/email/add`,
                 credentials: 'include',
         },
-        mapping: {
-            sessionPtr: r => r,
-        },
         result: false,
     },
 };
