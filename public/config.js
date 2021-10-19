@@ -1,5 +1,5 @@
 window.config = {
-  server: 'http://localhost:8080',
+  server: 'http://localhost:8081',
   lang: 'en',
   emailIssuanceUrl: {
     en: 'https://privacybydesign.foundation/issuance/email/',
