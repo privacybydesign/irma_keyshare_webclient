@@ -197,6 +197,20 @@ function handleVerifySession({dispatch}) {
     }
 }
 
+function handleLogout() {
+    return next => action => {
+        if (action.type === 'loggedOut') {
+            fetch(window.config.server + '/logout', {
+                method: 'POST',
+                credentials: 'include',
+            }).then(res => {
+                if (res.status !== 204) throw res.status;
+            });
+        }
+        return next(action);
+    }
+}
+
 export default function() {
     return createStore(
         combineReducers({
@@ -213,6 +227,7 @@ export default function() {
             handleEmailLogin,
             handleRegistrationVerify,
             handleVerifySession,
+            handleLogout,
         ),
     );
 }
