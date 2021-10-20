@@ -51,6 +51,7 @@ export default function(state = initialState, action) {
                     url: window.config.server,
                     start: {
                         url: o => `${o.url}/login/irma`,
+                        method: 'POST',
                         credentials: 'include',
                     },
                     result: false,
