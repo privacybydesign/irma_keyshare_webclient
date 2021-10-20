@@ -1,4 +1,7 @@
 {
+  "app": {
+    "title": "MyIRMA"
+  },
   "login-select-method": {
     "title": "MyIRMA login",
     "intro-par1": "This is the MyIRMA website of the Privacy by Design Foundation. Using this website you can view the activities of your IRMA app, and block or delete your account.",
