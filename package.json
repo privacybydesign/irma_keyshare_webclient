@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@privacybydesign/irma-frontend": "^0.1.1-rc.13",
+    "@privacybydesign/irma-frontend": "^0.4.3",
     "i18next": "^19.4.5",
     "moment": "^2.27.0",
     "node-sass": "^4.14.1",
