@@ -1,4 +1,7 @@
 {
+  "app": {
+    "title": "MijnIRMA"
+  },
   "login-select-method": {
     "title": "MijnIRMA login",
     "intro-par1": "Dit is de MijnIRMA website van de Privacy by Design Foundation. Als je IRMA gebruiker bent, kun je via deze pagina de activiteiten van je IRMA-app controleren en eventueel beëindigen.",
