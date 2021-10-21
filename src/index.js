@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import i18n from './i18n';
 
 import buildStore from './store';
 import App from './app';
@@ -26,6 +27,9 @@ function checkUrlHash() {
 
 window.addEventListener('hashchange', checkUrlHash);
 checkUrlHash();
+
+document.documentElement.setAttribute('lang', window.config.lang);
+document.title = i18n.t('app:title');
 
 ReactDOM.render(
   <React.StrictMode>
