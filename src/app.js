@@ -1,7 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
-
 import Login from './components/login/';
 import LoadingSpinner from './helpers/loading_spinner';
 import AccountOverview from './components/account_overview';
@@ -18,25 +16,18 @@ const mapStateToProps = state => {
 };
 
 // TODO: Maybe convert into router to improve URL structure.
-class App extends React.Component {
-  componentDidMount() {
-    document.documentElement.setAttribute('lang', this.props.i18n.language);
-    document.title = this.props.t('title');
+const App = (props) => {
+  if (props.loading) {
+    return <LoadingSpinner/>;
+  } else if (props.errorRaised) {
+    return <ErrorMessage/>;
+  } else if (props.loggedIn) {
+    return <AccountOverview/>;
+  } else if (props.registrationVerified) {
+    return <RegistrationVerified dispatch={props.dispatch}/>;
+  } else {
+    return <Login/>;
   }
+};
 
-  render() {
-    if (this.props.loading) {
-      return <LoadingSpinner/>;
-    } else if (this.props.errorRaised) {
-      return <ErrorMessage/>;
-    } else if (this.props.loggedIn) {
-      return <AccountOverview/>;
-    } else if (this.props.registrationVerified) {
-      return <RegistrationVerified dispatch={this.props.dispatch}/>;
-    } else {
-      return <Login/>;
-    }
-  }
-}
-
-export default connect(mapStateToProps)(withTranslation('app')(App));
+export default connect(mapStateToProps)(App);
