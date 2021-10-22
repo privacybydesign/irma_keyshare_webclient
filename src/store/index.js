@@ -211,7 +211,7 @@ function handleLogout() {
     }
 }
 
-export default function() {
+export default function buildStore() {
     return createStore(
         combineReducers({
             login: login,

@@ -14,7 +14,7 @@ const initialState = {
     },
 };
 
-export default function(state = initialState, action) {
+export default function userdata(state = initialState, action) {
     switch(action.type) {
         case 'loggedOut':
             return {
