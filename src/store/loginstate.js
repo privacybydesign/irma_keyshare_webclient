@@ -58,7 +58,7 @@ export default function login(state = initialState, action) {
                 },
             };
         case 'raiseError':
-            return {
+            return state.error ? state : {
                 ...state,
                 error: action.errorMessage,
             };

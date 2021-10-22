@@ -197,7 +197,7 @@ function handleVerifySession({dispatch}) {
     }
 }
 
-function handleLogout() {
+function handleLogout({dispatch}) {
     return next => action => {
         if (action.type === 'loggedOut') {
             fetch(window.config.server + '/logout', {
@@ -205,6 +205,8 @@ function handleLogout() {
                 credentials: 'include',
             }).then(res => {
                 if (res.status !== 204) throw res.status;
+            }).catch(err => {
+                dispatch({type: 'raiseError', errorMessage: 'Error on logging out. ('+err+')'});
             });
         }
         return next(action);
