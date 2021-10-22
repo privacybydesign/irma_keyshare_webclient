@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import i18n from './i18n';
 
 import buildStore from './store';
 import App from './app';
-import './i18n';
+import i18n from './i18n';
 import './index.scss';
 
 const store = buildStore();
