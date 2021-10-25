@@ -4,7 +4,7 @@ const initialState = {
     error: '',
 };
 
-export default function(state = initialState, action) {
+export default function login(state = initialState, action) {
     switch(action.type) {
         case 'startSendMail':
             return {
@@ -51,16 +51,14 @@ export default function(state = initialState, action) {
                     url: window.config.server,
                     start: {
                         url: o => `${o.url}/login/irma`,
+                        method: 'POST',
                         credentials: 'include',
-                    },
-                    mapping: {
-                        sessionPtr: r => r,
                     },
                     result: false,
                 },
             };
         case 'raiseError':
-            return {
+            return state.error ? state : {
                 ...state,
                 error: action.errorMessage,
             };

@@ -5,7 +5,7 @@ const initialState = {
     loading: false,
 };
 
-export default function(state = initialState, action) {
+export default function logs(state = initialState, action) {
     switch(action.type) {
         case 'loggedOut':
             return {

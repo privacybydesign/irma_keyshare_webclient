@@ -7,16 +7,14 @@ const initialState = {
         url: window.config.server,
             start: {
                 url: o => `${o.url}/email/add`,
+                method: 'POST',
                 credentials: 'include',
-        },
-        mapping: {
-            sessionPtr: r => r,
         },
         result: false,
     },
 };
 
-export default function(state = initialState, action) {
+export default function userdata(state = initialState, action) {
     switch(action.type) {
         case 'loggedOut':
             return {
