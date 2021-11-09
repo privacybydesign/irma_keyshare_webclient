@@ -1,13 +1,14 @@
-@import "src/theme";
+@import 'src/theme';
 
-html, body {
-    margin: 0;
-    padding: 0;
+html,
+body {
+  margin: 0;
+  padding: 0;
 
-    @include mainTheme;
-    background-color: $backgroundColor;
+  @include mainTheme;
+  background-color: $backgroundColor;
 }
 
 body {
-    padding-bottom: 60px;
+  padding-bottom: 60px;
 }

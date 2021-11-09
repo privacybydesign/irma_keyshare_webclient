@@ -26,10 +26,15 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^5.1.1",
     "prettier": "^2.4.1",
-    "prettier-config-standard": "^4.0.0"
+    "prettier-config-standard": "^4.0.0",
+    "stylelint": "^13.13.1",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-recommended-scss": "^4.3.0",
+    "stylelint-prettier": "^1.2.0",
+    "stylelint-scss": "^3.21.0"
   },
   "scripts": {
-    "lint": "eslint . --ext .js",
+    "lint": "eslint . --ext .js && stylelint ./src",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject"
