@@ -13,14 +13,14 @@ function checkUrlHash() {
   const fragment = window.location.hash;
   if (fragment.startsWith('#token=')) {
     const token = fragment.substr(7);
-    store.dispatch({type: 'startTokenLogin', token: token});
+    store.dispatch({ type: 'startTokenLogin', token: token });
     window.location.hash = '';
   } else if (fragment.startsWith('#verify=')) {
     const token = fragment.substr(8);
-    store.dispatch({type: 'startRegistrationVerify', token: token});
+    store.dispatch({ type: 'startRegistrationVerify', token: token });
     window.location.hash = '';
   } else {
-    store.dispatch({type: 'verifySession'});
+    store.dispatch({ type: 'verifySession' });
   }
 }
 
@@ -33,7 +33,7 @@ document.title = i18n.t('app:title');
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App/>
+      <App />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

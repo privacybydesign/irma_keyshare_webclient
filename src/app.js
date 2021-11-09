@@ -6,7 +6,7 @@ import AccountOverview from './components/account_overview';
 import RegistrationVerified from './components/registration_verified';
 import ErrorMessage from './components/error_message';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     loading: ['unknown', 'loggingOut'].includes(state.login.sessionState),
     loggedIn: state.login.sessionState === 'loggedIn',
@@ -18,15 +18,15 @@ const mapStateToProps = state => {
 // TODO: Maybe convert into router to improve URL structure.
 const App = (props) => {
   if (props.errorRaised) {
-    return <ErrorMessage/>;
+    return <ErrorMessage />;
   } else if (props.loading) {
-    return <LoadingSpinner/>;
+    return <LoadingSpinner />;
   } else if (props.loggedIn) {
-    return <AccountOverview/>;
+    return <AccountOverview />;
   } else if (props.registrationVerified) {
-    return <RegistrationVerified dispatch={props.dispatch}/>;
+    return <RegistrationVerified dispatch={props.dispatch} />;
   } else {
-    return <Login/>;
+    return <Login />;
   }
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {withTranslation} from 'react-i18next';
+import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 
 import LoadingSpinner from '../../helpers/loading_spinner';
 import LogsTable from './logs_table';
@@ -11,15 +11,18 @@ import './index.scss';
 
 const LOGS_PER_PAGE = 10;
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     ...state.logs,
   };
 };
 
 class Logs extends React.Component {
-  t = this.props.t;
-  mounting = true;
+  constructor(props) {
+    super(props);
+    this.t = props.t;
+    this.mounting = true;
+  }
 
   componentDidMount() {
     if (!this.props.loading) {
@@ -37,7 +40,7 @@ class Logs extends React.Component {
 
   renderLogs() {
     if (this.mounting || this.props.loading) {
-      return <LoadingSpinner/>;
+      return <LoadingSpinner />;
     } else {
       return (
         <>
@@ -56,7 +59,7 @@ class Logs extends React.Component {
               disabled={this.props.currentIndex === 0}
               onClick={() => this.loadLogs(-LOGS_PER_PAGE)}
             >
-              <ChevronLeftIcon/>
+              <ChevronLeftIcon />
               {this.t('previous')}
             </IrmaButton>
             <IrmaButton
@@ -66,10 +69,10 @@ class Logs extends React.Component {
               onClick={() => this.loadLogs(LOGS_PER_PAGE)}
             >
               {this.t('next')}
-              <ChevronRightIcon/>
+              <ChevronRightIcon />
             </IrmaButton>
           </div>
-          <LogsTable logEntries={this.props.logEntries}/>
+          <LogsTable logEntries={this.props.logEntries} />
         </>
       );
     }
