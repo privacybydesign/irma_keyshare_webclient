@@ -1,53 +1,50 @@
 import React from 'react';
-import {Trans, withTranslation} from 'react-i18next';
+import { Trans, withTranslation } from 'react-i18next';
 import IrmaButton from '../../helpers/irma_button';
 import IrmaModal from '../../helpers/irma_modal';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     deleting: state.userdata.deleting,
   };
 };
 
 class DeleteAccount extends React.Component {
-  t = this.props.t;
-
   constructor(props) {
     super(props);
     this.state = {
       showConfirmModal: false,
-    }
+    };
+    this.t = props.t;
   }
 
   onDelete() {
     this.setState({
       showConfirmModal: true,
     });
-  };
+  }
 
   onDeleteCancel() {
     this.setState({
       showConfirmModal: false,
     });
-  };
+  }
 
   onDeleteConfirm() {
-    this.props.dispatch({type: 'removeAccount'});
+    this.props.dispatch({ type: 'removeAccount' });
   }
 
   renderModal() {
     return (
       <IrmaModal
-          theme={'secondary'}
-          title={this.t('alert-header')}
-          action={this.t('alert-delete')}
-          onConfirm={() => this.onDeleteConfirm()}
-          onDismiss={() => this.onDeleteCancel()}
+        theme={'secondary'}
+        title={this.t('alert-header')}
+        action={this.t('alert-delete')}
+        onConfirm={() => this.onDeleteConfirm()}
+        onDismiss={() => this.onDeleteCancel()}
       >
-        <p>
-          {this.t('alert-explanation')}
-        </p>
+        <p>{this.t('alert-explanation')}</p>
       </IrmaModal>
     );
   }
@@ -57,22 +54,17 @@ class DeleteAccount extends React.Component {
     return (
       <>
         <h2>{this.t('header')}</h2>
+        <p>{this.t('explanation-par1')}</p>
         <p>
-          {this.t('explanation-par1')}
+          <Trans t={this.t} i18nKey="explanation-par2" components={[<b key="warning" />]} />
         </p>
-        <p>
-          <Trans
-            t={this.t}
-            i18nKey="explanation-par2"
-            components={[<b />]}
-          />
-        </p>
-        {this.props.deleting
-          ? <p>{this.t('deleted')}</p>
-          : <IrmaButton theme={'secondary'} onClick={() => this.onDelete()}>
-              {this.t('delete')}
-            </IrmaButton>
-        }
+        {this.props.deleting ? (
+          <p>{this.t('deleted')}</p>
+        ) : (
+          <IrmaButton theme={'secondary'} onClick={() => this.onDelete()}>
+            {this.t('delete')}
+          </IrmaButton>
+        )}
         {this.state.showConfirmModal ? this.renderModal() : null}
       </>
     );

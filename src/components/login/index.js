@@ -5,7 +5,7 @@ import SelectCandidate from './select_candidate';
 import LoadingSpinner from '../../helpers/loading_spinner';
 import EmailSent from './email_sent';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     ...state.login,
   };
@@ -14,14 +14,14 @@ const mapStateToProps = state => {
 const Login = (props) => {
   switch (props.sessionState) {
     case 'loggedOut':
-      return <SelectMethod dispatch={props.dispatch} irmaSession={props.irmaSession}/>
+      return <SelectMethod dispatch={props.dispatch} irmaSession={props.irmaSession} />;
     case 'selectCandidate':
-      return <SelectCandidate dispatch={props.dispatch} candidates={props.candidates} token={props.token}/>
+      return <SelectCandidate dispatch={props.dispatch} candidates={props.candidates} token={props.token} />;
     case 'emailSent':
-      return <EmailSent/>
+      return <EmailSent />;
     default:
-      return <LoadingSpinner/>
+      return <LoadingSpinner />;
   }
-}
+};
 
 export default connect(mapStateToProps)(Login);
