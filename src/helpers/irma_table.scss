@@ -1,4 +1,4 @@
-@import "src/theme";
+@import 'src/theme';
 
 .irma-table {
   width: 100%;
@@ -12,7 +12,8 @@
     border-bottom: 2px solid $borderColor;
   }
 
-  td, th {
+  td,
+  th {
     border-spacing: 0;
     text-align: left;
     padding: 8px;

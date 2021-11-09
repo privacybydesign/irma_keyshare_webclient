@@ -1,4 +1,4 @@
-@import "src/theme";
+@import 'src/theme';
 
 @mixin irma-button {
   width: fit-content;
@@ -9,7 +9,7 @@
   outline-color: $backgroundColor;
   &:disabled {
     cursor: not-allowed;
-    opacity: .65;
+    opacity: 0.65;
   }
 }
 
