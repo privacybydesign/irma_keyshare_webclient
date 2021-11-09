@@ -1,6 +1,6 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {withTranslation} from 'react-i18next';
+import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 
 import IrmaAppBar from '../../helpers/irma_app_bar';
 import LoadingSpinner from '../../helpers/loading_spinner';
@@ -10,7 +10,7 @@ import Column from '../../helpers/column';
 import DeleteAccount from '../delete_account';
 import LoadCards from '../load_cards';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     username: state.userdata.username,
     fetching: state.userdata.fetching,
@@ -18,7 +18,10 @@ const mapStateToProps = state => {
 };
 
 class AccountOverview extends React.Component {
-  t = this.props.t;
+  constructor(props) {
+    super(props);
+    this.t = props.t;
+  }
 
   renderUsername() {
     return (
@@ -32,15 +35,15 @@ class AccountOverview extends React.Component {
 
   renderBody() {
     if (this.props.fetching) {
-      return <LoadingSpinner/>;
+      return <LoadingSpinner />;
     } else {
       return (
         <Column>
           {this.renderUsername()}
-          <Logs/>
-          <LoadCards/>
-          <Emails/>
-          <DeleteAccount/>
+          <Logs />
+          <LoadCards />
+          <Emails />
+          <DeleteAccount />
         </Column>
       );
     }
@@ -49,10 +52,7 @@ class AccountOverview extends React.Component {
   render() {
     return (
       <>
-        <IrmaAppBar
-          title={this.t('title')}
-          onLogout={() => this.props.dispatch({type: 'logout'})}
-        />
+        <IrmaAppBar title={this.t('title')} onLogout={() => this.props.dispatch({ type: 'logout' })} />
         {this.renderBody()}
       </>
     );

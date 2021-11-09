@@ -1,14 +1,17 @@
 import React from 'react';
-import {withTranslation} from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import irmaFrontend from '@privacybydesign/irma-frontend';
 
 import './select_method.scss';
-import Column from "../../helpers/column";
+import Column from '../../helpers/column';
 import IrmaAppBar from '../../helpers/irma_app_bar';
 import IrmaButton from '../../helpers/irma_button';
 
 class SelectMethod extends React.Component {
-  t = this.props.t;
+  constructor(props) {
+    super(props);
+    this.t = props.t;
+  }
 
   componentDidMount() {
     this._irmaWeb = irmaFrontend.newWeb({
@@ -20,17 +23,18 @@ class SelectMethod extends React.Component {
 
       session: this.props.irmaSession,
     });
-    this._irmaWeb.start()
-    .then(() => {
-      // Delay dispatch to make IRMA success animation visible.
-      setTimeout(() => {
-        this.props.dispatch({type: 'verifySession'});
-      }, 1000);
-    })
-    .catch((err) => {
-      if (err !== "Aborted")
-        this.props.dispatch({ type: 'raiseError', errorMessage: `Error while logging in with IRMA: ${err}` });
-    });
+    this._irmaWeb
+      .start()
+      .then(() => {
+        // Delay dispatch to make IRMA success animation visible.
+        setTimeout(() => {
+          this.props.dispatch({ type: 'verifySession' });
+        }, 1000);
+      })
+      .catch((err) => {
+        if (err !== 'Aborted')
+          this.props.dispatch({ type: 'raiseError', errorMessage: `Error while logging in with IRMA: ${err}` });
+      });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -45,10 +49,10 @@ class SelectMethod extends React.Component {
     }
   }
 
-  handleEmailLogin(event) {
-    event.preventDefault();
-    let emailInput = document.getElementById('input-email');
-    this.props.dispatch({type: 'startEmailLogin', email: emailInput.value});
+  handleEmailLogin(e) {
+    e.preventDefault();
+    const emailInput = document.getElementById('input-email');
+    this.props.dispatch({ type: 'startEmailLogin', email: emailInput.value });
   }
 
   renderLoginMethods() {
@@ -58,29 +62,22 @@ class SelectMethod extends React.Component {
         <p>{this.t('or')}</p>
         {this.renderEmailLogin()}
       </div>
-    )
-  };
+    );
+  }
 
   renderIrmaLogin() {
-    let prevElement = document.getElementById('irma-web-form');
+    const prevElement = document.getElementById('irma-web-form');
     if (prevElement) {
-      return React.createElement('section', {id: 'irma-web-form', innerHTML: prevElement.innerHTML})
+      return React.createElement('section', { id: 'irma-web-form', innerHTML: prevElement.innerHTML });
     } else {
-      return (
-        <section id={'irma-web-form'}/>
-      );
+      return <section id={'irma-web-form'} />;
     }
   }
 
   renderEmailLogin() {
     return (
-      <form id={'login-form-email'}
-            className={'input-group'}
-            onSubmit={(e) => this.handleEmailLogin(e)}
-      >
-        <input type={'email'} id={'input-email'} placeholder={this.t('email-address')}
-               required autoFocus
-        />
+      <form id={'login-form-email'} className={'input-group'} onSubmit={(e) => this.handleEmailLogin(e)}>
+        <input type={'email'} id={'input-email'} placeholder={this.t('email-address')} required autoFocus />
         <span className={'input-group-btn'}>
           <IrmaButton theme={'primary'} className={'btn-email'} type={'submit'} id={'sign-in-button-email'}>
             {this.t('email-link')}
@@ -93,7 +90,7 @@ class SelectMethod extends React.Component {
   render() {
     return (
       <>
-        <IrmaAppBar title={this.t('title')}/>
+        <IrmaAppBar title={this.t('title')} />
         <Column>
           <p>{this.t('intro-par1')}</p>
           <p>{this.t('intro-par2')}</p>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Trans, withTranslation} from 'react-i18next';
+import { Trans, withTranslation } from 'react-i18next';
 
 const LoadCards = (props) => {
   return (
@@ -15,6 +15,6 @@ const LoadCards = (props) => {
       </p>
     </>
   );
-}
+};
 
 export default withTranslation('load-cards')(LoadCards);
