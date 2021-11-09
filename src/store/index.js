@@ -9,7 +9,6 @@ function handleLoadLogs({getState, dispatch}) {
     return next => action => {
         if (action.type === 'loadLogs' && !getState().logs.loading) {
             // load logs if needed
-            const result = next(action)
             const offset = getState().logs.currentIndex;
             fetch(window.config.server + '/user/logs/' + offset, {
                 method: 'GET',
@@ -24,10 +23,7 @@ function handleLoadLogs({getState, dispatch}) {
                 dispatch({type: 'errorLoadingLogs'});
                 dispatch({type: 'raiseError', errorMessage: 'Error on loading log entries. ('+err+')'});
             });
-
-            return result
         }
-
         return next(action);
     };
 }
