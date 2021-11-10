@@ -21,7 +21,7 @@ function handleLoadLogs({getState, dispatch}) {
                 dispatch({type: 'loadedLogs', entries: resjson});
             }).catch(err => {
                 dispatch({type: 'errorLoadingLogs'});
-                dispatch({type: 'raiseError', errorMessage: 'Error on loading log entries. ('+err+')'});
+                dispatch({type: 'raiseError', errorMessage: `Error while loading log entries: ${err}`});
             });
         }
         return next(action);
@@ -42,7 +42,7 @@ function handleUpdateData({getState, dispatch}) {
                 dispatch({type: 'updateInfo', data: resjson});
             }).catch(err => {
                 dispatch({type: 'errorUpdateInfo'});
-                dispatch({type: 'raiseError', errorMessage: 'Error on loading user data. ('+err+')'});
+                dispatch({type: 'raiseError', errorMessage: `Error while loading user data: ${err}`});
             });
         }
         return next(action);
@@ -60,7 +60,7 @@ function handleEmail({dispatch}) {
                 if (res.status !== 204) throw res.status;
                 dispatch({type: 'startUpdateInfo'});
             }).catch(err => {
-                dispatch({type: 'raiseError', errorMessage: 'Error on removing email. ('+err+')'});
+                dispatch({type: 'raiseError', errorMessage: `Error while removing email: ${err}`});
             });
         }
         return next(action);
@@ -77,7 +77,7 @@ function handleDeleteAccount({dispatch}) {
                 if (res.status !== 204) throw res.status;
                 dispatch({type: 'loggedOut'});
             }).catch(err => {
-                dispatch({type: 'raiseError', errorMessage: 'Error on deleting account. ('+err+')'});
+                dispatch({type: 'raiseError', errorMessage: `Error while deleting account: ${err}`});
             });
         }
         return next(action);
@@ -103,7 +103,7 @@ function handleTokenLogin({dispatch}) {
                     dispatch({type: 'setCandidates', candidates: resjson, token: action.token});
                 }
             }).catch(err => {
-                dispatch({type: 'raiseError', errorMessage: 'Error whilst fetching login candidates. ('+err+')'});
+                dispatch({type: 'raiseError', errorMessage: `Error while fetching login candidates: ${err}`});
                 dispatch({type: 'loggedOut'});
             });
         }
@@ -117,7 +117,7 @@ function handleTokenLogin({dispatch}) {
                 dispatch({type: 'loggedIn'});
                 dispatch({type: 'startUpdateInfo'});
             }).catch(err => {
-                dispatch({type: 'raiseError', errorMessage: 'Error on login in with token. ('+err+')'});
+                dispatch({type: 'raiseError', errorMessage: `Error while logging in with token: ${err}`});
                 dispatch({type: 'loggedOut'});
             });
         }
@@ -139,7 +139,7 @@ function handleEmailLogin({dispatch}) {
                 if (res.status !== 204) throw res.status;
                 dispatch({type: 'emailSent'});
             }).catch(err => {
-                dispatch({type: 'raiseError', errorMessage: 'Error on logging in with email. ('+err+')'});
+                dispatch({type: 'raiseError', errorMessage: `Error while logging in with email: ${err}`});
                 dispatch({type: 'loggedOut'});
             });
         }
@@ -158,7 +158,7 @@ function handleRegistrationVerify({dispatch}) {
                 if (res.status !== 204) throw res.status;
                 dispatch({type: 'registrationVerified'});
             }).catch(err => {
-                dispatch({type: 'raiseError', errorMessage: 'Error on verifying email. ('+err+')'});
+                dispatch({type: 'raiseError', errorMessage: `Error while verifying email: ${err}`});
                 dispatch({type: 'loggedOut'});
             });
         }
@@ -185,7 +185,7 @@ function handleVerifySession({dispatch}) {
                     throw res;
                 }
             }).catch(err => {
-                dispatch({type: 'raiseError', errorMessage: err});
+                dispatch({type: 'raiseError', errorMessage: `Error while verifying session: ${err}`});
                 dispatch({type: 'loggedOut'});
             });
         }
@@ -202,7 +202,7 @@ function handleLogout({dispatch}) {
             }).then(res => {
                 if (res.status !== 204) throw res.status;
             }).catch(err => {
-                dispatch({type: 'raiseError', errorMessage: 'Error on logging out. ('+err+')'});
+                dispatch({type: 'raiseError', errorMessage: `Error while logging out: ${err}`});
             });
         }
         return next(action);
