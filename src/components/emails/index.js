@@ -35,7 +35,7 @@ class Emails extends React.Component {
     )
     .catch((err) => {
       if (err !== "Aborted")
-        console.error(err); // TODO: show in error page
+        this.props.dispatch({ type: 'raiseError', errorMessage: `Error while adding email address: ${err}` });
     });
   }
 
