@@ -3,6 +3,7 @@ import {withTranslation} from 'react-i18next';
 import irmaFrontend from '@privacybydesign/irma-frontend';
 
 import './select_method.scss';
+import Column from "../../helpers/column";
 import IrmaAppBar from '../../helpers/irma_app_bar';
 import IrmaButton from '../../helpers/irma_button';
 
@@ -93,7 +94,7 @@ class SelectMethod extends React.Component {
     return (
       <>
         <IrmaAppBar title={this.t('title')}/>
-        <div className={'column'}>
+        <Column>
           <p>{this.t('intro-par1')}</p>
           <p>{this.t('intro-par2')}</p>
 
@@ -103,7 +104,7 @@ class SelectMethod extends React.Component {
             <li key={'login-method-email'}>{this.t('login-method-email')}</li>
           </ul>
           {this.renderLoginMethods()}
-        </div>
+        </Column>
       </>
     );
   }
