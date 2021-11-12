@@ -51,7 +51,7 @@ class AccountOverview extends React.Component {
       <>
         <IrmaAppBar
           title={this.t('title')}
-          onLogout={() => this.props.dispatch({type: 'loggedOut'})}
+          onLogout={() => this.props.dispatch({type: 'logout'})}
         />
         {this.renderBody()}
       </>

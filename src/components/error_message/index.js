@@ -16,7 +16,6 @@ const mapStateToProps = state => {
 const ErrorMessage = (props) => {
   const onRetry = () => {
     props.dispatch({type: 'resolveError'});
-    props.dispatch({type: 'loggedOut'});
   }
 
   return (

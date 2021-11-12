@@ -75,7 +75,7 @@ function handleDeleteAccount({dispatch}) {
                 credentials: 'include',
             }).then(res => {
                 if (res.status !== 204) throw res.status;
-                dispatch({type: 'loggedOut'});
+                dispatch({type: 'logout'});
             }).catch(err => {
                 dispatch({type: 'raiseError', errorMessage: `Error while deleting account: ${err}`});
             });
@@ -104,7 +104,6 @@ function handleTokenLogin({dispatch}) {
                 }
             }).catch(err => {
                 dispatch({type: 'raiseError', errorMessage: `Error while fetching login candidates: ${err}`});
-                dispatch({type: 'loggedOut'});
             });
         }
         if (action.type === 'finishTokenLogin') {
@@ -118,7 +117,6 @@ function handleTokenLogin({dispatch}) {
                 dispatch({type: 'startUpdateInfo'});
             }).catch(err => {
                 dispatch({type: 'raiseError', errorMessage: `Error while logging in with token: ${err}`});
-                dispatch({type: 'loggedOut'});
             });
         }
         return next(action);
@@ -140,7 +138,6 @@ function handleEmailLogin({dispatch}) {
                 dispatch({type: 'emailSent'});
             }).catch(err => {
                 dispatch({type: 'raiseError', errorMessage: `Error while logging in with email: ${err}`});
-                dispatch({type: 'loggedOut'});
             });
         }
         return next(action);
@@ -159,7 +156,6 @@ function handleRegistrationVerify({dispatch}) {
                 dispatch({type: 'registrationVerified'});
             }).catch(err => {
                 dispatch({type: 'raiseError', errorMessage: `Error while verifying email: ${err}`});
-                dispatch({type: 'loggedOut'});
             });
         }
         return next(action);
@@ -186,7 +182,6 @@ function handleVerifySession({dispatch}) {
                 }
             }).catch(err => {
                 dispatch({type: 'raiseError', errorMessage: `Error while verifying session: ${err}`});
-                dispatch({type: 'loggedOut'});
             });
         }
         return next(action);
@@ -195,14 +190,23 @@ function handleVerifySession({dispatch}) {
 
 function handleLogout({dispatch}) {
     return next => action => {
-        if (action.type === 'loggedOut') {
+        // When resolving an error, logout is performed without raising an error if it fails.
+        // This is done to prevent errors being raised recursively.
+        if (action.type === 'logout' || action.type === 'resolveError') {
             fetch(window.config.server + '/logout', {
                 method: 'POST',
                 credentials: 'include',
             }).then(res => {
                 if (res.status !== 204) throw res.status;
+                dispatch({type: 'loggedOut'});
             }).catch(err => {
-                dispatch({type: 'raiseError', errorMessage: `Error while logging out: ${err}`});
+                const errorMessage = `Error while logging out: ${err}`;
+                if (action.type === 'logout') {
+                    dispatch({type: 'raiseError', errorMessage: errorMessage});
+                } else {
+                    console.error(errorMessage);
+                    dispatch({type: 'loggedOut'});
+                }
             });
         }
         return next(action);
