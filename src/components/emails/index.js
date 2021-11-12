@@ -25,11 +25,15 @@ class Emails extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (!props.emails.map((address) => address.email).includes(state.emailToBeDeleted)) {
+    const activeEmailAddresses = props.emails
+        .filter((address) => !address.delete_in_progress)
+        .map((address) => address.email);
+    if (!activeEmailAddresses.includes(state.emailToBeDeleted)) {
       return {
         emailToBeDeleted: null,
       };
     }
+    return state;
   }
 
   onConfirmDeleteEmail() {
