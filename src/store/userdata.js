@@ -41,6 +41,11 @@ export default function userdata(state = initialState, action) {
                 emails: action.data.emails,
                 fetching: false,
             };
+        case 'removeEmail':
+            return {
+                ...state,
+                fetching: true,
+            };
         default:
             return state;
     }
