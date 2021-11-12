@@ -33,3 +33,9 @@
   box-shadow: 0 3px 9px rgba(0,0,0,.5);
   overflow: hidden;
 }
+
+.irma-modal-button-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}

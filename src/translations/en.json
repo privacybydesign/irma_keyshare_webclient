@@ -68,7 +68,9 @@
     "emailaddress": "Email",
     "delete": "Delete",
     "delete-in-progress": "Being deleted",
-    "add-email": "Add email address"
+    "add-email": "Add email address",
+    "delete-confirm-header": "Confirm",
+    "delete-confirm-explanation": "Are you sure you want to delete {{email}}?"
   },
   "delete-account": {
     "header": "Delete MyIRMA",
@@ -77,7 +79,6 @@
     "delete": "Delete MyIRMA",
     "alert-header": "Delete MyIRMA?",
     "alert-explanation": "If you proceed, all your cards will become permanently unusable, and your logs and email address will be deleted from MyIRMA. Are you certain?",
-    "alert-cancel": "Cancel",
     "alert-delete": "Delete",
     "deleted": "MyIRMA account deleted."
   },
@@ -90,5 +91,8 @@
     "explanation": "The requested action could not be processed. Please check your internet connection and try again. If the problem keeps occurring, please contact IRMA.",
     "error-details": "The following error occurred:",
     "retry": "Go to login page"
+  },
+  "irma-modal": {
+    "cancel": "Cancel"
   }
 }

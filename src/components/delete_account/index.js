@@ -2,7 +2,6 @@ import React from 'react';
 import {Trans, withTranslation} from 'react-i18next';
 import IrmaButton from '../../helpers/irma_button';
 import IrmaModal from '../../helpers/irma_modal';
-import './index.scss';
 import {connect} from 'react-redux';
 
 const mapStateToProps = state => {
@@ -39,18 +38,16 @@ class DeleteAccount extends React.Component {
 
   renderModal() {
     return (
-      <IrmaModal theme={'secondary'} title={this.t('alert-header')}>
+      <IrmaModal
+          theme={'secondary'}
+          title={this.t('alert-header')}
+          action={this.t('alert-delete')}
+          onConfirm={() => this.onDeleteConfirm()}
+          onDismiss={() => this.onDeleteCancel()}
+      >
         <p>
           {this.t('alert-explanation')}
         </p>
-        <div className={'delete-account-buttons'}>
-          <IrmaButton theme={'plain'} onClick={() => this.onDeleteCancel()}>
-            {this.t('alert-cancel')}
-          </IrmaButton>
-          <IrmaButton theme={'secondary'} onClick={() => this.onDeleteConfirm()}>
-            {this.t('alert-delete')}
-          </IrmaButton>
-        </div>
       </IrmaModal>
     );
   }

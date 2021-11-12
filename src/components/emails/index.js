@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import p from 'prop-types';
 import {Trans, withTranslation} from 'react-i18next';
 import IrmaButton from '../../helpers/irma_button';
+import IrmaModal from "../../helpers/irma_modal";
 import IrmaTable from '../../helpers/irma_table';
 import './index.scss';
 import * as IrmaFrontend from '@privacybydesign/irma-frontend';
@@ -15,12 +16,32 @@ function mapStateToProps(state) {
 }
 
 class Emails extends React.Component {
-  t = this.props.t;
+  constructor(props) {
+    super(props);
+    this.t = props.t;
+    this.state = {
+      emailToBeDeleted: null,
+    };
+  }
 
-  deleteEmail(address) {
+  static getDerivedStateFromProps(props, state) {
+    if (!props.emails.map((address) => address.email).includes(state.emailToBeDeleted)) {
+      return {
+        emailToBeDeleted: null,
+      };
+    }
+  }
+
+  onConfirmDeleteEmail() {
     this.props.dispatch({
       type: 'removeEmail',
-      email: address,
+      email: this.state.emailToBeDeleted,
+    });
+  }
+
+  onDeleteEmail(address) {
+    this.setState({
+      emailToBeDeleted: address,
     });
   }
 
@@ -37,6 +58,20 @@ class Emails extends React.Component {
       if (err !== "Aborted")
         this.props.dispatch({ type: 'raiseError', errorMessage: `Error while adding email address: ${err}` });
     });
+  }
+
+  renderDeleteEmailConfirmation() {
+    return <IrmaModal
+        theme={'secondary'}
+        title={this.t('delete-confirm-header')}
+        action={this.t('delete')}
+        onConfirm={() => this.onConfirmDeleteEmail()}
+        onDismiss={() => this.setState({ emailToBeDeleted: null })}
+    >
+      <p>
+        { this.t('delete-confirm-explanation', { email: this.state.emailToBeDeleted }) }
+      </p>
+    </IrmaModal>
   }
 
   renderEmailHeader() {
@@ -57,7 +92,7 @@ class Emails extends React.Component {
         <td className={'delete-column'}>{
           address.delete_in_progress
             ? this.t('delete-in-progress')
-            : <IrmaButton theme={'secondary'} onClick={() => this.deleteEmail(address.email)}>{this.t('delete')}</IrmaButton>
+            : <IrmaButton theme={'secondary'} onClick={() => this.onDeleteEmail(address.email)}>{this.t('delete')}</IrmaButton>
         }</td>
       </tr>
     );
@@ -82,7 +117,7 @@ class Emails extends React.Component {
     }
   }
 
-  render = () => {
+  render() {
     return (
       <>
         <h2>{this.t('header')}</h2>
@@ -98,6 +133,7 @@ class Emails extends React.Component {
         <IrmaButton theme={'primary'} className={'add-email'} onClick={() => this.addEmail()}>
           {this.t('add-email')}
         </IrmaButton>
+        { this.state.emailToBeDeleted ? this.renderDeleteEmailConfirmation() : null }
       </>
     );
   }
