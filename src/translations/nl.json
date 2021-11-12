@@ -68,7 +68,9 @@
     "emailaddress": "Email",
     "delete": "Verwijder",
     "delete-in-progress": "Wordt verwijderd",
-    "add-email": "Voeg e-mailadres toe"
+    "add-email": "Voeg e-mailadres toe",
+    "delete-confirm-header": "Bevestigen",
+    "delete-confirm-explanation": "Weet je zeker dat je {{email}} wilt verwijderen?"
   },
   "delete-account": {
     "header": "Verwijder MijnIRMA",
@@ -77,7 +79,6 @@
     "delete": "Verwijder MijnIRMA",
     "alert-header": "MijnIRMA verwijderen?",
     "alert-explanation": "Als u dit doet worden al uw kaartjes permanent onbruikbaar, en worden uw loggegevens en e-mailadres verwijderd uit MijnIRMA. Weet u het zeker?",
-    "alert-cancel": "Annuleren",
     "alert-delete": "Verwijderen",
     "deleted": "MijnIRMA account verwijderd."
   },
@@ -90,5 +91,8 @@
     "explanation": "De gevraagde actie kon niet worden verwerkt. Controleer je internetverbinding en probeer het opnieuw. Als de fout blijft aanhouden, neem dan contact op met IRMA.",
     "error-details": "De volgende fout trad op:",
     "retry": "Ga terug naar loginpagina"
+  },
+  "irma-modal": {
+    "cancel": "Annuleren"
   }
 }
