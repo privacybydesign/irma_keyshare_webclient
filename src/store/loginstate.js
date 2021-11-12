@@ -43,6 +43,11 @@ export default function login(state = initialState, action) {
                 ...state,
                 sessionState: 'loggedIn',
             };
+        case 'logout':
+            return {
+                ...state,
+                sessionState: 'loggingOut',
+            };
         case 'loggedOut':
             return {
                 ...state,
@@ -65,6 +70,7 @@ export default function login(state = initialState, action) {
         case 'resolveError':
             return {
                 ...state,
+                sessionState: 'loggingOut',
                 error: '',
             };
         default:
