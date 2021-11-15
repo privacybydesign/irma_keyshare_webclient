@@ -6,14 +6,19 @@ import IrmaAppBar from '../../widgets/irma_app_bar';
 import SuccessIcon from '../../widgets/success_icon';
 import Column from '../../widgets/column';
 
-const RegistrationVerified = (props) => {
-  const continueToMyIrma = (e) => {
+class RegistrationVerified extends React.Component {
+  constructor(props) {
+    super(props);
+    this.t = props.t;
+  }
+
+  continueToMyIrma(e) {
     e.preventDefault();
     window.location.hash = '';
-    props.dispatch({ type: 'loggedIn' });
-  };
+    this.props.dispatch({ type: 'loggedIn' });
+  }
 
-  const userAgent = () => {
+  userAgent() {
     // IE11 doesn't have window.navigator, test differently
     // https://stackoverflow.com/questions/21825157/internet-explorer-11-detection
     if (!!window.MSInputMethodContext && !!document.documentMode) return 'Desktop';
@@ -30,49 +35,51 @@ const RegistrationVerified = (props) => {
 
     // Neither Android nor iOS, assuming desktop
     return 'Desktop';
-  };
+  }
 
-  const isMobile = () => {
-    const agent = userAgent();
+  isMobile() {
+    const agent = this.userAgent();
     return agent === 'iOS' || agent === 'Android';
-  };
+  }
 
-  const getReturnUrl = () => {
+  getReturnUrl() {
     const universalLink = 'https://irma.app/-/';
-    if (userAgent() === 'Android') {
+    if (this.userAgent() === 'Android') {
       // Universal links are not stable in Android webviews and custom tabs, so always use intent links.
       const intent = `Intent;package=org.irmacard.cardemu;scheme=irma;l.timestamp=${Date.now()}`;
       const fallback = `S.browser_fallback_url=${encodeURIComponent(universalLink)}`;
       return `intent://#${intent};${fallback};end`;
     }
     return universalLink;
-  };
+  }
 
-  return (
-    <>
-      <IrmaAppBar title={props.t('title')} />,
-      <Column className={'center'}>
-        <SuccessIcon className={'success-icon'} />
-        <h2>{props.t('success')}</h2>
-        <p>{props.t('explanation')}</p>
-        <p>
-          {isMobile() ? (
-            <a className={'return-button'} href={getReturnUrl()}>
-              <img src={`${process.env.PUBLIC_URL}/assets/irma-logo.svg`} className={'irma-logo'} alt={'irma-logo'} />
-              <span>{props.t('return-to-irma')}</span>
+  render() {
+    return (
+      <>
+        <IrmaAppBar title={this.t('title')} />,
+        <Column className={'center'}>
+          <SuccessIcon className={'success-icon'} />
+          <h2>{this.t('success')}</h2>
+          <p>{this.t('explanation')}</p>
+          <p>
+            {this.isMobile() ? (
+              <a className={'return-button'} href={this.getReturnUrl()}>
+                <img src={`${process.env.PUBLIC_URL}/assets/irma-logo.svg`} className={'irma-logo'} alt={'irma-logo'} />
+                <span>{this.t('return-to-irma')}</span>
+              </a>
+            ) : (
+              this.t('app-is-ready')
+            )}
+          </p>
+          <p>
+            <a href={'/#'} onClick={() => this.continueToMyIrma()}>
+              {this.t('continue-to-myirma')}
             </a>
-          ) : (
-            props.t('app-is-ready')
-          )}
-        </p>
-        <p>
-          <a href={'/#'} onClick={continueToMyIrma}>
-            {props.t('continue-to-myirma')}
-          </a>
-        </p>
-      </Column>
-    </>
-  );
-};
+          </p>
+        </Column>
+      </>
+    );
+  }
+}
 
 export default withTranslation('registration-verified')(RegistrationVerified);
