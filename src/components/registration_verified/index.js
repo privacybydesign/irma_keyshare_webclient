@@ -2,9 +2,9 @@ import React from 'react';
 import { withTranslation } from 'react-i18next';
 
 import './index.scss';
-import IrmaAppBar from '../../helpers/irma_app_bar';
-import SuccessIcon from '../../helpers/success_icon';
-import Column from '../../helpers/column';
+import IrmaAppBar from '../../widgets/irma_app_bar';
+import SuccessIcon from '../../widgets/success_icon';
+import Column from '../../widgets/column';
 
 const RegistrationVerified = (props) => {
   const continueToMyIrma = (e) => {

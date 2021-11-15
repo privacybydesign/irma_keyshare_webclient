@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import SelectMethod from './select_method';
 import SelectCandidate from './select_candidate';
-import LoadingSpinner from '../../helpers/loading_spinner';
+import LoadingSpinner from '../../widgets/loading_spinner';
 import EmailSent from './email_sent';
 
 const mapStateToProps = (state) => {
