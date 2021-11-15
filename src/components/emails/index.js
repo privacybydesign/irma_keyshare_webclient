@@ -49,7 +49,7 @@ class Emails extends React.Component {
     });
   }
 
-  addEmail() {
+  onAddEmail() {
     let irma = IrmaFrontend.newPopup({
       language: this.props.i18n.language,
       session: this.props.addEmailIrmaSession,
@@ -134,7 +134,7 @@ class Emails extends React.Component {
           />
         </p>
         {this.renderEmailList()}
-        <IrmaButton theme={'primary'} className={'add-email'} onClick={() => this.addEmail()}>
+        <IrmaButton theme={'primary'} className={'add-email'} onClick={() => this.onAddEmail()}>
           {this.t('add-email')}
         </IrmaButton>
         { this.state.emailToBeDeleted ? this.renderDeleteEmailConfirmation() : null }
