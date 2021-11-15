@@ -4,9 +4,9 @@ import moment from 'moment';
 import 'moment/locale/nl';
 
 import './select_candidate.scss';
-import Column from '../../helpers/column';
-import IrmaAppBar from '../../helpers/irma_app_bar';
-import IrmaButton from '../../helpers/irma_button';
+import Column from '../../widgets/column';
+import IrmaAppBar from '../../widgets/irma_app_bar';
+import IrmaButton from '../../widgets/irma_button';
 
 class SelectCandidate extends React.Component {
   constructor(props) {

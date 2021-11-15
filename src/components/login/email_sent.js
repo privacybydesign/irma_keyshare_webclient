@@ -1,7 +1,7 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
-import IrmaAppBar from '../../helpers/irma_app_bar';
-import Column from '../../helpers/column';
+import IrmaAppBar from '../../widgets/irma_app_bar';
+import Column from '../../widgets/column';
 
 const EmailSent = (props) => {
   return (

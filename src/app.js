@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Login from './components/login/';
-import LoadingSpinner from './helpers/loading_spinner';
+import LoadingSpinner from './widgets/loading_spinner';
 import AccountOverview from './components/account_overview';
 import RegistrationVerified from './components/registration_verified';
 import ErrorMessage from './components/error_message';

@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import p from 'prop-types';
 import { Trans, withTranslation } from 'react-i18next';
-import IrmaButton from '../../helpers/irma_button';
-import IrmaModal from '../../helpers/irma_modal';
-import IrmaTable from '../../helpers/irma_table';
+import IrmaButton from '../../widgets/irma_button';
+import IrmaModal from '../../widgets/irma_modal';
+import IrmaTable from '../../widgets/irma_table';
 import './index.scss';
 import * as IrmaFrontend from '@privacybydesign/irma-frontend';
 

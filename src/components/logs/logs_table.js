@@ -4,7 +4,7 @@ import moment from 'moment';
 import 'moment/locale/nl';
 
 import './logs_table.scss';
-import IrmaTable from '../../helpers/irma_table';
+import IrmaTable from '../../widgets/irma_table';
 
 class LogsTable extends React.Component {
   constructor(props) {

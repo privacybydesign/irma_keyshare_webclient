@@ -1,7 +1,8 @@
 import React from 'react';
 import { Trans, withTranslation } from 'react-i18next';
-import IrmaButton from '../../helpers/irma_button';
-import IrmaModal from '../../helpers/irma_modal';
+import IrmaButton from '../../widgets/irma_button';
+import IrmaModal from '../../widgets/irma_modal';
+import './index.scss';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
