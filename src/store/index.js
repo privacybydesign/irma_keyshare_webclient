@@ -29,6 +29,10 @@ function handleLoadLogs({getState, dispatch}) {
 }
 
 function handleUpdateData({getState, dispatch}) {
+    // The removal of an email address is not processed into the Redux state directly. Therefore, we fully update
+    // the user data after an email address is removed. In this way we know for sure the viewed state is a correct
+    // representation of the current back-end state, and we can rely on the error handling of this function.
+    // It would be nice to reduce this overhead when more functionality is being introduced.
     return next => action => {
         if ((action.type === 'startUpdateInfo' && !getState().userdata.fetching) || action.type === 'emailRemoved') {
             fetch(window.config.server + '/user', {
