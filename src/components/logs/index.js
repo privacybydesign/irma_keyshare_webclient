@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 
-import LoadingSpinner from '../../helpers/loading_spinner';
+import LoadingSpinner from '../../widgets/loading_spinner';
 import LogsTable from './logs_table';
-import ChevronLeftIcon from '../../helpers/chevron-left-icon';
-import ChevronRightIcon from '../../helpers/chevron-right-icon';
-import IrmaButton from '../../helpers/irma_button';
+import ChevronLeftIcon from '../../widgets/chevron-left-icon';
+import ChevronRightIcon from '../../widgets/chevron-right-icon';
+import IrmaButton from '../../widgets/irma_button';
 import './index.scss';
 
 const LOGS_PER_PAGE = 10;

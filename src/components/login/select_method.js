@@ -3,9 +3,9 @@ import { withTranslation } from 'react-i18next';
 import irmaFrontend from '@privacybydesign/irma-frontend';
 
 import './select_method.scss';
-import Column from '../../helpers/column';
-import IrmaAppBar from '../../helpers/irma_app_bar';
-import IrmaButton from '../../helpers/irma_button';
+import Column from '../../widgets/column';
+import IrmaAppBar from '../../widgets/irma_app_bar';
+import IrmaButton from '../../widgets/irma_button';
 
 class SelectMethod extends React.Component {
   constructor(props) {

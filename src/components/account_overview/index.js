@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 
-import IrmaAppBar from '../../helpers/irma_app_bar';
-import LoadingSpinner from '../../helpers/loading_spinner';
+import IrmaAppBar from '../../widgets/irma_app_bar';
+import LoadingSpinner from '../../widgets/loading_spinner';
 import Emails from '../emails';
 import Logs from '../logs';
-import Column from '../../helpers/column';
+import Column from '../../widgets/column';
 import DeleteAccount from '../delete_account';
 import LoadCards from '../load_cards';
 
