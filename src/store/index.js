@@ -30,7 +30,7 @@ function handleLoadLogs({getState, dispatch}) {
 
 function handleUpdateData({getState, dispatch}) {
     return next => action => {
-        if (action.type === 'startUpdateInfo' && !getState().userdata.fetching) {
+        if ((action.type === 'startUpdateInfo' && !getState().userdata.fetching) || action.type === 'emailRemoved') {
             fetch(window.config.server + '/user', {
                 method: 'GET',
                 credentials: 'include',
@@ -58,7 +58,7 @@ function handleEmail({dispatch}) {
                 credentials: 'include',
             }).then(res => {
                 if (res.status !== 204) throw res.status;
-                dispatch({type: 'startUpdateInfo'});
+                dispatch({type: 'emailRemoved'});
             }).catch(err => {
                 dispatch({type: 'raiseError', errorMessage: `Error while removing email: ${err}`});
             });
