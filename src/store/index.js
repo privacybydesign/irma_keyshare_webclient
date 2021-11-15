@@ -9,8 +9,7 @@ function handleLoadLogs({ getState, dispatch }) {
   return (next) => (action) => {
     if (action.type === 'loadLogs' && !getState().logs.loading) {
       // load logs if needed
-      const offset = getState().logs.currentIndex;
-      fetch(`${window.config.server}/user/logs/${offset}`, {
+      fetch(`${window.config.server}/user/logs/${action.index}`, {
         method: 'GET',
         credentials: 'include',
       })
