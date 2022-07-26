@@ -27,7 +27,7 @@
   },
   "login-email-sent": {
     "title": "Controleer uw e-mail",
-    "explanation": "Log in door te klikken op de link die naar uw e-mailadres is verstuurd."
+    "explanation": "Log in door te klikken op de link die naar uw e-mailadres is verstuurd. Als je niets ontvangen hebt, dan was het ingevulde e-mailadres vermoedelijk niet bekend bij ons."
   },
   "registration-verified": {
     "title": "MijnIRMA-registratie klaar",

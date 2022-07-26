@@ -27,7 +27,7 @@
   },
   "login-email-sent": {
     "title": "Check your email",
-    "explanation": "Log in by clicking on the link that has been sent to your email address."
+    "explanation": "Log in by clicking on the link that has been sent to your email address. If you did not receive anything, then the email address you entered was probably not known to us."
   },
   "registration-verified": {
     "title": "MyIRMA registration finished",
