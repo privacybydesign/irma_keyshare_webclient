@@ -17,13 +17,13 @@
     "check-email-text": "Log in door te klikken op de link die naar je e-mailadres is verstuurd."
   },
   "login-select-candidate": {
-    "title": "Kies IRMA-account",
-    "username": "Gebruikersnaam",
+    "title": "Kies IRMA app-ID",
+    "username": "App-ID",
     "last-seen": "Laatst actief",
     "login": "Log in",
-    "explanation": "Het e-mailadres waarmee u inlogt is gekoppeld aan meerdere IRMA-accounts, die in onderstaande tabel worden weergegeven. De betekenis van de kolommen is als volgt:",
-    "candidates-item-1": "uw IRMA gebruikersnaam. Deze staat in uw IRMA-app als u inlogt bij MijnIRMA.",
-    "candidates-item-2": "wanneer er voor het laatst kaartjes zijn ontvangen of vrijgegeven met dit account."
+    "explanation": "Het e-mailadres waarmee u inlogt is gekoppeld aan meerdere IRMA apps, die in onderstaande tabel worden weergegeven. De betekenis van de kolommen is als volgt:",
+    "candidates-item-1": "uw IRMA app-ID. Deze staat in uw IRMA-app onder \"Meer\" (onderaan het scherm).",
+    "candidates-item-2": "wanneer er voor het laatst kaartjes zijn ontvangen of vrijgegeven met deze IRMA app."
   },
   "login-email-sent": {
     "title": "Controleer uw e-mail",
@@ -39,7 +39,7 @@
   },
   "account-overview": {
     "title": "MijnIRMA",
-    "logged-in-as": "Je bent ingelogd als"
+    "logged-in-as": "App-ID:"
   },
   "logs": {
     "header": "Bekijk het gebruik van uw IRMA-app",
@@ -63,8 +63,8 @@
   },
   "emails": {
     "header": "E-mailadressen",
-    "explanation": "De volgende e-mailadressen zijn geassocieerd met uw account. Met ieder van deze e-mailadressen kunt u inloggen op MijnIRMA. Als u uw e-mailadres al <0>geladen heeft als IRMA-kaartje</0>, kunt u hem associëren aan uw account met onderstaande knop.",
-    "no-email-addresses": "Er zijn geen e-mailadressen geassocieerd met uw account. Dit betekent dat u niet op MijnIRMA in kunt loggen en uw kaartjes kunt blokkeren, mocht u uw telefoon kwijtraken.",
+    "explanation": "De volgende e-mailadressen zijn geassocieerd met uw IRMA-app. Met ieder van deze e-mailadressen kunt u inloggen op MijnIRMA. Als u uw e-mailadres al <0>geladen heeft als IRMA-kaartje</0>, kunt u hem associëren aan uw IRMA-app met onderstaande knop.",
+    "no-email-addresses": "Er zijn geen e-mailadressen geassocieerd met uw IRMA-app. Dit betekent dat u niet op MijnIRMA in kunt loggen en uw kaartjes kunt blokkeren, mocht u uw telefoon kwijtraken.",
     "emailaddress": "Email",
     "delete": "Verwijder",
     "delete-in-progress": "Wordt verwijderd",
@@ -75,12 +75,12 @@
   "delete-account": {
     "header": "Verwijder MijnIRMA",
     "explanation-par1": "Als u uw MijnIRMA verwijdert, worden al uw kaartjes permanent onbruikbaar, en worden alle gebeurtenissen en uw e-mailadres permanent gewist.",
-    "explanation-par2": "<0>Waarschuwing:</0> uw MijnIRMA verwijderen is permanent! Als u daarna opnieuw IRMA wilt gaan gebruiken zal u zich opnieuw bij MijnIRMA moeten registreren en al uw kaartjes opnieuw moeten verkrijgen.",
+    "explanation-par2": "<0>Waarschuwing:</0> uw MijnIRMA verwijderen is permanent! Als u daarna opnieuw IRMA wilt gaan gebruiken zal u opnieuw de IRMA-app moeten installeren en al uw kaartjes opnieuw moeten verkrijgen.",
     "delete": "Verwijder MijnIRMA",
     "alert-header": "MijnIRMA verwijderen?",
     "alert-explanation": "Als u dit doet worden al uw kaartjes permanent onbruikbaar, en worden uw loggegevens en e-mailadres verwijderd uit MijnIRMA. Weet u het zeker?",
     "alert-delete": "Verwijderen",
-    "deleted": "MijnIRMA account verwijderd."
+    "deleted": "MijnIRMA verwijderd."
   },
   "load-cards": {
     "header": "Laad of ververs kaartjes",
