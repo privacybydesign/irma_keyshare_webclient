@@ -21,13 +21,13 @@
     "username": "App-ID",
     "last-seen": "Laatst actief",
     "login": "Log in",
-    "explanation": "Het e-mailadres waarmee u inlogt is gekoppeld aan meerdere IRMA apps, die in onderstaande tabel worden weergegeven. De betekenis van de kolommen is als volgt:",
-    "candidates-item-1": "uw IRMA app-ID. Deze staat in uw IRMA-app onder \"Meer\" (onderaan het scherm).",
+    "explanation": "Het e-mailadres waarmee je inlogt is gekoppeld aan meerdere IRMA apps, die in onderstaande tabel worden weergegeven. De betekenis van de kolommen is als volgt:",
+    "candidates-item-1": "je IRMA app-ID. Deze staat in je IRMA-app onder \"Meer\" (onderaan het scherm).",
     "candidates-item-2": "wanneer er voor het laatst kaartjes zijn ontvangen of vrijgegeven met deze IRMA app."
   },
   "login-email-sent": {
-    "title": "Controleer uw e-mail",
-    "explanation": "Log in door te klikken op de link die naar uw e-mailadres is verstuurd. Als je niets ontvangen hebt, dan was het ingevulde e-mailadres vermoedelijk niet bekend bij ons."
+    "title": "Controleer je e-mail",
+    "explanation": "Log in door te klikken op de link die naar je e-mailadres is verstuurd. Als je niets ontvangen hebt, dan was het ingevulde e-mailadres vermoedelijk niet bekend bij ons."
   },
   "registration-verified": {
     "title": "MijnIRMA-registratie klaar",
@@ -42,7 +42,7 @@
     "logged-in-as": "App-ID:"
   },
   "logs": {
-    "header": "Bekijk het gebruik van uw IRMA-app",
+    "header": "Bekijk het gebruik van je IRMA-app",
     "refresh": "Ververs",
     "previous": "Vorige",
     "next": "Volgende"
@@ -63,8 +63,8 @@
   },
   "emails": {
     "header": "E-mailadressen",
-    "explanation": "De volgende e-mailadressen zijn geassocieerd met uw IRMA-app. Met ieder van deze e-mailadressen kunt u inloggen op MijnIRMA. Als u uw e-mailadres al <0>geladen heeft als IRMA-kaartje</0>, kunt u hem associëren aan uw IRMA-app met onderstaande knop.",
-    "no-email-addresses": "Er zijn geen e-mailadressen geassocieerd met uw IRMA-app. Dit betekent dat u niet op MijnIRMA in kunt loggen en uw kaartjes kunt blokkeren, mocht u uw telefoon kwijtraken.",
+    "explanation": "De volgende e-mailadressen zijn geassocieerd met je IRMA-app. Met ieder van deze e-mailadressen kunt je inloggen op MijnIRMA. Als je je e-mailadres al <0>geladen hebt als IRMA-kaartje</0>, kun je hem associëren aan je IRMA-app met onderstaande knop.",
+    "no-email-addresses": "Er zijn geen e-mailadressen geassocieerd met je IRMA-app. Dit betekent dat je niet op MijnIRMA in kunt loggen en je kaartjes kunt blokkeren, mocht je je telefoon kwijtraken.",
     "emailaddress": "Email",
     "delete": "Verwijder",
     "delete-in-progress": "Wordt verwijderd",
@@ -74,17 +74,17 @@
   },
   "delete-account": {
     "header": "Verwijder MijnIRMA",
-    "explanation-par1": "Als u uw MijnIRMA verwijdert, worden al uw kaartjes permanent onbruikbaar, en worden alle gebeurtenissen en uw e-mailadres permanent gewist.",
-    "explanation-par2": "<0>Waarschuwing:</0> uw MijnIRMA verwijderen is permanent! Als u daarna opnieuw IRMA wilt gaan gebruiken zal u opnieuw de IRMA-app moeten installeren en al uw kaartjes opnieuw moeten verkrijgen.",
+    "explanation-par1": "Als je je MijnIRMA verwijdert, worden al je kaartjes permanent onbruikbaar, en worden alle gebeurtenissen en je e-mailadres permanent gewist.",
+    "explanation-par2": "<0>Waarschuwing:</0> je MijnIRMA verwijderen is permanent! Als je daarna opnieuw IRMA wilt gaan gebruiken zal je opnieuw de IRMA-app moeten installeren en al je kaartjes opnieuw moeten verkrijgen.",
     "delete": "Verwijder MijnIRMA",
     "alert-header": "MijnIRMA verwijderen?",
-    "alert-explanation": "Als u dit doet worden al uw kaartjes permanent onbruikbaar, en worden uw loggegevens en e-mailadres verwijderd uit MijnIRMA. Weet u het zeker?",
+    "alert-explanation": "Als je dit doet worden al je kaartjes permanent onbruikbaar, en worden je loggegevens en e-mailadres verwijderd uit MijnIRMA. Weet je het zeker?",
     "alert-delete": "Verwijderen",
     "deleted": "MijnIRMA verwijderd."
   },
   "load-cards": {
     "header": "Laad of ververs kaartjes",
-    "explanation": "Ga naar <0>deze pagina</0> om meer kaartjes in uw IRMA-app te laden of om bestaande kaartjes te verversen."
+    "explanation": "Ga naar <0>deze pagina</0> om meer kaartjes in je IRMA-app te laden of om bestaande kaartjes te verversen."
   },
   "error-message": {
     "header": "Er is een fout opgetreden",
