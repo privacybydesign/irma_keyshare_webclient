@@ -23,7 +23,7 @@
     "login": "Log in",
     "explanation": "Het e-mailadres waarmee je inlogt is gekoppeld aan meerdere IRMA apps, die in onderstaande tabel worden weergegeven. De betekenis van de kolommen is als volgt:",
     "candidates-item-1": "je IRMA app-ID. Deze staat in je IRMA-app onder \"Meer\" (onderaan het scherm).",
-    "candidates-item-2": "wanneer er voor het laatst kaartjes zijn ontvangen of vrijgegeven met deze IRMA app."
+    "candidates-item-2": "wanneer er voor het laatst gegevens zijn ontvangen of vrijgegeven met deze IRMA app."
   },
   "login-email-sent": {
     "title": "Controleer je e-mail",
@@ -63,8 +63,8 @@
   },
   "emails": {
     "header": "E-mailadressen",
-    "explanation": "De volgende e-mailadressen zijn geassocieerd met je IRMA-app. Met ieder van deze e-mailadressen kunt je inloggen op MijnIRMA. Als je je e-mailadres al <0>geladen hebt als IRMA-kaartje</0>, kun je hem associëren aan je IRMA-app met onderstaande knop.",
-    "no-email-addresses": "Er zijn geen e-mailadressen geassocieerd met je IRMA-app. Dit betekent dat je niet op MijnIRMA in kunt loggen en je kaartjes kunt blokkeren, mocht je je telefoon kwijtraken.",
+    "explanation": "De volgende e-mailadressen zijn geassocieerd met je IRMA-app. Met ieder van deze e-mailadressen kunt je inloggen op MijnIRMA. Als je je e-mailadres al <0>geladen hebt in je IRMA-app</0>, kun je hem associëren aan je IRMA-app met onderstaande knop.",
+    "no-email-addresses": "Er zijn geen e-mailadressen geassocieerd met je IRMA-app. Dit betekent dat je niet op MijnIRMA in kunt loggen en de gegevens in je IRMA app kunt blokkeren, mocht je je telefoon kwijtraken.",
     "emailaddress": "Email",
     "delete": "Verwijder",
     "delete-in-progress": "Wordt verwijderd",
@@ -74,17 +74,17 @@
   },
   "delete-account": {
     "header": "Verwijder MijnIRMA",
-    "explanation-par1": "Als je je MijnIRMA verwijdert, worden al je kaartjes permanent onbruikbaar, en worden alle gebeurtenissen en je e-mailadres permanent gewist.",
-    "explanation-par2": "<0>Waarschuwing:</0> je MijnIRMA verwijderen is permanent! Als je daarna opnieuw IRMA wilt gaan gebruiken zal je opnieuw de IRMA-app moeten installeren en al je kaartjes opnieuw moeten verkrijgen.",
+    "explanation-par1": "Als je je MijnIRMA verwijdert, worden alle gegevens in je IRMA-app permanent onbruikbaar, en worden alle gebeurtenissen en je e-mailadres permanent gewist.",
+    "explanation-par2": "<0>Waarschuwing:</0> je MijnIRMA verwijderen is permanent! Als je daarna opnieuw IRMA wilt gaan gebruiken zal je opnieuw de IRMA-app moeten installeren en al je gegevens opnieuw moeten verkrijgen.",
     "delete": "Verwijder MijnIRMA",
     "alert-header": "MijnIRMA verwijderen?",
-    "alert-explanation": "Als je dit doet worden al je kaartjes permanent onbruikbaar, en worden je loggegevens en e-mailadres verwijderd uit MijnIRMA. Weet je het zeker?",
+    "alert-explanation": "Als je dit doet worden alle gegevens in je IRMA-app permanent onbruikbaar, en worden je loggegevens en e-mailadres verwijderd uit MijnIRMA. Weet je het zeker?",
     "alert-delete": "Verwijderen",
     "deleted": "MijnIRMA verwijderd."
   },
   "load-cards": {
-    "header": "Laad of ververs kaartjes",
-    "explanation": "Ga naar <0>deze pagina</0> om meer kaartjes in je IRMA-app te laden of om bestaande kaartjes te verversen."
+    "header": "Laad of ververs gegevens",
+    "explanation": "Ga naar <0>deze pagina</0> om meer gegevens in je IRMA-app te laden of om bestaande gegevens te verversen."
   },
   "error-message": {
     "header": "Er is een fout opgetreden",
