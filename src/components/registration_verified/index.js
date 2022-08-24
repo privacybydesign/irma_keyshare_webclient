@@ -14,7 +14,6 @@ class RegistrationVerified extends React.Component {
 
   continueToMyIrma(e) {
     e.preventDefault();
-    window.location.hash = '';
     this.props.dispatch({ type: 'loggedIn' });
   }
 
@@ -72,7 +71,7 @@ class RegistrationVerified extends React.Component {
             )}
           </p>
           <p>
-            <a href={'/#'} onClick={() => this.continueToMyIrma()}>
+            <a href={'/#'} onClick={(e) => this.continueToMyIrma(e)}>
               {this.t('continue-to-myirma')}
             </a>
           </p>
