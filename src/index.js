@@ -14,11 +14,9 @@ function checkUrlHash() {
   if (fragment.startsWith('#token=')) {
     const token = fragment.substr(7);
     store.dispatch({ type: 'startTokenLogin', token: token });
-    window.location.hash = '';
   } else if (fragment.startsWith('#verify=')) {
     const token = fragment.substr(8);
     store.dispatch({ type: 'startRegistrationVerify', token: token });
-    window.location.hash = '';
   } else {
     store.dispatch({ type: 'verifySession' });
   }
