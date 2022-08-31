@@ -34,7 +34,7 @@
     "success": "Gelukt",
     "explanation": "Je emailadres is nu aan je IRMA-app gekoppeld.",
     "return-to-irma": "Terug naar IRMA",
-    "continue=to-myirma": "Ga naar MijnIRMA",
+    "continue-to-myirma": "Ga naar MijnIRMA",
     "app-is-ready": "Je IRMA-app is nu klaar voor verder gebruik."
   },
   "account-overview": {
