@@ -129,7 +129,6 @@ function handleTokenLogin({ dispatch }) {
         .then((res) => {
           if (res.status !== 204) throw res.status;
           dispatch({ type: 'loggedIn' });
-          dispatch({ type: 'startUpdateInfo' });
         })
         .catch((err) => {
           dispatch({ type: 'raiseError', errorMessage: `Error while logging in with token: ${err}` });
@@ -196,7 +195,6 @@ function handleVerifySession({ dispatch }) {
         .then((res) => {
           if (res === 'ok') {
             dispatch({ type: 'loggedIn' });
-            dispatch({ type: 'startUpdateInfo' });
           } else if (res === 'expired') {
             dispatch({ type: 'loggedOut' });
           } else {
@@ -206,6 +204,15 @@ function handleVerifySession({ dispatch }) {
         .catch((err) => {
           dispatch({ type: 'raiseError', errorMessage: `Error while verifying session: ${err}` });
         });
+    }
+    return next(action);
+  };
+}
+
+function handleLoggedIn({ dispatch }) {
+  return (next) => (action) => {
+    if (action.type === 'loggedIn') {
+      dispatch({ type: 'startUpdateInfo' });
     }
     return next(action);
   };
@@ -254,6 +261,7 @@ export default function buildStore() {
       handleEmailLogin,
       handleRegistrationVerify,
       handleVerifySession,
+      handleLoggedIn,
       handleLogout
     )
   );
