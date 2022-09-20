@@ -18,7 +18,7 @@ const Login = (props) => {
     case 'selectCandidate':
       return <SelectCandidate dispatch={props.dispatch} candidates={props.candidates} token={props.token} />;
     case 'emailSent':
-      return <EmailSent />;
+      return <EmailSent dispatch={props.dispatch} />;
     default:
       return <LoadingSpinner />;
   }
