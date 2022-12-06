@@ -19,7 +19,7 @@ const ErrorMessage = (props) => {
 
   return (
     <>
-      <IrmaAppBar title={props.t('header')} />,
+      <IrmaAppBar title={props.t('header')} />
       <Column>
         <p>{props.t('explanation')}</p>
         <p>
