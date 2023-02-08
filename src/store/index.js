@@ -170,8 +170,13 @@ function handleRegistrationVerify({ dispatch }) {
         credentials: 'include',
       })
         .then((res) => {
-          if (res.status !== 204) throw res.status;
-          dispatch({ type: 'registrationVerified' });
+          if (res.status === 204) {
+            dispatch({ type: 'registrationVerified' });
+          } else if (res.status === 400) {
+            dispatch({ type: 'tokenInvalid' });
+          } else {
+            throw res.status;
+          }
         })
         .catch((err) => {
           dispatch({ type: 'raiseError', errorMessage: `Error while verifying email: ${err}` });

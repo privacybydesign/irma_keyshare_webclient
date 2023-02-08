@@ -62,6 +62,11 @@ export default function login(state = initialState, action) {
           result: false,
         },
       };
+    case 'tokenInvalid':
+      return {
+        ...state,
+        sessionState: 'tokenInvalid',
+      };
     case 'raiseError':
       return state.error
         ? state

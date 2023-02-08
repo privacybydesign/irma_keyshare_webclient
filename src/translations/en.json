@@ -87,8 +87,18 @@
     "header": "Load or refresh data",
     "explanation": "Go to <0>this page</0> to load more data in your IRMA app, or refresh existing data."
   },
+  "token-invalid": {
+    "header": "Something went wrong",
+    "explanation": "This link has expired.",
+    "explanation-details": "You can still add your e-mail address so that you can block your IRMA app in case of loss or theft:",
+    "point-1":"Open <0>MyIRMA</0>.",
+    "point-2":"Click on 'Open IRMA app' or scan the QR code with your IRMA app.",
+    "point-3":"Follow the instructions in your IRMA app to log in to MyIRMA.",
+    "point-4":"Click on 'Add email address' and follow the instructions to add your e-mail address to MijnIRMA.",
+    "retry": "Go to MyIRMA"
+  },
   "error-message": {
-    "header": "An error occurred",
+    "header": "Something went wrong",
     "explanation": "The requested action could not be processed. Please check your internet connection and try again. If the problem keeps occurring, please contact IRMA.",
     "error-details": "The following error occurred:",
     "retry": "Go to login page"
