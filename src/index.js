@@ -13,10 +13,10 @@ function checkUrlHash() {
   const fragment = window.location.hash;
   if (fragment.startsWith('#token=')) {
     const token = fragment.substr(7);
-    store.dispatch({ type: 'startTokenLogin', token: token });
+    store.dispatch({ type: 'startTokenLogin', token });
   } else if (fragment.startsWith('#verify=')) {
     const token = fragment.substr(8);
-    store.dispatch({ type: 'startRegistrationVerify', token: token });
+    store.dispatch({ type: 'startRegistrationVerify', token });
   } else {
     store.dispatch({ type: 'verifySession' });
   }

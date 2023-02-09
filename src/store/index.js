@@ -239,7 +239,7 @@ function handleLogout({ dispatch }) {
         .catch((err) => {
           const errorMessage = `Error while logging out: ${err}`;
           if (action.type === 'logout') {
-            dispatch({ type: 'raiseError', errorMessage: errorMessage });
+            dispatch({ type: 'raiseError', errorMessage });
           } else {
             console.error(errorMessage);
             dispatch({ type: 'loggedOut' });
@@ -253,9 +253,9 @@ function handleLogout({ dispatch }) {
 export default function buildStore() {
   return createStore(
     combineReducers({
-      login: login,
-      logs: logs,
-      userdata: userdata,
+      login,
+      logs,
+      userdata,
     }),
     applyMiddleware(
       handleLoadLogs,

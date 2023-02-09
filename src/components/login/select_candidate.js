@@ -15,7 +15,7 @@ class SelectCandidate extends React.Component {
   }
 
   handleSelectCandidate(username) {
-    this.props.dispatch({ type: 'finishTokenLogin', token: this.props.token, username: username });
+    this.props.dispatch({ type: 'finishTokenLogin', token: this.props.token, username });
   }
 
   renderCandidates() {
