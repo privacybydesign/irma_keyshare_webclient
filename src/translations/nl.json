@@ -90,11 +90,11 @@
   "token-invalid": {
     "header": "Er ging iets mis",
     "explanation": "Deze link is verlopen.",
-    "explanation-details": "Je kunt alsnog je e-mail adres toevoegen zodat je jouw IRMA-app kunt blokkeren bij verlies of diefstal:",
+    "explanation-details": "Je kunt alsnog je e-mailadres toevoegen zodat je jouw IRMA-app kunt blokkeren bij verlies of diefstal:",
     "point-1":"Ga naar <0>MijnIRMA</0>.",
     "point-2":"Klik op 'Open IRMA-app' of scan de QR code met jouw IRMA-app.",
     "point-3":"Volg de instructies in jouw IRMA app om in te loggen in MijnIRMA.",
-    "point-4":"Klik op 'Voeg e-mail adres toe' en volg de instructies om je e-mail adres toe toe voegen aan MijnIRMA.",
+    "point-4":"Klik op 'Voeg e-mailadres toe' en volg de instructies om je e-mailadres toe toe voegen aan MijnIRMA.",
     "retry": "Ga naar MijnIRMA"
   },
   "error-message": {
