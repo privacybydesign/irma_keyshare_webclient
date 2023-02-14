@@ -172,7 +172,7 @@ function handleRegistrationVerify({ dispatch }) {
         .then((res) => {
           if (res.status === 204) {
             dispatch({ type: 'registrationVerified' });
-          } else if (res.status === 400) {
+          } else if (res.status === 403) {
             dispatch({ type: 'tokenInvalid' });
           } else {
             throw res.status;
