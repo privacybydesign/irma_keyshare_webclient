@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 
 import buildStore from './store';
@@ -7,6 +7,8 @@ import App from './app';
 import i18n from './i18n';
 import './index.scss';
 
+const container = document.getElementById('root');
+const root = createRoot(container);
 const store = buildStore();
 
 function checkUrlHash() {
@@ -28,11 +30,10 @@ checkUrlHash();
 document.documentElement.setAttribute('lang', window.config.lang);
 document.title = i18n.t('app:title');
 
-ReactDOM.render(
+root.render(
   <React.StrictMode>
     <Provider store={store}>
       <App />
     </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
