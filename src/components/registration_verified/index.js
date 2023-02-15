@@ -46,8 +46,7 @@ class RegistrationVerified extends React.Component {
     if (this.userAgent() === 'Android') {
       // Universal links are not stable in Android webviews and custom tabs, so always use intent links.
       const intent = `Intent;package=org.irmacard.cardemu;scheme=irma;l.timestamp=${Date.now()}`;
-      const fallback = `S.browser_fallback_url=${encodeURIComponent(universalLink)}`;
-      return `intent://#${intent};${fallback};end`;
+      return `intent://#${intent};end`;
     }
     return universalLink;
   }
