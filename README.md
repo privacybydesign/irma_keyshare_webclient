@@ -25,6 +25,18 @@ Even if you use a local setup, the MyIRMA backend server will use another port t
 You can either resolve this by running your browser in insecure mode, or you can check the running instructions for
 a combined local setup [below](#yarn-build).
 
+Below some examples on how to start a browser in insecure mode.
+
+* MacOS
+
+      open -n -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --args --user-data-dir="/tmp/chrome-disable-web-security" --disable-web-security
+
+* Linux
+
+      chromium --user-data-dir=/tmp/chromium-disable-web-security --disable-web-security
+
+Warnings about using an unsupported browser option can be ignored.
+
 ### `yarn build`
 
 Builds the app for production to the `build` folder.<br />
