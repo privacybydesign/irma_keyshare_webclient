@@ -5,8 +5,8 @@ import en from './translations/en.json';
 import nl from './translations/nl.json';
 
 const resources = {
-  en: en,
-  nl: nl,
+  en,
+  nl,
 };
 
 i18n

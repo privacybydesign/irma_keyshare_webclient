@@ -87,8 +87,18 @@
     "header": "Laad of ververs gegevens",
     "explanation": "Ga naar <0>deze pagina</0> om meer gegevens in je IRMA-app te laden of om bestaande gegevens te verversen."
   },
+  "token-invalid": {
+    "header": "Er ging iets mis",
+    "explanation": "Deze link is verlopen.",
+    "explanation-details": "Je kunt alsnog je e-mailadres toevoegen zodat je jouw IRMA-app kunt blokkeren bij verlies of diefstal:",
+    "point-1":"Ga naar <0>MijnIRMA</0>.",
+    "point-2":"Klik op 'Open IRMA-app' of scan de QR code met jouw IRMA-app.",
+    "point-3":"Volg de instructies in jouw IRMA app om in te loggen in MijnIRMA.",
+    "point-4":"Klik op 'Voeg e-mailadres toe' en volg de instructies om je e-mailadres toe toe voegen aan MijnIRMA.",
+    "retry": "Ga naar MijnIRMA"
+  },
   "error-message": {
-    "header": "Er is een fout opgetreden",
+    "header": "Er ging iets mis",
     "explanation": "De gevraagde actie kon niet worden verwerkt. Controleer je internetverbinding en probeer het opnieuw. Als de fout blijft aanhouden, neem dan contact op met IRMA.",
     "error-details": "De volgende fout trad op:",
     "retry": "Ga terug naar loginpagina"

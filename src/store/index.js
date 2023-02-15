@@ -170,8 +170,13 @@ function handleRegistrationVerify({ dispatch }) {
         credentials: 'include',
       })
         .then((res) => {
-          if (res.status !== 204) throw res.status;
-          dispatch({ type: 'registrationVerified' });
+          if (res.status === 204) {
+            dispatch({ type: 'registrationVerified' });
+          } else if (res.status === 403) {
+            dispatch({ type: 'tokenInvalid' });
+          } else {
+            throw res.status;
+          }
         })
         .catch((err) => {
           dispatch({ type: 'raiseError', errorMessage: `Error while verifying email: ${err}` });
@@ -234,7 +239,7 @@ function handleLogout({ dispatch }) {
         .catch((err) => {
           const errorMessage = `Error while logging out: ${err}`;
           if (action.type === 'logout') {
-            dispatch({ type: 'raiseError', errorMessage: errorMessage });
+            dispatch({ type: 'raiseError', errorMessage });
           } else {
             console.error(errorMessage);
             dispatch({ type: 'loggedOut' });
@@ -248,9 +253,9 @@ function handleLogout({ dispatch }) {
 export default function buildStore() {
   return createStore(
     combineReducers({
-      login: login,
-      logs: logs,
-      userdata: userdata,
+      login,
+      logs,
+      userdata,
     }),
     applyMiddleware(
       handleLoadLogs,
