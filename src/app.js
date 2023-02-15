@@ -4,6 +4,7 @@ import Login from './components/login/';
 import LoadingSpinner from './widgets/loading_spinner';
 import AccountOverview from './components/account_overview';
 import RegistrationVerified from './components/registration_verified';
+import TokenInvalid from './components/token_invalid';
 import ErrorMessage from './components/error_message';
 
 const mapStateToProps = (state) => {
@@ -11,6 +12,7 @@ const mapStateToProps = (state) => {
     loading: ['unknown', 'loggingOut'].includes(state.login.sessionState),
     loggedIn: state.login.sessionState === 'loggedIn',
     registrationVerified: state.login.sessionState === 'showPostRegistration',
+    tokenInvalid: state.login.sessionState === 'tokenInvalid',
     errorRaised: state.login.error !== '',
   };
 };
@@ -25,6 +27,8 @@ const App = (props) => {
     return <AccountOverview />;
   } else if (props.registrationVerified) {
     return <RegistrationVerified dispatch={props.dispatch} />;
+  } else if (props.tokenInvalid) {
+    return <TokenInvalid dispatch={props.dispatch} />;
   } else {
     return <Login />;
   }

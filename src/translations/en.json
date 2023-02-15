@@ -8,32 +8,32 @@
     "intro-par2": "The foundation knows when your IRMA app is used, but does not know where or with what information. In this way a combination of security and privacy is pursued. The MyIRMA usage log allows you to check if your IRMA app is being abused. If so, you can block your IRMA app here.",
     "login-methods": "Below you can log in to MyIRMA in two ways:",
     "login-method-irma": "Using IRMA, by scanning a QR code with the IRMA app; this is the easiest way.",
-    "login-method-email": "Using the email address with which you registered. If you enter it below a link will be sent to it that will allow you to log in to MyIRMA. You can use this login method when you do not have your phone with you, or if your phone has been stolen and you want to prevent abuse of your IRMA app.",
+    "login-method-email": "Using the e-mail address with which you registered. If you enter it below a link will be sent to it that will allow you to log in to MyIRMA. You can use this login method when you do not have your phone with you, or if your phone has been stolen and you want to prevent abuse of your IRMA app.",
     "login-using": "Log in using",
     "or": "or",
-    "email-address": "Email address",
-    "email-link": "Email link",
-    "check-email": "Check your email",
-    "check-email-text": "Log in by clicking on the link that has been sent to your email address."
+    "email-address": "E-mail address",
+    "email-link": "E-mail link",
+    "check-email": "Check your e-mail",
+    "check-email-text": "Log in by clicking on the link that has been sent to your e-mail address."
   },
   "login-select-candidate": {
     "title": "Choose IRMA app ID",
     "username": "App ID",
     "last-seen": "Last active",
     "login": "Login",
-    "explanation": "The email address with which you are logging in is associated to multiple IRMA apps, which are shown in the table below. The columns mean the following:",
+    "explanation": "The e-mail address with which you are logging in is associated to multiple IRMA apps, which are shown in the table below. The columns mean the following:",
     "candidates-item-1": "Your IRMA app ID. You can find this in your IRMA app under \"More\" (at the bottom of the screen).",
     "candidates-item-2": "Time of the most recent usage of this IRMA app."
   },
   "login-email-sent": {
-    "title": "Check your email",
-    "explanation": "Log in by clicking on the link that has been sent to your email address. If you did not receive anything, then the email address you entered was probably not known to us.",
+    "title": "Check your e-mail",
+    "explanation": "Log in by clicking on the link that has been sent to your e-mail address. If you did not receive anything, then the e-mail address you entered was probably not known to us.",
     "back": "Back"
   },
   "registration-verified": {
     "title": "MyIRMA registration finished",
     "success": "Done",
-    "explanation": "Your email address has been linked to your IRMA app successfully.",
+    "explanation": "Your e-mail address has been linked to your IRMA app successfully.",
     "return-to-irma": "Return to IRMA",
     "continue-to-myirma": "Go to MyIRMA",
     "app-is-ready": "Your IRMA app is now ready for further usage."
@@ -63,23 +63,23 @@
     "IRMA_BLOCKED": "MyIRMA blocked"
   },
   "emails": {
-    "header": "Email addresses",
-    "explanation": "The following email addresses are associated to your IRMA app. You can login on MyIRMA using each of these addresses. If you have already <0>loaded your email address in your IRMA app</0> you can associate it to your IRMA app using the button below.",
-    "no-email-addresses": "There are no email addresses associated to your IRMA app. This means that you will not be able to log in on MyIRMA and block the data in your IRMA app, in case you lose your phone.",
-    "emailaddress": "Email",
+    "header": "E-mail addresses",
+    "explanation": "The following e-mail addresses are associated to your IRMA app. You can login on MyIRMA using each of these addresses. If you have already <0>loaded your e-mail address in your IRMA app</0> you can associate it to your IRMA app using the button below.",
+    "no-email-addresses": "There are no e-mail addresses associated to your IRMA app. This means that you will not be able to log in on MyIRMA and block the data in your IRMA app, in case you lose your phone.",
+    "emailaddress": "E-mail",
     "delete": "Delete",
     "delete-in-progress": "Being deleted",
-    "add-email": "Add email address",
+    "add-email": "Add e-mail address",
     "delete-confirm-header": "Confirm",
     "delete-confirm-explanation": "Are you sure you want to delete {{email}}?"
   },
   "delete-account": {
     "header": "Delete MyIRMA",
-    "explanation-par1": "If you delete your MyIRMA, all the data in your IRMA app becomes permanently unusable, and all events as well as your email address will be permanently deleted.",
+    "explanation-par1": "If you delete your MyIRMA, all the data in your IRMA app becomes permanently unusable, and all events as well as your e-mail address will be permanently deleted.",
     "explanation-par2": "<0>Warning:</0> Blocking or deleting your MyIRMA is permanent! If you want to use IRMA again afterwards you will have to re-install the IRMA app and re-obtain all your data.",
     "delete": "Delete MyIRMA",
     "alert-header": "Delete MyIRMA?",
-    "alert-explanation": "If you proceed, all the data in your IRMA app will become permanently unusable, and your logs and email address will be deleted from MyIRMA. Are you certain?",
+    "alert-explanation": "If you proceed, all the data in your IRMA app will become permanently unusable, and your logs and e-mail address will be deleted from MyIRMA. Are you sure?",
     "alert-delete": "Delete",
     "deleted": "MyIRMA deleted."
   },
@@ -87,8 +87,18 @@
     "header": "Load or refresh data",
     "explanation": "Go to <0>this page</0> to load more data in your IRMA app, or refresh existing data."
   },
+  "token-invalid": {
+    "header": "Something went wrong",
+    "explanation": "This link has expired.",
+    "explanation-details": "You can still add your e-mail address so that you can block your IRMA app in case of loss or theft:",
+    "point-1":"Open <0>MyIRMA</0>.",
+    "point-2":"Click on 'Open IRMA app' or scan the QR code with your IRMA app.",
+    "point-3":"Follow the instructions in your IRMA app to log in to MyIRMA.",
+    "point-4":"Click on 'Add e-mail address' and follow the instructions to add your e-mail address to MijnIRMA.",
+    "retry": "Go to MyIRMA"
+  },
   "error-message": {
-    "header": "An error occurred",
+    "header": "Something went wrong",
     "explanation": "The requested action could not be processed. Please check your internet connection and try again. If the problem keeps occurring, please contact IRMA.",
     "error-details": "The following error occurred:",
     "retry": "Go to login page"

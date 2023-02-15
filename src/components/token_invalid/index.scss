@@ -1,0 +1,7 @@
+@import 'src/theme';
+
+a {
+  color: $primaryColor;
+  text-decoration: underline;
+  cursor: pointer;
+}
