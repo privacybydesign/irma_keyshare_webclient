@@ -76,7 +76,7 @@
   "delete-account": {
     "header": "Delete MyYivi",
     "explanation-par1": "If you delete your MyYivi, all the data in your Yivi app becomes permanently unusable, and all events as well as your e-mail address will be permanently deleted.",
-    "explanation-par2": "<0>Warning:</0> Blocking or deleting your MyYivi is permanent! If you want to use IRMA again afterwards you will have to re-install the Yivi app and re-obtain all your data.",
+    "explanation-par2": "<0>Warning:</0> Blocking or deleting your MyYivi is permanent! If you want to use Yivi again afterwards you will have to re-install the Yivi app and re-obtain all your data.",
     "delete": "Delete MyYivi",
     "alert-header": "Delete MyYivi?",
     "alert-explanation": "If you proceed, all the data in your Yivi app will become permanently unusable, and your logs and e-mail address will be deleted from MyYivi. Are you sure?",
