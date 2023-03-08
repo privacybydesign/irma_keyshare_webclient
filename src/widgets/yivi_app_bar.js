@@ -26,4 +26,4 @@ class YiviAppBar extends React.Component {
     );
   }
 }
-export default withTranslation('irma-app-bar')(YiviAppBar);
+export default withTranslation('yivi-app-bar')(YiviAppBar);

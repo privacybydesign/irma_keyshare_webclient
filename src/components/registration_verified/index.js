@@ -63,7 +63,7 @@ class RegistrationVerified extends React.Component {
           <p>
             {this.isMobile() ? (
               <YiviButton theme={'primary'} onClick={() => this.launchReturnUrl()}>
-                {this.t('return-to-irma')}
+                {this.t('return-to-yivi')}
               </YiviButton>
             ) : (
               this.t('app-is-ready')
@@ -71,7 +71,7 @@ class RegistrationVerified extends React.Component {
           </p>
           <p>
             <a href={'/#'} onClick={(e) => this.continueToMyYivi(e)}>
-              {this.t('continue-to-myirma')}
+              {this.t('continue-to-myyivi')}
             </a>
           </p>
         </Column>

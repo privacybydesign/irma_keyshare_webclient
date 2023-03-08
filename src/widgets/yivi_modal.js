@@ -48,4 +48,4 @@ YiviModal.propTypes = {
   onDismiss: p.func.isRequired,
 };
 
-export default withTranslation('irma-modal')(YiviModal);
+export default withTranslation('yivi-modal')(YiviModal);

@@ -99,7 +99,7 @@ class SelectMethod extends React.Component {
 
           <p>{this.t('login-methods')}</p>
           <ul>
-            <li>{this.t('login-method-irma')}</li>
+            <li>{this.t('login-method-yivi')}</li>
             <li>{this.t('login-method-email')}</li>
           </ul>
           {this.renderLoginMethods()}

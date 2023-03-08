@@ -1,14 +1,14 @@
 {
   "app": {
-    "title": "MijnIRMA"
+    "title": "MijnYivi"
   },
   "login-select-method": {
-    "title": "MijnIRMA login",
-    "intro-par1": "Dit is de MijnIRMA website van de Privacy by Design Foundation. Als je IRMA gebruiker bent, kun je via deze pagina de activiteiten van je IRMA-app controleren en eventueel beëindigen.",
-    "intro-par2": "De stichting ziet wanneer je IRMA-app gebruikt wordt, maar ziet niet waar of met welke informatie. Hiermee wordt een combinatie van beveiliging (security) en privacy nagestreefd. Als er misbruik van je IRMA-app gemaakt wordt kun je dat bij MijnIRMA zien in de gebruiksgegevens. Vervolgens kun je het gebruik van de IRMA-app stoppen.",
-    "login-methods": "Je kunt hieronder op twee manieren inloggen bij MijnIRMA:",
-    "login-method-irma": "Met IRMA zelf, via het scannen van een QR code; dit is de makkelijkste manier.",
-    "login-method-email": "Met het emailadres waarmee je jezelf geregistreerd hebt. Als je dit hieronder invult, krijg je een link toegestuurd waarmee je op de MijnIRMA pagina komt. Deze optie kun je gebruiken als je je telefoon niet bij de hand hebt, of erger, als je telefoon gestolen is en je misbruik van je IRMA-app uit wil sluiten.",
+    "title": "MijnYivi login",
+    "intro-par1": "Dit is de MijnYivi omgeving van de Privacy by Design Foundation. Als je Yivi gebruiker bent, kun je via deze pagina de activiteiten van je Yivi-app controleren en eventueel beëindigen.",
+    "intro-par2": "De stichting ziet wanneer je Yivi-app gebruikt wordt, maar ziet niet waar of met welke informatie. Hiermee wordt een combinatie van beveiliging (security) en privacy nagestreefd. Als er misbruik van je Yivi-app gemaakt wordt kun je dat bij MijnYivi zien in de gebruiksgegevens. Vervolgens kun je het gebruik van de Yivi-app stoppen.",
+    "login-methods": "Je kunt hieronder op twee manieren inloggen bij MijnYivi:",
+    "login-method-yivi": "Met je Yivi app, door het scannen van een QR code; dit is de makkelijkste manier.",
+    "login-method-email": "Met het emailadres waarmee je jezelf geregistreerd hebt. Als je dit hieronder invult, krijg je een link toegestuurd waarmee je op MijnYivi terechtkomt. Deze optie kun je gebruiken als je je telefoon niet bij de hand hebt, of erger, als je telefoon gestolen is en je misbruik van je Yivi-app uit wil sluiten.",
     "login-using": "Log in met",
     "or": "of",
     "email-address": "E-mailadres",
@@ -17,33 +17,33 @@
     "check-email-text": "Log in door te klikken op de link die naar je e-mailadres is verstuurd."
   },
   "login-select-candidate": {
-    "title": "Kies IRMA app-ID",
+    "title": "Kies Yivi app-ID",
     "username": "App-ID",
     "last-seen": "Laatst actief",
     "login": "Log in",
-    "explanation": "Het e-mailadres waarmee je inlogt is gekoppeld aan meerdere IRMA apps, die in onderstaande tabel worden weergegeven. De betekenis van de kolommen is als volgt:",
-    "candidates-item-1": "je IRMA app-ID. Deze staat in je IRMA-app onder \"Meer\" (onderaan het scherm).",
-    "candidates-item-2": "wanneer er voor het laatst gegevens zijn ontvangen of vrijgegeven met deze IRMA app."
+    "explanation": "Het e-mailadres waarmee je inlogt is gekoppeld aan meerdere Yivi apps die in onderstaande tabel worden weergegeven. De betekenis van de kolommen is als volgt:",
+    "candidates-item-1": "je Yivi app-ID. Deze staat in je Yivi-app onder \"Meer\" (onderaan het scherm).",
+    "candidates-item-2": "wanneer er voor het laatst gegevens zijn ontvangen of vrijgegeven met deze Yivi-app."
   },
   "login-email-sent": {
     "title": "Controleer je e-mail",
-    "explanation": "Log in door te klikken op de link die naar je e-mailadres is verstuurd. Als je niets ontvangen hebt, dan was het ingevulde e-mailadres vermoedelijk niet bekend bij ons.",
+    "explanation": "Log in door te klikken op de link die naar je e-mailadres is verstuurd. Als je niets ontvangen hebt, dan is het ingevulde e-mailadres vermoedelijk niet bekend bij ons.",
     "back": "Terug"
   },
   "registration-verified": {
-    "title": "MijnIRMA-registratie klaar",
+    "title": "MijnYivi-registratie klaar",
     "success": "Gelukt",
-    "explanation": "Je emailadres is nu aan je IRMA-app gekoppeld.",
-    "return-to-irma": "Terug naar IRMA",
-    "continue-to-myirma": "Ga naar MijnIRMA",
-    "app-is-ready": "Je IRMA-app is nu klaar voor verder gebruik."
+    "explanation": "Je emailadres is nu aan je Yivi-app gekoppeld.",
+    "return-to-yivi": "Terug naar jouw Yivi-app",
+    "continue-to-myyivi": "Ga naar MijnYivi",
+    "app-is-ready": "Je Yivi-app is nu klaar voor gebruik."
   },
   "account-overview": {
-    "title": "MijnIRMA",
+    "title": "MijnYivi",
     "logged-in-as": "App-ID:"
   },
   "logs": {
-    "header": "Bekijk het gebruik van je IRMA-app",
+    "header": "Bekijk het gebruik van je Yivi-app",
     "refresh": "Ververs",
     "previous": "Vorige",
     "next": "Volgende"
@@ -54,18 +54,18 @@
   },
   "logs-events": {
     "PIN_CHECK_REFUSED": "PIN verificatie geblokkeerd",
-    "IRMA_APP_AUTH_REFUSED": "IRMA sessie geblokkeerd",
+    "IRMA_APP_AUTH_REFUSED": "Yivi sessie geblokkeerd",
     "PIN_CHECK_SUCCESS": "PIN geverifieerd",
     "PIN_CHECK_FAILED": "PIN verkeerd, {{param}} pogingen resterend",
     "PIN_CHECK_BLOCKED": "PIN te vaak verkeerd, geblokkeerd voor {{param}} seconden",
-    "IRMA_SESSION": "IRMA sessie uitgevoerd",
-    "IRMA_ENABLED": "MijnIRMA ingeschakeld",
-    "IRMA_BLOCKED": "MijnIRMA geblokkeerd"
+    "IRMA_SESSION": "Yivi sessie uitgevoerd",
+    "IRMA_ENABLED": "MijnYivi ingeschakeld",
+    "IRMA_BLOCKED": "MijnYivi geblokkeerd"
   },
   "emails": {
     "header": "E-mailadressen",
-    "explanation": "De volgende e-mailadressen zijn geassocieerd met je IRMA-app. Met ieder van deze e-mailadressen kunt je inloggen op MijnIRMA. Als je je e-mailadres al <0>geladen hebt in je IRMA-app</0>, kun je hem associëren aan je IRMA-app met onderstaande knop.",
-    "no-email-addresses": "Er zijn geen e-mailadressen geassocieerd met je IRMA-app. Dit betekent dat je niet op MijnIRMA in kunt loggen en de gegevens in je IRMA app kunt blokkeren, mocht je je telefoon kwijtraken.",
+    "explanation": "De volgende e-mailadressen zijn geassocieerd met je Yivi-app. Met ieder van deze e-mailadressen kunt je inloggen op MijnYivi. Als je je e-mailadres al <0>geladen hebt in je Yivi-app</0>, kun je hem associëren met je Yivi-app met onderstaande knop.",
+    "no-email-addresses": "Er zijn geen e-mailadressen geassocieerd met je Yivi-app. Dit betekent dat je niet op MijnYivi in kunt loggen en de gegevens in je Yivi-app kunt blokkeren, mocht je je telefoon kwijtraken.",
     "emailaddress": "Email",
     "delete": "Verwijder",
     "delete-in-progress": "Wordt verwijderd",
@@ -74,39 +74,39 @@
     "delete-confirm-explanation": "Weet je zeker dat je {{email}} wilt verwijderen?"
   },
   "delete-account": {
-    "header": "Verwijder MijnIRMA",
-    "explanation-par1": "Als je je MijnIRMA verwijdert, worden alle gegevens in je IRMA-app permanent onbruikbaar, en worden alle gebeurtenissen en je e-mailadres permanent gewist.",
-    "explanation-par2": "<0>Waarschuwing:</0> je MijnIRMA verwijderen is permanent! Als je daarna opnieuw IRMA wilt gaan gebruiken zal je opnieuw de IRMA-app moeten installeren en al je gegevens opnieuw moeten verkrijgen.",
-    "delete": "Verwijder MijnIRMA",
-    "alert-header": "MijnIRMA verwijderen?",
-    "alert-explanation": "Als je dit doet worden alle gegevens in je IRMA-app permanent onbruikbaar, en worden je loggegevens en e-mailadres verwijderd uit MijnIRMA. Weet je het zeker?",
+    "header": "Verwijder MijnYivi",
+    "explanation-par1": "Als je je MijnYivi verwijdert, worden alle gegevens in je Yivi-app permanent onbruikbaar, en worden alle gebeurtenissen en je e-mailadres permanent gewist.",
+    "explanation-par2": "<0>Waarschuwing:</0> je MijnYivi verwijderen is permanent! Als je daarna opnieuw Yivi wilt gaan gebruiken zal je opnieuw de Yivi-app moeten installeren en al je gegevens opnieuw moeten verkrijgen.",
+    "delete": "Verwijder MijnYivi",
+    "alert-header": "MijnYivi verwijderen?",
+    "alert-explanation": "Als je dit doet worden alle gegevens in je Yivi-app permanent onbruikbaar, en worden je loggegevens en e-mailadres verwijderd uit MijnYivi. Weet je het zeker?",
     "alert-delete": "Verwijderen",
-    "deleted": "MijnIRMA verwijderd."
+    "deleted": "MijnYivi verwijderd."
   },
   "load-cards": {
     "header": "Laad of ververs gegevens",
-    "explanation": "Ga naar <0>deze pagina</0> om meer gegevens in je IRMA-app te laden of om bestaande gegevens te verversen."
+    "explanation": "Ga naar <0>deze pagina</0> om meer gegevens in je Yivi-app te laden of om bestaande gegevens te verversen."
   },
   "token-invalid": {
     "header": "Er ging iets mis",
     "explanation": "Deze link is verlopen.",
-    "explanation-details": "Je kunt alsnog je e-mailadres toevoegen zodat je jouw IRMA-app kunt blokkeren bij verlies of diefstal:",
-    "point-1":"Ga naar <0>MijnIRMA</0>.",
-    "point-2":"Klik op 'Open IRMA-app' of scan de QR code met jouw IRMA-app.",
-    "point-3":"Volg de instructies in jouw IRMA app om in te loggen in MijnIRMA.",
-    "point-4":"Klik op 'Voeg e-mailadres toe' en volg de instructies om je e-mailadres toe toe voegen aan MijnIRMA.",
-    "retry": "Ga naar MijnIRMA"
+    "explanation-details": "Je kunt alsnog je e-mailadres toevoegen zodat je jouw Yivi-app kunt blokkeren bij verlies of diefstal:",
+    "point-1":"Ga naar <0>MijnYivi</0>.",
+    "point-2":"Klik op 'Open Yivi-app' of scan de QR code met jouw Yivi-app.",
+    "point-3":"Volg de instructies in jouw Yivi app om in te loggen in MijnYivi.",
+    "point-4":"Klik op 'Voeg e-mailadres toe' en volg de instructies om je e-mailadres toe toe voegen aan MijnYivi.",
+    "retry": "Ga naar MijnYivi"
   },
   "error-message": {
     "header": "Er ging iets mis",
-    "explanation": "De gevraagde actie kon niet worden verwerkt. Controleer je internetverbinding en probeer het opnieuw. Als de fout blijft aanhouden, neem dan contact op met IRMA.",
+    "explanation": "De gevraagde actie kon niet worden verwerkt. Controleer je internetverbinding en probeer het opnieuw. Als de fout blijft aanhouden, neem dan contact op met Yivi.",
     "error-details": "De volgende fout trad op:",
     "retry": "Ga terug naar loginpagina"
   },
-  "irma-modal": {
+  "yivi-modal": {
     "cancel": "Annuleren"
   },
-  "irma-app-bar": {
+  "yivi-app-bar": {
     "logout": "Uitloggen"
   }
 }
