@@ -1,0 +1,68 @@
+@import 'src/theme';
+
+@mixin button {
+  width: fit-content;
+  padding: 12px 32px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  outline-color: transparent;
+  line-height: 24px;
+  font-family: 'OpenSans';
+  font-style: normal;
+  font-weight: 400;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.button-primary {
+  @include button;
+  font-size: 16px;
+  color:white;
+  background: #e12747 url('../../public/assets/button-primary.svg') no-repeat right top;
+}
+
+.button-secondary {
+  @include button;
+  font-size: 16px;
+  color: $textAccentColor;
+  background:transparent;
+  border:1px solid $textAccentColor;
+}
+
+.button-tertiary {
+  @include button;
+  font-size: 14px;
+  border: 1px solid #B6D6EA;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  background:#fff;
+  &:not([disabled]):hover{
+    background: #EAF3F9;
+  }
+  &:disabled{
+    cursor: not-allowed;
+    color:#9F9A9A;
+    background: #F7F5F3;
+    border-color: #D7D2CD;
+  }
+}
+
+.button-ghost {
+  @include button;
+  color:#BA3354;
+  background:transparent;
+  text-decoration: underline;
+  font-weight: 700;
+  padding: 0px;
+  gap: 8px;
+  svg {
+    height:16px;
+    path {
+      stroke: #BA3354;
+    }
+  }
+}
+
+

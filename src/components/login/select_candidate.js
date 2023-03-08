@@ -3,10 +3,12 @@ import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 import 'moment/locale/nl';
 
-import './select_candidate.scss';
+import styles from './select_candidate.module.scss';
 import Column from '../../widgets/column';
-import IrmaAppBar from '../../widgets/irma_app_bar';
-import IrmaButton from '../../widgets/irma_button';
+import YiviAppBar from '../../widgets/yivi_app_bar';
+import YiviButton from '../../widgets/yivi_button';
+import Spacer from '../../widgets/spacer';
+import YiviTable from '../../widgets/yivi_table';
 
 class SelectCandidate extends React.Component {
   constructor(props) {
@@ -25,10 +27,10 @@ class SelectCandidate extends React.Component {
         <tr key={candidate.username}>
           <td>{candidate.username}</td>
           <td title={lastActive.format('dddd, D MMM YYYY, H:mm:ss')}>{lastActive.fromNow()}</td>
-          <td className={'button-td'}>
-            <IrmaButton theme={'primary'} onClick={() => this.handleSelectCandidate(candidate.username)}>
+          <td className={styles.buttonCol}>
+            <YiviButton theme={'ghost'} onClick={() => this.handleSelectCandidate(candidate.username)}>
               {this.t('login')}
-            </IrmaButton>
+            </YiviButton>
           </td>
         </tr>
       );
@@ -38,8 +40,9 @@ class SelectCandidate extends React.Component {
   render() {
     return (
       <>
-        <IrmaAppBar title={this.t('title')} />
+        <YiviAppBar title={this.t('title')} />
         <Column>
+          <Spacer />
           <p>{this.t('explanation')}</p>
           <ul>
             <li>
@@ -53,16 +56,16 @@ class SelectCandidate extends React.Component {
               {this.t('candidates-item-2')}
             </li>
           </ul>
-          <table className="candidate-table" id="user-candidates">
+          <YiviTable id="user-candidates">
             <thead>
               <tr>
                 <th>{this.t('username')}</th>
                 <th>{this.t('last-seen')}</th>
-                <th className={'button-td'} />
+                <th className={styles.buttonCol} />
               </tr>
             </thead>
             <tbody id="user-candidates-body">{this.renderCandidates()}</tbody>
-          </table>
+          </YiviTable>
         </Column>
       </>
     );

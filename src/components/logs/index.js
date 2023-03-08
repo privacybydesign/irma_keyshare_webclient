@@ -6,8 +6,9 @@ import LoadingSpinner from '../../widgets/loading_spinner';
 import LogsTable from './logs_table';
 import ChevronLeftIcon from '../../widgets/chevron-left-icon';
 import ChevronRightIcon from '../../widgets/chevron-right-icon';
-import IrmaButton from '../../widgets/irma_button';
-import './index.scss';
+import YiviButton from '../../widgets/yivi_button';
+import styles from './index.module.scss';
+import UpdateIcon from '../../widgets/update_icon';
 
 const LOGS_PER_PAGE = 10;
 
@@ -44,47 +45,54 @@ class Logs extends React.Component {
     } else {
       return (
         <>
-          <div className={'button-row'}>
-            <IrmaButton
-              theme={'plain'}
-              className={'refresh'}
-              disabled={this.props.currentIndex > 0}
-              onClick={() => this.loadLogs(0)}
-            >
-              {this.t('refresh')}
-            </IrmaButton>
-            <IrmaButton
-              theme={'plain'}
-              className={'previous'}
-              disabled={this.props.currentIndex === 0}
-              onClick={() => this.loadLogs(-LOGS_PER_PAGE)}
-            >
-              <ChevronLeftIcon />
-              {this.t('previous')}
-            </IrmaButton>
-            <IrmaButton
-              theme={'plain'}
-              className={'next'}
-              disabled={!this.props.haveMore}
-              onClick={() => this.loadLogs(LOGS_PER_PAGE)}
-            >
-              {this.t('next')}
-              <ChevronRightIcon />
-            </IrmaButton>
+          <div className={styles.buttonRow}>
+            <div>
+              <h2>{this.t('header')}</h2>
+            </div>
+            <div>
+              <YiviButton
+                theme={'tertiary'}
+                className={'refresh'}
+                disabled={this.props.currentIndex > 0}
+                onClick={() => this.loadLogs(0)}
+              >
+                <UpdateIcon />
+                {this.t('refresh')}
+              </YiviButton>
+            </div>
           </div>
           <LogsTable logEntries={this.props.logEntries} />
+          <div className={styles.buttonRow}>
+            <div>
+              <YiviButton
+                theme={'tertiary'}
+                className={'previous'}
+                disabled={this.props.currentIndex === 0}
+                onClick={() => this.loadLogs(-LOGS_PER_PAGE)}
+              >
+                <ChevronLeftIcon />
+                {this.t('previous')}
+              </YiviButton>
+            </div>
+            <div className={'right'}>
+              <YiviButton
+                theme={'tertiary'}
+                className={'next'}
+                disabled={!this.props.haveMore}
+                onClick={() => this.loadLogs(LOGS_PER_PAGE)}
+              >
+                {this.t('next')}
+                <ChevronRightIcon />
+              </YiviButton>
+            </div>
+          </div>
         </>
       );
     }
   }
 
   render() {
-    return (
-      <>
-        <h2>{this.t('header')}</h2>
-        {this.renderLogs()}
-      </>
-    );
+    return <>{this.renderLogs()}</>;
   }
 }
 

@@ -1,0 +1,18 @@
+@import 'src/theme';
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+
+  td,
+  th {
+    border-spacing: 0;
+    text-align: left;
+    padding: 8px 8px 8px 0px;
+  }
+
+  td {
+    border-top: 1px solid #96C5E1;
+  }
+}

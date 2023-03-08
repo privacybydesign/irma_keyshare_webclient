@@ -1,10 +1,10 @@
 import React from 'react';
 import { Trans, withTranslation } from 'react-i18next';
 
-import './index.scss';
-import IrmaAppBar from '../../widgets/irma_app_bar';
+import YiviAppBar from '../../widgets/yivi_app_bar';
 import Column from '../../widgets/column';
-import IrmaButton from '../../widgets/irma_button';
+import YiviButton from '../../widgets/yivi_button';
+import Spacer from '../../widgets/spacer';
 
 const TokenInvalid = (props) => {
   const onRetry = () => {
@@ -13,27 +13,22 @@ const TokenInvalid = (props) => {
 
   return (
     <>
-      <IrmaAppBar title={props.t('header')} />
+      <YiviAppBar title={props.t('header')} />
       <Column>
+        <Spacer />
         <p>{props.t('explanation')}</p>
         <p>{props.t('explanation-details')}</p>
         <ul>
           <li>
-            <Trans
-              t={props.t}
-              i18nKey="point-1"
-              // eslint-disable-next-line
-              components={[<a href={undefined}
-              onClick={onRetry} />]}
-            />
+            <Trans t={props.t} i18nKey="point-1" components={[<a href={undefined} onClick={onRetry} key={0} />]} />
           </li>
           <li>{props.t('point-2')}</li>
           <li>{props.t('point-3')}</li>
           <li>{props.t('point-4')}</li>
         </ul>
-        <IrmaButton theme={'primary'} onClick={onRetry}>
+        <YiviButton theme={'primary'} onClick={onRetry}>
           {props.t('retry')}
-        </IrmaButton>
+        </YiviButton>
       </Column>
     </>
   );

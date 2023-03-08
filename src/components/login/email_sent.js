@@ -1,8 +1,10 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
-import IrmaAppBar from '../../widgets/irma_app_bar';
-import IrmaButton from '../../widgets/irma_button';
+import YiviAppBar from '../../widgets/yivi_app_bar';
+import YiviButton from '../../widgets/yivi_button';
 import Column from '../../widgets/column';
+import Spacer from '../../widgets/spacer';
+import styles from './email_sent.module.scss';
 
 const EmailSent = (props) => {
   const onBack = () => {
@@ -11,12 +13,14 @@ const EmailSent = (props) => {
 
   return (
     <>
-      <IrmaAppBar title={props.t('title')} />,
-      <Column>
+      <YiviAppBar title={props.t('title')} />
+      <Column className={styles.center}>
+        <Spacer />
         <p>{props.t('explanation')}</p>
-        <IrmaButton theme={'primary'} onClick={onBack}>
+        <Spacer />
+        <YiviButton theme={'primary'} onClick={onBack}>
           {props.t('back')}
-        </IrmaButton>
+        </YiviButton>
       </Column>
     </>
   );

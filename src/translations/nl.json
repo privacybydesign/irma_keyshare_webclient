@@ -105,5 +105,8 @@
   },
   "irma-modal": {
     "cancel": "Annuleren"
+  },
+  "irma-app-bar": {
+    "logout": "Uitloggen"
   }
 }

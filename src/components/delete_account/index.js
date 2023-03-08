@@ -1,7 +1,8 @@
 import React from 'react';
 import { Trans, withTranslation } from 'react-i18next';
-import IrmaButton from '../../widgets/irma_button';
-import IrmaModal from '../../widgets/irma_modal';
+import YiviButton from '../../widgets/yivi_button';
+import YiviModal from '../../widgets/yivi_modal';
+import CrossIcon from '../../widgets/cross_icon';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
@@ -37,15 +38,14 @@ class DeleteAccount extends React.Component {
 
   renderModal() {
     return (
-      <IrmaModal
-        theme={'secondary'}
+      <YiviModal
         title={this.t('alert-header')}
         action={this.t('alert-delete')}
         onConfirm={() => this.onDeleteConfirm()}
         onDismiss={() => this.onDeleteCancel()}
       >
         <p>{this.t('alert-explanation')}</p>
-      </IrmaModal>
+      </YiviModal>
     );
   }
 
@@ -61,9 +61,10 @@ class DeleteAccount extends React.Component {
         {this.props.deleting ? (
           <p>{this.t('deleted')}</p>
         ) : (
-          <IrmaButton theme={'secondary'} onClick={() => this.onDelete()}>
+          <YiviButton theme={'ghost'} onClick={() => this.onDelete()}>
+            <CrossIcon />
             {this.t('delete')}
-          </IrmaButton>
+          </YiviButton>
         )}
         {this.state.showConfirmModal ? this.renderModal() : null}
       </>

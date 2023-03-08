@@ -3,7 +3,7 @@ const initialState = {
   emails: [],
   deleting: false,
   fetching: false,
-  addEmailIrmaSession: {
+  addEmailYiviSession: {
     url: window.config.server,
     start: {
       url: (o) => `${o.url}/email/add`,

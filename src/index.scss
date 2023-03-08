@@ -4,11 +4,32 @@ html,
 body {
   margin: 0;
   padding: 0;
-
-  @include mainTheme;
+  @include fontMainTheme;
   background-color: $backgroundColor;
 }
 
 body {
   padding-bottom: 60px;
+}
+
+table th {
+  font-weight: normal;
+}
+
+h2 {
+  @include fontAccentTheme;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 22px;
+  margin: 8px 0px;
+}
+
+p {
+  margin: 12px 0;
+}
+
+a {
+  color: $textAccentColor;
+  text-decoration: underline;
+  cursor: pointer;
 }

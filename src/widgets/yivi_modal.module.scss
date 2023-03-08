@@ -1,0 +1,46 @@
+@import 'src/theme';
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  background-color: rgba(72, 71, 71, 0.6);
+  overflow: auto;
+}
+
+.container {
+  position: absolute;
+  max-width: 500px;
+  min-width: 280px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.content {
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  outline: 0;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding:0 16px;
+  border-bottom:1px solid #D7D2CD;
+  height: 55px;
+}
+
+.buttonBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}

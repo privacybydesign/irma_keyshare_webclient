@@ -3,8 +3,8 @@ import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 import 'moment/locale/nl';
 
-import './logs_table.scss';
-import IrmaTable from '../../widgets/irma_table';
+import styles from './logs_table.module.scss';
+import YiviTable from '../../widgets/yivi_table';
 
 class LogsTable extends React.Component {
   constructor(props) {
@@ -26,22 +26,22 @@ class LogsTable extends React.Component {
     return (
       <tr key={index}>
         {this.renderLogEntryTime(logEntry.timestamp)}
-        <td className={'event-column'}>{this.t(`logs-events:${logEntry.event}`, { param: logEntry.param })}</td>
+        <td className={styles.eventColumn}>{this.t(`logs-events:${logEntry.event}`, { param: logEntry.param })}</td>
       </tr>
     );
   }
 
   render() {
     return (
-      <IrmaTable>
+      <YiviTable>
         <thead>
           <tr>
-            <th className={'when-column'}>{this.t('when')}</th>
-            <th className={'event-column'}>{this.t('event')}</th>
+            <th className={styles.whenColumn}>{this.t('when')}</th>
+            <th className={styles.eventColumn}>{this.t('event')}</th>
           </tr>
         </thead>
         <tbody>{this.props.logEntries.map((entry, index) => this.renderLogEntry(entry, index))}</tbody>
-      </IrmaTable>
+      </YiviTable>
     );
   }
 }

@@ -105,5 +105,8 @@
   },
   "irma-modal": {
     "cancel": "Cancel"
+  },
+  "irma-app-bar": {
+    "logout": "Logout"
   }
 }
