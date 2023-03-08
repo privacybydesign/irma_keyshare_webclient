@@ -61,6 +61,7 @@ class Logs extends React.Component {
               </YiviButton>
             </div>
           </div>
+          <hr className={styles.ruler} />
           <LogsTable logEntries={this.props.logEntries} />
           <div className={styles.buttonRow}>
             <div>

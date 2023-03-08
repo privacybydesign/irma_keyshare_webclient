@@ -2,5 +2,15 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
+  padding-bottom: 24px;
+}
+
+.ruler {
+  height: 1px;
+  width: 100%;
+  background-color: #cfe4ef;
+  margin-bottom: 40px;
+  border: none;
 }
