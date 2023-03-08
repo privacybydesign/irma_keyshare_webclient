@@ -38,7 +38,7 @@
   font-style: normal;
 }
 
-$backgroundColor: #EAF3F9;
+$backgroundColor: #eaf3f9;
 $headerColor: white;
 $textColor: black;
 $textAccentColor: #484747;
@@ -57,13 +57,13 @@ $textAccentColor: #484747;
 
 /* Temporary Yivi web-form styling overrides */
 #yivi-web-form {
-  background:white;
+  background: white;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  border:0px;
+  border: 0px;
 
   .yivi-web-content {
     border-radius: 4px;
-    background: #F7F5F3;
+    background: #f7f5f3;
   }
 }
