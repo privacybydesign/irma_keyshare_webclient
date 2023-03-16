@@ -67,3 +67,16 @@
     }
   }
 }
+
+@media (max-width: 600px) {
+  :global(button.responsive) {
+    border: 1px solid transparent;
+    background: transparent;
+    box-shadow: none;
+    padding: 12px 0; 
+
+    span {
+      display:none;
+    }
+  }
+}

@@ -52,12 +52,12 @@ class Logs extends React.Component {
             <div>
               <YiviButton
                 theme={'tertiary'}
-                className={'refresh'}
+                className={'responsive'}
                 disabled={this.props.currentIndex > 0}
                 onClick={() => this.loadLogs(0)}
               >
                 <UpdateIcon />
-                {this.t('refresh')}
+                <span>{this.t('refresh')}</span>
               </YiviButton>
             </div>
           </div>
