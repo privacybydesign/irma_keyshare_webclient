@@ -4,18 +4,18 @@
   },
   "login-select-method": {
     "title": "MijnYivi login",
-    "intro-par1": "Dit is de MijnYivi omgeving van de Privacy by Design Foundation. Als je Yivi gebruiker bent, kun je via deze pagina de activiteiten van je Yivi-app controleren en eventueel beëindigen.",
-    "intro-par2": "De stichting ziet wanneer je Yivi-app gebruikt wordt, maar ziet niet waar of met welke informatie. Hiermee wordt een combinatie van beveiliging (security) en privacy nagestreefd. Als er misbruik van je Yivi-app gemaakt wordt kun je dat bij MijnYivi zien in de gebruiksgegevens. Vervolgens kun je het gebruik van de Yivi-app stoppen.",
-    "login-methods": "Je kunt hieronder op twee manieren inloggen bij MijnYivi:",
-    "login-method-yivi-title":"Optie 1: Met jouw Yivi-app",
-    "login-method-yivi-description": "Scan de QR code met jouw Yivi app en volg de instructies op het scherm. Dit is de makkelijkste manier.",
-    "login-method-email-title":"Optie 2: Met jouw e-mail adres",
-    "login-method-email-description": "Als je hieronder het e-mail adres invult waarmee je jezelf geregistreerd hebt, krijg je een link toegestuurd waarmee je op MijnYivi terechtkomt. Deze optie kun je gebruiken als je je telefoon niet bij de hand hebt, of erger, als je telefoon gestolen is en je misbruik van je Yivi-app uit wil sluiten.",
+    "intro-par1": "Dit is de self care omgeving van Yivi. Als je Yivi gebruiker bent, kun je via deze pagina de activiteiten van je Yivi-app bekijken. Ook is het mogelijk om de app op afstand te blokkeren, bijvoorbeeld bij diefstal of verlies.",
+    "intro-par2": "Yivi ziet wanneer je Yivi-app gebruikt wordt, maar niet waar. Ook zien wij niet welke informatie je deelt, of met wie. Op deze manier proberen we de beste balans te vinden tussen veiligheid en privacy.",
+    "login-methods": "Je kunt hieronder op twee manieren inloggen:",
+    "login-method-yivi-title":"Met jouw Yivi-app",
+    "login-method-yivi-description": "Scan de QR code met jouw Yivi app en volg de instructies op het scherm.",
+    "login-method-email-title":" Met je e-mail adres",
+    "login-method-email-description": "Tijdens de activatie van Yivi heb je een e-mailadres opgegeven. Als je dat adres hieronder invult krijg je een e-mail met een link. Deze link geeft je toegang tot MijnYivi.",
     "login-using": "Log in met",
     "email-address": "E-mailadres",
     "email-link": "E-mail link",
     "check-email": "Controleer je e-mail",
-    "check-email-text": "Log in door te klikken op de link die naar je e-mailadres is verstuurd."
+    "check-email-text": "Log in door op de link te klikken die naar je e-mailadres is verstuurd."
   },
   "login-select-candidate": {
     "title": "Kies Yivi app-ID",
@@ -28,7 +28,7 @@
   },
   "login-email-sent": {
     "title": "Controleer je e-mail",
-    "explanation": "Log in door te klikken op de link die naar je e-mailadres is verstuurd. Als je niets ontvangen hebt, dan is het ingevulde e-mailadres vermoedelijk niet bekend bij ons.",
+    "explanation": "Log in door te klikken op de link die naar je e-mailadres is verstuurd. Controleer je spam folder als je geen e-mail gehad hebt.",
     "back": "Terug"
   },
   "registration-verified": {
@@ -65,8 +65,8 @@
   },
   "emails": {
     "header": "E-mailadressen",
-    "explanation": "De volgende e-mailadressen zijn geassocieerd met je Yivi-app. Met ieder van deze e-mailadressen kunt je inloggen op MijnYivi. Als je je e-mailadres al <0>geladen hebt in je Yivi-app</0>, kun je hem associëren met je Yivi-app met onderstaande knop.",
-    "no-email-addresses": "Er zijn geen e-mailadressen geassocieerd met je Yivi-app. Dit betekent dat je niet op MijnYivi in kunt loggen en de gegevens in je Yivi-app kunt blokkeren, mocht je je telefoon kwijtraken.",
+    "explanation": "De volgende e-mailadressen zijn gelinked met je Yivi-app. Met ieder van deze e-mailadressen kunt je inloggen op MijnYivi. Als je je e-mailadres al <0>geladen hebt in je Yivi-app</0>, kun je hem associëren met je Yivi-app met onderstaande knop.",
+    "no-email-addresses": "Er zijn geen e-mailadressen gelinked met je Yivi-app. Dit betekent dat je niet op MijnYivi in kunt loggen en de gegevens in je Yivi-app kunt blokkeren, mocht je je telefoon kwijtraken.",
     "emailaddress": "Email",
     "delete": "Verwijder",
     "delete-in-progress": "Wordt verwijderd",
@@ -76,8 +76,8 @@
   },
   "delete-account": {
     "header": "Verwijder MijnYivi",
-    "explanation-par1": "Als je je MijnYivi verwijdert, worden alle gegevens in je Yivi-app permanent onbruikbaar, en worden alle gebeurtenissen en je e-mailadres permanent gewist.",
-    "explanation-par2": "<0>Waarschuwing:</0> je MijnYivi verwijderen is permanent! Als je daarna opnieuw Yivi wilt gaan gebruiken zal je opnieuw de Yivi-app moeten installeren en al je gegevens opnieuw moeten verkrijgen.",
+    "explanation-par1": "Als je je MijnYivi verwijdert, worden alle gegevens in je Yivi-app permanent onbruikbaar. Ook wordt de transactie geschiedenis en opgeslagen e-mailadressen gewist.",
+    "explanation-par2": "<0>Waarschuwing:</0> je MijnYivi verwijderen is permanent! Als je daarna Yivi wilt gaan gebruiken zal je opnieuw de Yivi-app moeten installeren en al je gegevens opnieuw moeten verkrijgen.",
     "delete": "Verwijder MijnYivi",
     "alert-header": "MijnYivi verwijderen?",
     "alert-explanation": "Als je dit doet worden alle gegevens in je Yivi-app permanent onbruikbaar, en worden je loggegevens en e-mailadres verwijderd uit MijnYivi. Weet je het zeker?",
