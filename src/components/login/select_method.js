@@ -53,11 +53,23 @@ class SelectMethod extends React.Component {
 
   renderLoginMethods() {
     return (
-      <div className={styles.wrapper}>
+      <>
+        <p>
+          <b>{this.t('login-method-yivi-title')}</b>
+          <br />
+          {this.t('login-method-yivi-description')}
+        </p>
+        <Spacer size={'small'} />
         {this.renderYiviLogin()}
-        <p>{this.t('or')}</p>
+        <Spacer />
+        <p>
+          <b>{this.t('login-method-email-title')}</b>
+          <br />
+          {this.t('login-method-email-description')}
+        </p>
+        <Spacer size={'small'} />
         {this.renderEmailLogin()}
-      </div>
+      </>
     );
   }
 
@@ -98,10 +110,7 @@ class SelectMethod extends React.Component {
           <p>{this.t('intro-par2')}</p>
 
           <p>{this.t('login-methods')}</p>
-          <ul>
-            <li>{this.t('login-method-yivi')}</li>
-            <li>{this.t('login-method-email')}</li>
-          </ul>
+          <Spacer size={'small'} />
           {this.renderLoginMethods()}
         </Column>
       </>

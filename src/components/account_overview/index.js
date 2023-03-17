@@ -42,6 +42,7 @@ class AccountOverview extends React.Component {
         <Column>
           <Spacer />
           {this.renderUsername()}
+          <Spacer />
           <Logs />
           <Spacer />
           <LoadCards />

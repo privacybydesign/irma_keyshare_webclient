@@ -69,14 +69,15 @@
 }
 
 @media (max-width: 600px) {
+  /* stylelint-disable-next-line */
   :global(button.responsive) {
     border: 1px solid transparent;
     background: transparent;
     box-shadow: none;
-    padding: 12px 0; 
+    padding: 12px 0;
 
     span {
-      display:none;
+      display: none;
     }
   }
 }

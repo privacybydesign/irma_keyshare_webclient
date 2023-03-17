@@ -23,7 +23,7 @@
 .content {
   background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 6px;
+  border-radius: 8px;
   outline: 0;
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   overflow: hidden;
@@ -42,5 +42,9 @@
 .buttonBar {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: flex-end;
+}
+
+.buttonBar button {
+  margin-left: 16px;
 }

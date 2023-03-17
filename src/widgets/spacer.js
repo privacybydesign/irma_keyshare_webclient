@@ -1,9 +1,16 @@
 import React from 'react';
-
+import p from 'prop-types';
 import styles from './spacer.module.scss';
 
-const Spacer = () => {
-  return <div className={styles.spacer} />;
+class Spacer extends React.Component {
+  render() {
+    const { size } = this.props;
+    return <div className={styles[size || 'large']} />;
+  }
+}
+
+Spacer.propTypes = {
+  size: p.oneOf(['large', 'small']),
 };
 
 export default Spacer;

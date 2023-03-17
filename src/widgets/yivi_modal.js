@@ -5,6 +5,7 @@ import styles from './yivi_modal.module.scss';
 import Column from './column';
 import YiviButton from './yivi_button';
 import CrossIcon from './cross_icon';
+import Spacer from './spacer';
 
 class YiviModal extends React.Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class YiviModal extends React.Component {
             </div>
             <Column>
               {this.props.children}
+              <Spacer size={'small'} />
               <div className={styles.buttonBar}>
                 <YiviButton theme={'secondary'} onClick={() => this.props.onDismiss()}>
                   {this.t('cancel')}
