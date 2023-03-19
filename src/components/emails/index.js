@@ -57,7 +57,7 @@ class Emails extends React.Component {
       session: this.props.addEmailYiviSession,
     })
       .start()
-      .then(function () {
+      .then(() => {
         this.props.dispatch({ type: 'startUpdateInfo' });
       })
       .catch((err) => {

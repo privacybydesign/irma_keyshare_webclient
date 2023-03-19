@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@privacybydesign/yivi-frontend": "^0.1.0",
     "i18next": "^22.4.9",
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
@@ -19,7 +20,6 @@
     "@babel/core": "^7.0.0-0",
     "@babel/plugin-syntax-flow": "^7.14.5",
     "@babel/plugin-transform-react-jsx": "^7.14.9",
-    "@privacybydesign/yivi-frontend": "^0.1.0",
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-config-prettier-standard": "^4.0.1",

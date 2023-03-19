@@ -16,7 +16,7 @@
     "no-shadow": ["error", {"builtinGlobals":  true}],
     "no-unsafe-optional-chaining": "error",
     "no-var": "error",
-    "prefer-arrow-callback": "error",
+    "prefer-arrow-callback": [ "error", { "allowUnboundThis": false } ],
     "prefer-rest-params": "error",
     "prefer-spread": "error",
     "prefer-template": "error",
