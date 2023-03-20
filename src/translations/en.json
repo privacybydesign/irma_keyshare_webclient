@@ -5,7 +5,7 @@
   "login-select-method": {
     "title": "MyYivi login",
     "intro-par1": "This is the Yivi self-service portal. Using this website you can view the activities of your Yivi app, and remotely lock your mobile app in case of loss or theft.",
-    "intro-par2": "Yivi knows when your app is used but does not know where you're using it, what information you share or who you're sharing it with. By doing so we're combining privacy and security.",
+    "intro-par2": "Yivi knows when your app is used but does not know where you're using it, what information you share nor who you're sharing it with. By doing so we're combining privacy and security.",
     "login-methods": "You can log in to MyYivi in two ways:",
     "login-method-yivi-title":"Use the Yivi app",
     "login-method-yivi-description": "Scan the QR code using your Yivi app and follow the instructions on the screen.",
@@ -22,7 +22,7 @@
     "username": "App ID",
     "last-seen": "Last active",
     "login": "Login",
-    "explanation": "The email address you use to log in is linked to several Yivi apps, which are shown in the table below. The meaning of the columns is as follows:",
+    "explanation": "The e-mail address you use to log in is linked to several Yivi apps, which are shown in the table below. The meaning of the columns is as follows:",
     "candidates-item-1": "your Yivi app ID. This is located in your Yivi app under \"More\" (at the bottom of the screen).",
     "candidates-item-2": "when data was last exchanged using Yivi."
   },
