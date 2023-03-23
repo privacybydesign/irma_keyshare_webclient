@@ -1,0 +1,26 @@
+@import 'src/theme';
+
+.bar {
+  height: 86px;
+  justify-content: center;
+  align-items: center;
+  background-color: $headerColor;
+  border-bottom: 1px solid #cfe4ef;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  h1 {
+    @include fontAccentTheme;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 30px;
+    padding: 16px 0;
+  }
+}

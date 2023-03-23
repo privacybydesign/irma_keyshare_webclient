@@ -1,51 +1,69 @@
 @font-face {
-  font-family: 'Montserrat';
-  src: url('./fonts/subset-Montserrat-Regular.woff2') format('woff2'),
-    url('./fonts/subset-Montserrat-Regular.woff') format('woff');
+  font-family: 'OpenSans';
+  src: url('./fonts/open-sans-v34-latin-regular.woff2') format('woff2'),
+    url('./fonts/open-sans-v34-latin-regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Montserrat';
-  src: url('./fonts/subset-Montserrat-SemiBold.woff2') format('woff2'),
-    url('./fonts/subset-Montserrat-SemiBold.woff') format('woff');
+  font-family: 'OpenSans';
+  src: url('./fonts/open-sans-v34-latin-700.woff2') format('woff2'),
+    url('./fonts/open-sans-v34-latin-700.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
 
-$backgroundColor: #f2f5f8;
-$primaryColor: #004c92;
-$secondaryColor: #c8192c;
-$plainColor: #efefef;
-$borderColor: #ccc;
+@font-face {
+  font-family: 'Alexandria';
+  src: url('./fonts/alexandria-v1-latin-regular.woff2') format('woff2'),
+    url('./fonts/alexandria-v1-latin-regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 
-@mixin mainTheme {
+@font-face {
+  font-family: 'Alexandria';
+  src: url('./fonts/alexandria-v1-latin-600.woff2') format('woff2'),
+    url('./fonts/alexandria-v1-latin-600.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Alexandria';
+  src: url('./fonts/alexandria-v1-latin-700.woff2') format('woff2'),
+    url('./fonts/alexandria-v1-latin-700.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+$backgroundColor: #eaf3f9;
+$headerColor: white;
+$textColor: black;
+$textAccentColor: #484747;
+
+@mixin fontMainTheme {
   font-size: 16px;
   line-height: 24px;
-  font-family: 'Montserrat', Verdana, Arial, sans-serif;
+  color: $textColor;
+  font-family: 'OpenSans', Verdana, Arial, sans-serif;
 }
 
-@mixin primaryTheme {
-  @include mainTheme;
-  background-color: $primaryColor;
-  color: white;
-  font-family: inherit;
-  font-size: inherit;
+@mixin fontAccentTheme {
+  color: $textAccentColor;
+  font-family: 'Alexandria', Verdana, Arial, sans-serif;
 }
 
-@mixin secondaryTheme {
-  @include mainTheme;
-  background-color: $secondaryColor;
-  color: white;
-  font-family: inherit;
-  font-size: inherit;
-}
+/* Temporary Yivi web-form styling overrides */
+#yivi-web-form {
+  background: white;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  border: 0px;
 
-@mixin plainTheme {
-  @include mainTheme;
-  background-color: $plainColor;
-  color: black;
-  font-family: inherit;
-  font-size: inherit;
+  .yivi-web-content {
+    border-radius: 8px;
+    background: #f7f5f3;
+  }
 }

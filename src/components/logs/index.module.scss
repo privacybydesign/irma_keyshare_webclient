@@ -1,0 +1,15 @@
+.buttonRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ruler {
+  height: 1px;
+  width: 100%;
+  background-color: #cfe4ef;
+  margin-bottom: 40px;
+  border: none;
+}

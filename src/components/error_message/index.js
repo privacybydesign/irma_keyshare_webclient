@@ -1,10 +1,11 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 
-import IrmaAppBar from '../../widgets/irma_app_bar';
+import YiviAppBar from '../../widgets/yivi_app_bar';
 import Column from '../../widgets/column';
-import IrmaButton from '../../widgets/irma_button';
+import YiviButton from '../../widgets/yivi_button';
 import { connect } from 'react-redux';
+import Spacer from '../../widgets/spacer';
 
 const mapStateToProps = (state) => {
   return {
@@ -19,17 +20,18 @@ const ErrorMessage = (props) => {
 
   return (
     <>
-      <IrmaAppBar title={props.t('header')} />
+      <YiviAppBar title={props.t('header')} />
       <Column>
+        <Spacer />
         <p>{props.t('explanation')}</p>
         <p>
           {props.t('error-details')}
           <br />
           <i>{props.error.toString()}</i>
         </p>
-        <IrmaButton theme={'primary'} onClick={onRetry}>
+        <YiviButton theme={'primary'} onClick={onRetry}>
           {props.t('retry')}
-        </IrmaButton>
+        </YiviButton>
       </Column>
     </>
   );

@@ -1,11 +1,11 @@
-IRMA keyshare webclient
+Yivi keyshare webclient
 ======================
 
 This project contains the web interface to interact with the [irmago MyIRMA backend server](https://github.com/privacybydesign/irmago/tree/master/server/keyshare/myirmaserver). In particular it allows users to
 
  * edit the email addresses that are linked to the account;
  * inspect a log of recent actions; and
- * disable the user's IRMA app.
+ * disable the user's Yivi app.
 
 Instructions on how to run the MyIRMA backend server can be found in the [irmago README](https://github.com/privacybydesign/irmago#running).
 

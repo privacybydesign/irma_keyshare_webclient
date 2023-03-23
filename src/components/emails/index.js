@@ -2,16 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import p from 'prop-types';
 import { Trans, withTranslation } from 'react-i18next';
-import IrmaButton from '../../widgets/irma_button';
-import IrmaModal from '../../widgets/irma_modal';
-import IrmaTable from '../../widgets/irma_table';
-import './index.scss';
-import * as IrmaFrontend from '@privacybydesign/irma-frontend';
+import YiviButton from '../../widgets/yivi_button';
+import YiviModal from '../../widgets/yivi_modal';
+import YiviTable from '../../widgets/yivi_table';
+import PlusIcon from '../../widgets/plus_icon';
+import styles from './index.module.scss';
+import * as YiviFrontend from '@privacybydesign/yivi-frontend';
+import CrossIcon from '../../widgets/cross_icon';
 
 function mapStateToProps(state) {
   return {
     emails: state.userdata.emails,
-    addEmailIrmaSession: state.userdata.addEmailIrmaSession,
+    addEmailYiviSession: state.userdata.addEmailYiviSession,
   };
 }
 
@@ -50,13 +52,14 @@ class Emails extends React.Component {
   }
 
   onAddEmail() {
-    const irma = IrmaFrontend.newPopup({
+    YiviFrontend.newPopup({
       language: this.props.i18n.language,
-      session: this.props.addEmailIrmaSession,
-    });
-    irma
+      session: this.props.addEmailYiviSession,
+    })
       .start()
-      .then(() => this.props.dispatch({ type: 'startUpdateInfo' }))
+      .then(() => {
+        this.props.dispatch({ type: 'startUpdateInfo' });
+      })
       .catch((err) => {
         if (err !== 'Aborted')
           this.props.dispatch({ type: 'raiseError', errorMessage: `Error while adding email address: ${err}` });
@@ -65,15 +68,14 @@ class Emails extends React.Component {
 
   renderDeleteEmailConfirmation() {
     return (
-      <IrmaModal
-        theme={'secondary'}
+      <YiviModal
         title={this.t('delete-confirm-header')}
         action={this.t('delete')}
         onConfirm={() => this.onConfirmDeleteEmail()}
         onDismiss={() => this.setState({ emailToBeDeleted: null })}
       >
         <p>{this.t('delete-confirm-explanation', { email: this.state.emailToBeDeleted })}</p>
-      </IrmaModal>
+      </YiviModal>
     );
   }
 
@@ -92,13 +94,14 @@ class Emails extends React.Component {
     return (
       <tr key={address.email}>
         <td>{address.email}</td>
-        <td className={'delete-column'}>
+        <td className={styles.deleteColumn}>
           {address.delete_in_progress ? (
             this.t('delete-in-progress')
           ) : (
-            <IrmaButton theme={'secondary'} onClick={() => this.onDeleteEmail(address.email)}>
+            <YiviButton theme={'ghost'} onClick={() => this.onDeleteEmail(address.email)}>
+              <CrossIcon />
               {this.t('delete')}
-            </IrmaButton>
+            </YiviButton>
           )}
         </td>
       </tr>
@@ -110,10 +113,10 @@ class Emails extends React.Component {
       return <p>{this.t('no-email-addresses')}</p>;
     } else {
       return (
-        <IrmaTable>
+        <YiviTable>
           {this.renderEmailHeader()}
           <tbody>{this.props.emails.map((email) => this.renderEmailRow(email))}</tbody>
-        </IrmaTable>
+        </YiviTable>
       );
     }
   }
@@ -131,9 +134,10 @@ class Emails extends React.Component {
           />
         </p>
         {this.renderEmailList()}
-        <IrmaButton theme={'primary'} className={'add-email'} onClick={() => this.onAddEmail()}>
+        <YiviButton theme={'tertiary'} className={'add-email'} onClick={() => this.onAddEmail()}>
+          <PlusIcon />
           {this.t('add-email')}
-        </IrmaButton>
+        </YiviButton>
         {this.state.emailToBeDeleted ? this.renderDeleteEmailConfirmation() : null}
       </>
     );

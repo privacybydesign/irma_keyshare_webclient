@@ -1537,10 +1537,10 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@privacybydesign/irma-frontend@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.npmjs.org/@privacybydesign/irma-frontend/-/irma-frontend-0.4.3.tgz"
-  integrity sha512-1UFNUI4cqAYXFndgcywckgEZKYqtz/eTXmH83gFNYkeBQzv8PKygowrrSOFlb5HUWaXCNnMeTTxVnZH4eLy9EQ==
+"@privacybydesign/yivi-frontend@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@privacybydesign/yivi-frontend/-/yivi-frontend-0.1.0.tgz#e736944dae87cbac3353fdea6b1870b1b941e9fa"
+  integrity sha512-EswUMc6h46Vk04y6YTB9futsDxpw2s55hYM+/V/E29c1KLuDNC2iw6Paz0WfN+uh52Yd7gJ+mFqKqXMFgkzIoA==
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"

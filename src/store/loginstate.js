@@ -52,7 +52,7 @@ export default function login(state = initialState, action) {
       return {
         ...state,
         sessionState: 'loggedOut',
-        irmaSession: {
+        yiviSession: {
           url: window.config.server,
           start: {
             url: (o) => `${o.url}/login/irma`,

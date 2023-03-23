@@ -4,10 +4,7 @@ import { initReactI18next } from 'react-i18next';
 import en from './translations/en.json';
 import nl from './translations/nl.json';
 
-const resources = {
-  en,
-  nl,
-};
+const resources = { en, nl };
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next

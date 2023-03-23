@@ -2,13 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 
-import IrmaAppBar from '../../widgets/irma_app_bar';
+import YiviAppBar from '../../widgets/yivi_app_bar';
 import LoadingSpinner from '../../widgets/loading_spinner';
 import Emails from '../emails';
 import Logs from '../logs';
 import Column from '../../widgets/column';
 import DeleteAccount from '../delete_account';
 import LoadCards from '../load_cards';
+import Spacer from '../../widgets/spacer';
 
 const mapStateToProps = (state) => {
   return {
@@ -39,10 +40,15 @@ class AccountOverview extends React.Component {
     } else {
       return (
         <Column>
+          <Spacer />
           {this.renderUsername()}
+          <Spacer />
           <Logs />
+          <Spacer />
           <LoadCards />
+          <Spacer />
           <Emails />
+          <Spacer />
           <DeleteAccount />
         </Column>
       );
@@ -52,7 +58,7 @@ class AccountOverview extends React.Component {
   render() {
     return (
       <>
-        <IrmaAppBar title={this.t('title')} onLogout={() => this.props.dispatch({ type: 'logout' })} />
+        <YiviAppBar title={this.t('title')} onLogout={() => this.props.dispatch({ type: 'logout' })} />
         {this.renderBody()}
       </>
     );

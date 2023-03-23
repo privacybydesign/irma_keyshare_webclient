@@ -1,9 +1,8 @@
 import React from 'react';
-
-import './loading_spinner.scss';
+import styles from './loading_spinner.module.scss';
 
 const LoadingSpinner = () => {
-  return <div className={'spinner'} />;
+  return <div className={styles.spinner} />;
 };
 
 export default LoadingSpinner;

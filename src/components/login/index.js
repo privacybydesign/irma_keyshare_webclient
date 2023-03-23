@@ -14,7 +14,7 @@ const mapStateToProps = (state) => {
 const Login = (props) => {
   switch (props.sessionState) {
     case 'loggedOut':
-      return <SelectMethod dispatch={props.dispatch} irmaSession={props.irmaSession} />;
+      return <SelectMethod dispatch={props.dispatch} yiviSession={props.yiviSession} />;
     case 'selectCandidate':
       return <SelectCandidate dispatch={props.dispatch} candidates={props.candidates} token={props.token} />;
     case 'emailSent':

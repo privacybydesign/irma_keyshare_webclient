@@ -1,10 +1,11 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 
-import './index.scss';
-import IrmaAppBar from '../../widgets/irma_app_bar';
+import styles from './index.module.scss';
+import YiviAppBar from '../../widgets/yivi_app_bar';
 import SuccessIcon from '../../widgets/success_icon';
 import Column from '../../widgets/column';
+import YiviButton from '../../widgets/yivi_button';
 
 class RegistrationVerified extends React.Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class RegistrationVerified extends React.Component {
     this.t = props.t;
   }
 
-  continueToMyIrma(e) {
+  continueToMyYivi(e) {
     e.preventDefault();
     this.props.dispatch({ type: 'loggedIn' });
   }
@@ -41,37 +42,36 @@ class RegistrationVerified extends React.Component {
     return agent === 'iOS' || agent === 'Android';
   }
 
-  getReturnUrl() {
-    const universalLink = 'https://irma.app/-/';
+  launchReturnUrl() {
     if (this.userAgent() === 'Android') {
       // Universal links are not stable in Android webviews and custom tabs, so always use intent links.
       const intent = `Intent;package=org.irmacard.cardemu;scheme=irma;l.timestamp=${Date.now()}`;
-      return `intent://#${intent};end`;
+      window.location.href = `intent://#${intent};end`;
+    } else {
+      window.location.href = 'https://irma.app/-/';
     }
-    return universalLink;
   }
 
   render() {
     return (
       <>
-        <IrmaAppBar title={this.t('title')} />,
-        <Column className={'center'}>
-          <SuccessIcon className={'success-icon'} />
+        <YiviAppBar title={this.t('title')} />
+        <Column className={styles.center}>
+          <SuccessIcon />
           <h2>{this.t('success')}</h2>
           <p>{this.t('explanation')}</p>
           <p>
             {this.isMobile() ? (
-              <a className={'return-button'} href={this.getReturnUrl()}>
-                <img src={`${process.env.PUBLIC_URL}/assets/irma-logo.svg`} className={'irma-logo'} alt={'irma-logo'} />
-                <span>{this.t('return-to-irma')}</span>
-              </a>
+              <YiviButton theme={'primary'} onClick={() => this.launchReturnUrl()}>
+                {this.t('return-to-yivi')}
+              </YiviButton>
             ) : (
               this.t('app-is-ready')
             )}
           </p>
           <p>
-            <a href={'/#'} onClick={(e) => this.continueToMyIrma(e)}>
-              {this.t('continue-to-myirma')}
+            <a href={'/#'} onClick={(e) => this.continueToMyYivi(e)}>
+              {this.t('continue-to-myyivi')}
             </a>
           </p>
         </Column>
