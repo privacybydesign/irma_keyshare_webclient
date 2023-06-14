@@ -70,6 +70,9 @@
     "emailaddress": "E-mail",
     "delete": "Verwijder",
     "delete-in-progress": "Wordt verwijderd",
+    "delete-in-progress-explanation": "Je e-mailadres is gemarkeerd voor verwijdering en wordt binnen enkele dagen verwijderd.",
+    "revalidate-in-progress": "Wordt gevalideerd",
+    "revalidate-in-progress-explanation": "Je e-mailadres is gemarkeerd als ongeldig. Bestaat het nog wel? Of is er een probleem met je mailserver? We controleren het nogmaals binnen 5 dagen. Werkt het dan wel, dan wordt je e-mailadres weer vrijgegeven. Zo niet, dan zullen we het voor je verwijderen.",
     "add-email": "Voeg e-mailadres toe",
     "delete-confirm-header": "Bevestigen",
     "delete-confirm-explanation": "Weet je zeker dat je {{email}} wilt verwijderen?"

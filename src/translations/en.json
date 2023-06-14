@@ -70,6 +70,9 @@
     "emailaddress": "E-mail",
     "delete": "Delete",
     "delete-in-progress": "Being deleted",
+    "delete-in-progress-explanation": "Your e-mail address is marked for deletion and will be deleted within a few days.",
+    "revalidate-in-progress": "Being revalidated",
+    "revalidate-in-progress-explanation": "Your e-mail address is marked invalid. Does it still exist? Or is there a problem with your mail server? We will check again within 5 days. If it works, your e-mail address will be active again. If not, we will delete it for you.",
     "add-email": "Add e-mail address",
     "delete-confirm-header": "Confirm",
     "delete-confirm-explanation": "Are you sure you want to delete {{email}}?"

@@ -96,7 +96,23 @@ class Emails extends React.Component {
         <td>{address.email}</td>
         <td className={styles.deleteColumn}>
           {address.delete_in_progress ? (
-            this.t('delete-in-progress')
+            <a
+              role="button"
+              tabIndex="0"
+              className={styles.tooltip}
+              data-title={this.t('delete-in-progress-explanation')}
+            >
+              {this.t('delete-in-progress')}
+            </a>
+          ) : address.revalidate_in_progress ? (
+            <a
+              role="button"
+              tabIndex="0"
+              className={styles.tooltip}
+              data-title={this.t('revalidate-in-progress-explanation')}
+            >
+              {this.t('revalidate-in-progress')}
+            </a>
           ) : (
             <YiviButton theme={'ghost'} onClick={() => this.onDeleteEmail(address.email)}>
               <CrossIcon />

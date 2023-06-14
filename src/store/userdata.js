@@ -38,6 +38,7 @@ export default function userdata(state = initialState, action) {
         ...state,
         username: action.data.username,
         deleting: action.data.delete_in_progress,
+        revalidating: action.data.revalidate_in_progress,
         emails: action.data.emails,
         fetching: false,
       };
