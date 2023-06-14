@@ -1,5 +1,4 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
-
 import login from './loginstate';
 import logs from './logs';
 import userdata from './userdata';
@@ -65,8 +64,13 @@ function handleEmail({ dispatch }) {
         credentials: 'include',
       })
         .then((res) => {
-          if (res.status !== 204) throw res.status;
-          dispatch({ type: 'emailRemoved' });
+          if (res.status === 204) {
+            dispatch({ type: 'emailRemoved' });
+          } else if (res.status === 400) {
+            dispatch({ type: 'raiseWarning', explanation: 'delete-mail-explanation', details: 'delete-mail-details' });
+          } else {
+            throw res.status;
+          }
         })
         .catch((err) => {
           dispatch({ type: 'raiseError', errorMessage: `Error while removing email: ${err}` });
@@ -84,8 +88,17 @@ function handleDeleteAccount({ dispatch }) {
         credentials: 'include',
       })
         .then((res) => {
-          if (res.status !== 204) throw res.status;
-          dispatch({ type: 'logout' });
+          if (res.status === 204) {
+            dispatch({ type: 'logout' });
+          } else if (res.status === 400) {
+            dispatch({
+              type: 'raiseWarning',
+              explanation: 'delete-account-mail-explanation',
+              details: 'delete-account-mail-details',
+            });
+          } else {
+            throw res.status;
+          }
         })
         .catch((err) => {
           dispatch({ type: 'raiseError', errorMessage: `Error while deleting account: ${err}` });

@@ -101,6 +101,14 @@
     "point-4":"Click on 'Add e-mail address' and follow the instructions to add your e-mail address to MyYivi.",
     "retry": "Go to MyYivi"
   },
+  "warning-message": {
+    "header": "Something went wrong",
+    "return": "Go back",
+    "delete-account-mail-explanation": "We could not send an e-mail to one or more of your registered e-mail addresses.",
+    "delete-account-mail-details": "Please check if your e-mail addresses are still valid and working properly. Since sending the email failed, we will validate your e-mail address again in 5 days and delete it if the issue persists. Until then, access to MyYivi is blocked. Afterwards you can proceed deleting your account.",
+    "delete-mail-explanation": "We could not mark your e-mail address for deletion.",
+    "delete-mail-details":"Your e-mail address is marked invalid. Does it still exist? Or is there a problem with your mail server? We will check again within 5 days. If it works, your e-mail address will be active again. If not, we will delete it for you."
+  },
   "error-message": {
     "header": "Something went wrong",
     "explanation": "The requested action could not be processed. Please check your internet connection and try again. If the problem keeps occurring, please contact Yivi.",

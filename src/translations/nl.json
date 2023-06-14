@@ -101,6 +101,14 @@
     "point-4":"Klik op 'Voeg e-mailadres toe' en volg de instructies om je e-mailadres toe toe voegen aan MijnYivi.",
     "retry": "Ga naar MijnYivi"
   },
+  "warning-message": {
+    "header": "Er ging iets mis",
+    "return": "Ga terug",
+    "delete-account-mail-explanation": "We konden geen e-mail sturen aan èèn of meerdere van jouw geregistreerde e-mailadressen.",
+    "delete-account-mail-details": "Controleer of jouw e-mailadresssen nog werken. Omdat het verzenden van de e-mail niet lukte, valideren we jouw e-mailadres over 5 dagen opnieuw en zullen we het verwijderen als het probleem zich nogsteeds voordoet. Tot die tijd is toegang tot MijnYivi geblokkeerd. Daarna kun je jouw account alsnog verwijderen.",
+    "delete-mail-explanation": "We konden jouw e-mailadres niet markeren voor verwijdering.",
+    "delete-mail-details":"Je e-mailadres is gemarkeerd als ongeldig. Bestaat het nog wel? Of is er een probleem met je mailserver? We controleren het nogmaals binnen 5 dagen. Werkt het dan wel, dan wordt je e-mailadres weer vrijgegeven. Zo niet, dan zullen we het voor je verwijderen."
+  },
   "error-message": {
     "header": "Er ging iets mis",
     "explanation": "De gevraagde actie kon niet worden verwerkt. Controleer je internetverbinding en probeer het opnieuw. Als de fout blijft aanhouden, neem dan contact op met Yivi.",

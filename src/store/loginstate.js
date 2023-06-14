@@ -67,6 +67,13 @@ export default function login(state = initialState, action) {
         ...state,
         sessionState: 'tokenInvalid',
       };
+    case 'raiseWarning':
+      return {
+        ...state,
+        sessionState: 'warningRaised',
+        explanation: action.explanation,
+        details: action.details,
+      };
     case 'raiseError':
       return state.error
         ? state
