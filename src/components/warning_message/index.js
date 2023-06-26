@@ -14,7 +14,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-// TODO: Maybe convert WarninMessage and ErrorMessage into a single component.
 const WarningMessage = (props) => {
   const onReturn = () => {
     props.dispatch({ type: 'resolveError' });
