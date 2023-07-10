@@ -63,10 +63,11 @@ function handleEmail({ dispatch }) {
         body: action.email,
         credentials: 'include',
       })
+        .then((res) => res.json())
         .then((res) => {
           if (res.status === 204) {
             dispatch({ type: 'emailRemoved' });
-          } else if (res.status === 400) {
+          } else if (res.status === 500 && res.error === 'REVALIDATE_EMAIL') {
             dispatch({ type: 'raiseWarning', explanation: 'delete-mail-explanation', details: 'delete-mail-details' });
           } else {
             throw res.status;
@@ -87,10 +88,11 @@ function handleDeleteAccount({ dispatch }) {
         method: 'POST',
         credentials: 'include',
       })
+        .then((res) => res.json())
         .then((res) => {
           if (res.status === 204) {
             dispatch({ type: 'logout' });
-          } else if (res.status === 400) {
+          } else if (res.status === 500 && res.error === 'REVALIDATE_EMAIL') {
             dispatch({
               type: 'raiseWarning',
               explanation: 'delete-account-mail-explanation',
