@@ -70,6 +70,9 @@
     "emailaddress": "E-mail",
     "delete": "Verwijder",
     "delete-in-progress": "Wordt verwijderd",
+    "delete-in-progress-explanation": "Je e-mailadres is gemarkeerd voor verwijdering en wordt binnen enkele dagen verwijderd.",
+    "revalidate-in-progress": "Wordt gevalideerd",
+    "revalidate-in-progress-explanation": "Je e-mailadres is gemarkeerd als ongeldig omdat het niet bereikbaar was. Bestaat het nog wel? We controleren het nogmaals binnen 5 dagen. Werkt het dan wel, dan wordt je e-mailadres weer vrijgegeven. Zo niet, dan zullen we het voor je verwijderen.",
     "add-email": "Voeg e-mailadres toe",
     "delete-confirm-header": "Bevestigen",
     "delete-confirm-explanation": "Weet je zeker dat je {{email}} wilt verwijderen?"
@@ -97,6 +100,14 @@
     "point-3":"Volg de instructies in jouw Yivi app om in te loggen in MijnYivi.",
     "point-4":"Klik op 'Voeg e-mailadres toe' en volg de instructies om je e-mailadres toe toe voegen aan MijnYivi.",
     "retry": "Ga naar MijnYivi"
+  },
+  "warning-message": {
+    "header": "Er ging iets mis",
+    "return": "Ga terug",
+    "delete-account-mail-explanation": "We konden geen e-mail sturen aan één of meerdere van jouw geregistreerde e-mailadressen.",
+    "delete-account-mail-details": "Controleer of jouw e-mailadresssen nog werken. Omdat het verzenden van de e-mail niet lukte, valideren we jouw e-mailadres over 5 dagen opnieuw en zullen we het verwijderen als het probleem zich nog steeds voordoet. Tot die tijd is toegang tot jouw Yivi app en MijnYivi geblokkeerd. Daarna kan je jouw account alsnog verwijderen.",
+    "delete-mail-explanation": "We konden jouw e-mailadres niet markeren voor verwijdering.",
+    "delete-mail-details": "Het lijkt erop dat je e-mail adres niet werkt of niet meer actief is en daarom hebben we het tijdelijk als ongeldig gemarkeerd. Bestaat het nog? We valideren jouw e-mailadres over 5 dagen opnieuw en zullen het verwijderen als het probleem zich nog steeds voordoet. Werkt het wel, dan wordt je e-mailadres weer actief."
   },
   "error-message": {
     "header": "Er ging iets mis",
