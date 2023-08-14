@@ -6,10 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [3.1.0] - 2023-08-10
 ### Added
 - E-mail address 'being revalidated' indicator icon with tooltip
 - E-mail address 'being deleted' indicator icon with tooltip
 - Custom warnings when and invalid e-mail address is marked for revalidation while deleting e-mail address or account
+
+**Note:** This version recommends myirmaserver [v0.13.0](https://github.com/privacybydesign/irmago/releases/tag/v0.13.0) or above to be used as backend.
 
 ## [3.0.0] - 2023-03-23
 ### Added
@@ -40,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Merge pull request #9 from privacybydesign/firefox-fix
 - Fix: remove invalid fallback URL to solve issues on Firefox for Android
 
+[3.1.0]: https://github.com/privacybydesign/irma_keyshare_webclient/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/privacybydesign/irma_keyshare_webclient/compare/v2.0.3...v3.0.0
 [2.0.3]: https://github.com/privacybydesign/irma_keyshare_webclient/compare/v2.0.2...v2.0.3
 [2.0.2]: https://github.com/privacybydesign/irma_keyshare_webclient/compare/v2.0.1...v2.0.2
