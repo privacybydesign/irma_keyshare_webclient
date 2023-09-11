@@ -63,15 +63,22 @@ function handleEmail({ dispatch }) {
         body: action.email,
         credentials: 'include',
       })
-        .then((res) => res.json())
         .then((res) => {
           if (res.status === 204) {
             dispatch({ type: 'emailRemoved' });
-          } else if (res.status === 500 && res.error === 'REVALIDATE_EMAIL') {
-            dispatch({ type: 'raiseWarning', explanation: 'delete-mail-explanation', details: 'delete-mail-details' });
-          } else {
-            throw res.status;
+            return res;
           }
+          return res.json().then((resjson) => {
+            if (res.status === 500 && resjson.error === 'REVALIDATE_EMAIL') {
+              dispatch({
+                type: 'raiseWarning',
+                explanation: 'delete-mail-explanation',
+                details: 'delete-mail-details',
+              });
+            } else {
+              throw res.status;
+            }
+          });
         })
         .catch((err) => {
           dispatch({ type: 'raiseError', errorMessage: `Error while removing email: ${err}` });
@@ -213,6 +220,8 @@ function handleVerifySession({ dispatch }) {
           return res.text();
         })
         .then((res) => {
+          console.log('TEST!');
+          console.log(res);
           if (res === 'ok') {
             dispatch({ type: 'loggedIn' });
           } else if (res === 'expired') {
