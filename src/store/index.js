@@ -220,8 +220,6 @@ function handleVerifySession({ dispatch }) {
           return res.text();
         })
         .then((res) => {
-          console.log('TEST!');
-          console.log(res);
           if (res === 'ok') {
             dispatch({ type: 'loggedIn' });
           } else if (res === 'expired') {
