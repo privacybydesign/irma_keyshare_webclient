@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed
+- Deleting an e-mail address results in an error
+
 ## [3.1.0] - 2023-08-10
 ### Added
 - E-mail address 'being revalidated' indicator icon with tooltip
