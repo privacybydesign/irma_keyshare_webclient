@@ -95,7 +95,6 @@ function handleDeleteAccount({ dispatch }) {
         method: 'POST',
         credentials: 'include',
       })
-        .then((res) => res.json())
         .then((res) => {
           if (res.status === 204) {
             dispatch({ type: 'logout' });
