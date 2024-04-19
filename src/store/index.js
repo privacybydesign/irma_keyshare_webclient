@@ -95,19 +95,22 @@ function handleDeleteAccount({ dispatch }) {
         method: 'POST',
         credentials: 'include',
       })
-        .then((res) => res.json())
         .then((res) => {
           if (res.status === 204) {
             dispatch({ type: 'logout' });
-          } else if (res.status === 500 && res.error === 'REVALIDATE_EMAIL') {
-            dispatch({
-              type: 'raiseWarning',
-              explanation: 'delete-account-mail-explanation',
-              details: 'delete-account-mail-details',
-            });
-          } else {
-            throw res.status;
+            return res;
           }
+          return res.json().then((resjson) => {
+            if (res.status === 500 && resjson.error === 'REVALIDATE_EMAIL') {
+              dispatch({
+                type: 'raiseWarning',
+                explanation: 'delete-account-mail-explanation',
+                details: 'delete-account-mail-details',
+              });
+            } else {
+              throw res.status;
+            }
+          });
         })
         .catch((err) => {
           dispatch({ type: 'raiseError', errorMessage: `Error while deleting account: ${err}` });

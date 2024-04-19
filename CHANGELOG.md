@@ -6,6 +6,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [3.1.3] - 2024-04-18
+### Fixed
+- JSON parsing error is shown when deleting account
+
+### Security
+- chore(deps): bump webpack-dev-middleware from 5.3.3 to 5.3.4 by @dependabot in #53
+- chore(deps): bump express from 4.18.2 to 4.19.2 by @dependabot in #54
+
+## [3.1.2] - 2024-03-20
+### Security
+- chore(deps): bump @babel/traverse from 7.22.8 to 7.23.2 by @dependabot in #46
+- chore(deps-dev): bump postcss from 8.4.19 to 8.4.31 by @dependabot in #45
+- chore(deps): bump follow-redirects from 1.15.2 to 1.15.6 by @dependabot in #51
+
+### Internal
+- Added Dockerfile
+
 ## [3.1.1] - 2023-09-12
 
 ### Fixed
@@ -48,7 +65,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Merge pull request #9 from privacybydesign/firefox-fix
 - Fix: remove invalid fallback URL to solve issues on Firefox for Android
 
-[3.1.1]: https://github.com/privacybydesign/irma_keyshare_webclient/compare/v3.0.0...v3.1.1
+[3.1.3]: https://github.com/privacybydesign/irma_keyshare_webclient/compare/v3.1.2...v3.1.3
+[3.1.2]: https://github.com/privacybydesign/irma_keyshare_webclient/compare/v3.1.1...v3.1.2
+[3.1.1]: https://github.com/privacybydesign/irma_keyshare_webclient/compare/v3.1.0...v3.1.1
 [3.1.0]: https://github.com/privacybydesign/irma_keyshare_webclient/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/privacybydesign/irma_keyshare_webclient/compare/v2.0.3...v3.0.0
 [2.0.3]: https://github.com/privacybydesign/irma_keyshare_webclient/compare/v2.0.2...v2.0.3
