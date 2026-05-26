@@ -1,6 +1,6 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
-import YiviFrontend from '@privacybydesign/yivi-frontend';
+import * as YiviFrontend from '@privacybydesign/yivi-frontend';
 import styles from './select_method.module.scss';
 import Column from '../../widgets/column';
 import YiviAppBar from '../../widgets/yivi_app_bar';
