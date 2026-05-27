@@ -119,6 +119,7 @@
     "cancel": "Cancel"
   },
   "yivi-app-bar": {
-    "logout": "Logout"
+    "logout": "Logout",
+    "language-switcher-label": "Language"
   }
 }

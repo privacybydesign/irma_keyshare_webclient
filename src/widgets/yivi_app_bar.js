@@ -20,7 +20,7 @@ class YiviAppBar extends React.Component {
     const current = this.props.i18n.language;
     const langs = ['nl', 'en'];
     return (
-      <div className={styles.languageSwitcher} aria-label="Language">
+      <div className={styles.languageSwitcher} aria-label={this.t('language-switcher-label')}>
         {langs.map((lang, idx) => (
           <React.Fragment key={lang}>
             {idx > 0 ? <span className={styles.languageDivider}>|</span> : null}

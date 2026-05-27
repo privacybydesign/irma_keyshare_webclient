@@ -1,7 +1,7 @@
 @import 'src/theme';
 
 .bar {
-  height: 86px;
+  min-height: 86px;
   justify-content: center;
   align-items: center;
   background-color: $headerColor;
@@ -9,17 +9,43 @@
 }
 
 .content {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 8px;
 
+  // Visually center the title across the bar without making its centering
+  // sensitive to the widths of the side controls. Absolute positioning keeps
+  // it anchored to the bar's midpoint; the side flex items lay out normally
+  // and the title stays put regardless of their content.
   h1 {
     @include fontAccentTheme;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 16px 0;
     text-align: center;
     font-weight: bold;
     font-size: 24px;
     line-height: 30px;
-    padding: 16px 0;
+    pointer-events: none; // so it never blocks clicks on the side controls
+    max-width: calc(100% - 220px); // leave breathing room next to side controls
+  }
+
+  // On narrow viewports, drop the absolute centering: let the title flow
+  // inline and wrap below the controls if it has to.
+  @media (max-width: 600px) {
+    h1 {
+      position: static;
+      transform: none;
+      flex-basis: 100%;
+      order: 3;
+      max-width: 100%;
+    }
   }
 }
 
@@ -27,8 +53,6 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  justify-self: start;
-  padding-left: 8px;
 }
 
 .languageButton {
@@ -60,6 +84,5 @@
 }
 
 .logout {
-  justify-self: end;
-  padding-right: 8px;
+  margin-left: auto;
 }

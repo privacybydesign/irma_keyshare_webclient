@@ -119,6 +119,7 @@
     "cancel": "Annuleren"
   },
   "yivi-app-bar": {
-    "logout": "Uitloggen"
+    "logout": "Uitloggen",
+    "language-switcher-label": "Taal"
   }
 }
