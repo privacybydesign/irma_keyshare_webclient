@@ -1,23 +1,18 @@
 @use 'src/theme' as *;
 
+// The bar itself is the grid: side / title / side. Three explicit columns means
+// the title can't be pushed off-screen-center by the switcher (it sits in its
+// own column), and the switcher sits at the actual left edge of the bar rather
+// than the edge of the Column-constrained content area.
 .bar {
-  min-height: 86px;
-  background-color: $headerColor;
-  border-bottom: 1px solid #cfe4ef;
-}
-
-// Three explicit grid columns: side / title / side. Title sits in its own
-// column so it never overlaps the controls (the previous absolute-positioning
-// approach intercepted clicks even when the rendered text didn't visually
-// overlap). Side columns share the remaining space equally, so the title
-// stays centered whether or not the logout button is rendered.
-.content {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 8px;
-  padding: 0 8px;
+  padding: 0 16px;
   min-height: 86px;
+  background-color: $headerColor;
+  border-bottom: 1px solid #cfe4ef;
 
   h1 {
     @include fontAccentTheme;
@@ -28,11 +23,11 @@
     font-weight: bold;
     font-size: 24px;
     line-height: 30px;
-    min-width: 0; // allow the column to shrink rather than overflow the bar
+    min-width: 0;
   }
 
-  // On narrow viewports the title can't share a row with both side controls
-  // without one of them overflowing. Stack everything into a single column.
+  // On narrow viewports the three columns can't share one row without one of
+  // them clipping. Stack into a single column: switcher, title, logout.
   @media (max-width: 600px) {
     grid-template-columns: 1fr;
 
@@ -91,12 +86,10 @@
   .languageSwitcher {
     grid-column: 1;
     grid-row: 1;
-    justify-self: start;
   }
 
   .logout {
     grid-column: 1;
     grid-row: 3;
-    justify-self: end;
   }
 }
