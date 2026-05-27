@@ -1,4 +1,4 @@
-FROM node:24-alpine as build
+FROM node:24-alpine AS build
 WORKDIR /app
 COPY . /app
 RUN yarn install --immutable --immutable-cache --check-cache
