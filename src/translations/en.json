@@ -87,10 +87,6 @@
     "alert-delete": "Delete",
     "deleted": "MyYivi deleted."
   },
-  "load-cards": {
-    "header": "Load or refresh data",
-    "explanation": "Go to <0>this page</0> to load more data in your Yivi app, or refresh existing data."
-  },
   "token-invalid": {
     "header": "Something went wrong",
     "explanation": "This link has expired.",

@@ -8,7 +8,6 @@ import Emails from '../emails';
 import Logs from '../logs';
 import Column from '../../widgets/column';
 import DeleteAccount from '../delete_account';
-import LoadCards from '../load_cards';
 import Spacer from '../../widgets/spacer';
 
 const mapStateToProps = (state) => {
@@ -44,8 +43,6 @@ class AccountOverview extends React.Component {
           {this.renderUsername()}
           <Spacer />
           <Logs />
-          <Spacer />
-          <LoadCards />
           <Spacer />
           <Emails />
           <Spacer />
