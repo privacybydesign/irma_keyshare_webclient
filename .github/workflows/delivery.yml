@@ -1,16 +1,22 @@
 name: Delivery
 
 on:
+  pull_request:
+    types: [synchronize, opened, reopened]
   push:
-    branches: [ master ]
+    branches: [master]
   release:
     # Note: a current limitation is that when a release is edited after publication, then the Docker tags are not automatically updated.
-    types: [ published ]
+    types: [published]
+  schedule:
+    # Run every monday at 09:00 UTC to re-scan the latest image against fresh CVE data.
+    - cron: '0 9 * * 1'
   workflow_dispatch:
 
 permissions:
   contents: write
   packages: write
+  security-events: write
 
 jobs:
   publish-docker-image:
@@ -19,6 +25,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
+      # Succeeds only when the workflow is running against the tip of master.
+      # Used to gate the :edge tag so PR / dispatch / schedule runs don't clobber it.
+      - name: Check whether this event is the HEAD of master
+        continue-on-error: true
+        id: is-head-main
+        run: git rev-parse HEAD | grep -x ${{ github.sha }}
+        shell: bash
+
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0
@@ -26,7 +40,11 @@ jobs:
           images: ghcr.io/${{ github.repository }}
           tags: |
             type=semver,pattern={{major}}.{{minor}}.{{patch}}
-            type=raw,value=edge
+            type=edge,enable=${{ steps.is-head-main.outcome == 'success' }}
+            type=ref,event=branch,enable=${{ github.event_name == 'workflow_dispatch' }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
@@ -35,10 +53,38 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Build container and export to local Docker for scanning
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
+        with:
+          context: .
+          load: true
+          tags: local/${{ github.repository }}:scan
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Scan image with Anchore
+        uses: anchore/scan-action@e1165082ffb1fe366ebaf02d8526e7c4989ea9d2 # v7.4.0
+        id: scan
+        with:
+          image: local/${{ github.repository }}:scan
+          only-fixed: true
+          fail-build: true
+          severity-cutoff: critical
+          output-format: sarif
+
+      - name: Upload Anchore scan SARIF report
+        uses: github/codeql-action/upload-sarif@f52b05f4acaaa234e44466e66d29050e135ea9ef # v4.36.0
+        if: ${{ !cancelled() }}
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
+
       - name: Build container and push to GitHub Container Registry
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
+        if: ${{ ! contains(fromJSON('["schedule", "pull_request"]'), github.event_name) }}
         with:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
