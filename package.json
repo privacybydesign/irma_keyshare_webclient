@@ -5,7 +5,7 @@
   "type": "module",
   "dependencies": {
     "@privacybydesign/yivi-frontend": "^1.0.2",
-    "i18next": "^26.3.0",
+    "i18next": "^26.2.0",
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
     "react": "^19.2.0",
@@ -26,6 +26,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2",
+    "postcss": "^8.5.10",
     "prettier": "^2.8.3",
     "prettier-config-standard": "^5.0.0",
     "stylelint": "^15.10.1",
@@ -62,5 +63,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "packageManager": "yarn@4.15.0"
 }
