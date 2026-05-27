@@ -24,5 +24,8 @@ export default defineConfig({
     // host mount) doesn't need to change.
     outDir: 'build',
     sourcemap: false,
+    // Vite defaults to esbuild for minification. Terser is slower but a
+    // bit more aggressive on JS — saves ~1 kB gzipped on this bundle.
+    minify: 'terser',
   },
 });
