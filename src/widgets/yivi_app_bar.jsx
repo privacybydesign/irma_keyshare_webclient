@@ -14,26 +14,36 @@ class YiviAppBar extends React.Component {
     if (this.props.i18n.language === lang) return;
     this.props.i18n.changeLanguage(lang);
     document.documentElement.setAttribute('lang', lang);
+    try {
+      window.localStorage.setItem('lang', lang);
+    } catch (e) {
+      // localStorage unavailable — pick won't survive reload, but the page still works.
+    }
   }
 
   renderLanguageSwitcher() {
     const current = this.props.i18n.language;
     const langs = ['nl', 'en'];
     return (
-      <div className={styles.languageSwitcher} aria-label={this.t('language-switcher-label')}>
-        {langs.map((lang, idx) => (
-          <React.Fragment key={lang}>
-            {idx > 0 ? <span className={styles.languageDivider}>|</span> : null}
-            <button
-              type="button"
-              className={`${styles.languageButton} ${current === lang ? styles.languageButtonActive : ''}`}
-              onClick={() => this.changeLanguage(lang)}
-              aria-pressed={current === lang}
-            >
-              {lang.toUpperCase()}
-            </button>
-          </React.Fragment>
-        ))}
+      <div className={styles.languageSwitcher} role="group" aria-label={this.t('language-switcher-label')}>
+        {langs.map((lang, idx) => {
+          const isActive = current === lang;
+          return (
+            <React.Fragment key={lang}>
+              {idx > 0 ? <span className={styles.languageDivider}>|</span> : null}
+              <button
+                type="button"
+                className={`${styles.languageButton} ${isActive ? styles.languageButtonActive : ''}`}
+                onClick={() => this.changeLanguage(lang)}
+                aria-pressed={isActive}
+                aria-disabled={isActive}
+                disabled={isActive}
+              >
+                {lang.toUpperCase()}
+              </button>
+            </React.Fragment>
+          );
+        })}
       </div>
     );
   }

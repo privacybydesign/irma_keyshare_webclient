@@ -1,3 +1,8 @@
+// Font files live in `public/fonts/` and are served at the host root in
+// production. The leading slash here is processed by Vite's CSS asset
+// pipeline at build time and rewritten to include the build `base` (set via
+// `vite build --base=/sub/` or the `base:` option in vite.config.js), so
+// these URLs follow whatever sub-path the app is deployed under.
 @font-face {
   font-family: 'OpenSans';
   src: url('/fonts/open-sans-v34-latin-regular.woff2') format('woff2'),

@@ -5,6 +5,11 @@ import { fileURLToPath } from 'node:url';
 const repoRoot = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
+  // Override at build time with `vite build --base=/sub/` (or set the
+  // VITE_BASE env var, honoured below) for sub-path deploys. Vite rewrites
+  // absolute /foo paths in both HTML and CSS — including the @font-face URLs
+  // in src/theme.scss — to include this prefix.
+  base: process.env.VITE_BASE || '/',
   plugins: [react()],
   // SCSS files use `@use 'src/theme' as *;` — make that resolve via Sass loadPaths.
   css: {

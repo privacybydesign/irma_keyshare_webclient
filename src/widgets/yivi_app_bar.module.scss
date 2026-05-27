@@ -32,19 +32,17 @@
     font-weight: bold;
     font-size: 24px;
     line-height: 30px;
-    pointer-events: none; // so it never blocks clicks on the side controls
-    max-width: calc(100% - 220px); // leave breathing room next to side controls
   }
 
-  // On narrow viewports, drop the absolute centering: let the title flow
-  // inline and wrap below the controls if it has to.
+  // On narrow viewports the side controls and the absolutely-centered title
+  // can collide, so drop the absolute centering and let the title flow into
+  // its own row below the controls.
   @media (max-width: 600px) {
     h1 {
       position: static;
       transform: none;
       flex-basis: 100%;
       order: 3;
-      max-width: 100%;
     }
   }
 }
@@ -69,13 +67,16 @@
     opacity: 1;
     text-decoration: underline;
   }
+
+  &:disabled {
+    cursor: default;
+  }
 }
 
 .languageButtonActive {
   font-weight: bold;
   opacity: 1;
   text-decoration: underline;
-  cursor: default;
 }
 
 .languageDivider {
