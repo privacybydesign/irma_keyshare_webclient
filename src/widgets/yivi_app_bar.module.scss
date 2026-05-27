@@ -2,52 +2,50 @@
 
 .bar {
   min-height: 86px;
-  justify-content: center;
-  align-items: center;
   background-color: $headerColor;
   border-bottom: 1px solid #cfe4ef;
 }
 
+// Three explicit grid columns: side / title / side. Title sits in its own
+// column so it never overlaps the controls (the previous absolute-positioning
+// approach intercepted clicks even when the rendered text didn't visually
+// overlap). Side columns share the remaining space equally, so the title
+// stays centered whether or not the logout button is rendered.
 .content {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
   padding: 0 8px;
+  min-height: 86px;
 
-  // Visually center the title across the bar without making its centering
-  // sensitive to the widths of the side controls. Absolute positioning keeps
-  // it anchored to the bar's midpoint; the side flex items lay out normally
-  // and the title stays put regardless of their content.
   h1 {
     @include fontAccentTheme;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    grid-column: 2;
     margin: 0;
     padding: 16px 0;
     text-align: center;
     font-weight: bold;
     font-size: 24px;
     line-height: 30px;
+    min-width: 0; // allow the column to shrink rather than overflow the bar
   }
 
-  // On narrow viewports the side controls and the absolutely-centered title
-  // can collide, so drop the absolute centering and let the title flow into
-  // its own row below the controls.
+  // On narrow viewports the title can't share a row with both side controls
+  // without one of them overflowing. Stack everything into a single column.
   @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+
     h1 {
-      position: static;
-      transform: none;
-      flex-basis: 100%;
-      order: 3;
+      grid-column: 1;
+      grid-row: 2;
     }
   }
 }
 
 .languageSwitcher {
+  grid-column: 1;
+  justify-self: start;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -85,5 +83,20 @@
 }
 
 .logout {
-  margin-left: auto;
+  grid-column: 3;
+  justify-self: end;
+}
+
+@media (max-width: 600px) {
+  .languageSwitcher {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+  }
+
+  .logout {
+    grid-column: 1;
+    grid-row: 3;
+    justify-self: end;
+  }
 }
