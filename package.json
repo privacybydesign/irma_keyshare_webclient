@@ -16,7 +16,7 @@
     "sass": "^1.58.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^5.2.0",
+    "@vitejs/plugin-react": "^6.0.2",
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-config-prettier-standard": "^4.0.1",
@@ -34,10 +34,10 @@
     "stylelint-prettier": "^3.0.0",
     "stylelint-scss": "^5.3.1",
     "typescript": "^6.0.3",
-    "vite": "^7.3.3"
+    "vite": "^8.0.14"
   },
   "scripts": {
-    "lint": "eslint . --ext .js && stylelint ./src",
+    "lint": "eslint . --ext .js,.jsx && stylelint 'src/**/*.scss'",
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview"
