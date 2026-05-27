@@ -87,6 +87,10 @@
     "alert-delete": "Verwijderen",
     "deleted": "MijnYivi verwijderd."
   },
+  "load-cards": {
+    "header": "Laad of ververs gegevens",
+    "explanation": "Ga naar <0>deze pagina</0> om meer gegevens in je Yivi-app te laden of om bestaande gegevens te verversen."
+  },
   "token-invalid": {
     "header": "Er ging iets mis",
     "explanation": "Deze link is verlopen.",

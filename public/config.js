@@ -25,4 +25,8 @@ window.config = {
     en: 'https://privacybydesign.foundation/issuance/email/',
     nl: 'https://privacybydesign.foundation/uitgifte/email/',
   },
+  attributesOverviewUrl: {
+    en: 'https://yivi.app/storing_and_sharing/',
+    nl: 'https://yivi.app/storing_and_sharing/',
+  },
 };
