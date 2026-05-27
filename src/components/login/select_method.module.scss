@@ -1,4 +1,4 @@
-@import 'src/theme';
+@use 'src/theme' as *;
 
 .inputGroup {
   display: flex;

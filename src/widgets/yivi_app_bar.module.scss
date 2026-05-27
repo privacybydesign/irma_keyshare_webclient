@@ -1,4 +1,4 @@
-@import 'src/theme';
+@use 'src/theme' as *;
 
 .bar {
   min-height: 86px;
