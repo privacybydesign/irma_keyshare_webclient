@@ -25,6 +25,10 @@ window.config = {
     en: 'https://email-issuer.yivi.app/en',
     nl: 'https://email-issuer.yivi.app/nl',
   },
+  // yivi.app is a Dutch-default site: /storing_and_sharing/ serves the Dutch
+  // page (<title>Wat kan ik opslaan en delen | Yivi</title>) and English lives
+  // under the /en/ prefix. The asymmetry below mirrors that — don't "fix" the
+  // missing /nl/ on the nl entry.
   attributesOverviewUrl: {
     en: 'https://yivi.app/en/storing_and_sharing/',
     nl: 'https://yivi.app/storing_and_sharing/',

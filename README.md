@@ -78,3 +78,14 @@ window.config = {
 ```
 
 The in-app EN/NL switcher in the header writes the user's pick to `localStorage.lang` regardless of how the initial language was chosen, so subsequent loads honour the explicit pick.
+
+## Container vulnerability scanning
+
+The Delivery workflow (`.github/workflows/delivery.yml`) runs [`anchore/scan-action`](https://github.com/anchore/scan-action) against the built image on every PR / push / release / scheduled run, with SARIF uploaded to GitHub Code Scanning. The scope of the build-failing gate is deliberately narrow — note what does **not** block merges:
+
+- **Severity cutoff is `high`.** Moderate and low CVEs surface in Code Scanning but do not fail the build. Bump `severity-cutoff` in `delivery.yml` if you want a stricter gate.
+- **`only-fixed: true`.** Unfixable CVEs (no upstream patch available) are reported via SARIF but don't fail the build — blocking on something we can't actually patch isn't useful. They become "fixable" automatically once a fix is published.
+- **`fail-build` is gated to non-PR events.** PR runs always upload a SARIF report but never block the PR on its content. The intent is that a freshly-disclosed upstream CVE shouldn't block every open PR until the base image is bumped. The gate kicks back in on `push` / `release` / `workflow_dispatch` so anything merged or released has to clear the bar.
+- **Schedule runs scan the deployed `:edge` image**, not a rebuild of `master`. A new CVE that affects the running image shows up the next Monday at 09:00 UTC even if no code has changed.
+
+Base images are pinned by digest (`joseluisq/static-web-server@sha256:…` for the runtime stage, `node:24-alpine` for the build stage) so an upstream silent re-tag of `:latest` can't shift scan results without a source change. Bump both the tag and the digest together when reviewing CVE fixes.

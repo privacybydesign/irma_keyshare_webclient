@@ -8,5 +8,8 @@ COPY . /app
 RUN yarn install --immutable
 RUN yarn build
 
-FROM joseluisq/static-web-server:latest
+# Pinned by manifest-list digest so an upstream re-tag of :latest can't flip
+# the Anchore scan between green and red without a source change. Bump the
+# tag + digest together when a CVE patch warrants it.
+FROM joseluisq/static-web-server:2.42.0@sha256:2d67e47e22172235e339908777e692006ffdcf42dc4c531aff5d4337a7559a1e
 COPY --from=build /app/build /public

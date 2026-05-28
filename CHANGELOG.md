@@ -36,6 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Drop `contents: write` permission from the Delivery workflow (reduces blast radius).
 - `github.repository` value interpolated via `env:` rather than directly into a `run:` script — eliminates one expression-injection vector.
 - Stylelint deprecation `scss/at-import-no-partial-leading-underscore` replaced with its successor `scss/load-no-partial-leading-underscore`.
+- Runtime base image pinned by manifest-list digest (`joseluisq/static-web-server:2.42.0@sha256:2d67e47…`) so a silent upstream re-tag of `:latest` can't flip Anchore scan results without a source change.
+- README "Container vulnerability scanning" section documents the scope of the build-failing gate (cutoff `high`, `only-fixed: true`, PR runs scan-only) so future maintainers don't assume merges block on all known CVEs.
 
 ### Internal
 - Drop the standalone `yarn build` job from `status-checks.yml`; the Delivery workflow's Docker build (which now runs on every PR) exercises the same code path and also produces a vulnerability report.
