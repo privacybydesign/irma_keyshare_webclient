@@ -54,3 +54,27 @@ You can easily test the React app using Docker and Go:
 5. Open [http://localhost:8081](http://localhost:8081) to view it in a browser.
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+## Configuration
+
+The deployed app reads its runtime config from `public/config.js`, which sets `window.config`. The file in this repo is the local-development template; deployments (e.g. the Kubernetes manifests in `irma-keyshare-ops`) overwrite it with environment-specific values.
+
+### `lang`
+
+The `lang` field decides which translation the app starts in. Starting in 4.0.0 the shipped template runs a small `detectLanguage()` helper at script-load time:
+
+1. If `localStorage.lang` holds `nl` or `en` (set by a previous click on the in-app language switcher), that wins.
+2. Otherwise, walk `navigator.languages` in preference order and pick the first base subtag (`nl` or `en`) we support.
+3. Otherwise, fall back to `en`.
+
+This is a behavior change from earlier versions where `lang` was hard-coded to `'en'`. **Operators who want to keep the old "always start in English" behavior** should replace the `detectLanguage()` call with a literal in the deployed `config.js`:
+
+```js
+window.config = {
+  ...
+  lang: 'en',
+  ...
+};
+```
+
+The in-app EN/NL switcher in the header writes the user's pick to `localStorage.lang` regardless of how the initial language was chosen, so subsequent loads honour the explicit pick.

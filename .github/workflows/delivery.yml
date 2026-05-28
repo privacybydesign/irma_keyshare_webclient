@@ -9,7 +9,9 @@ on:
     # Note: a current limitation is that when a release is edited after publication, then the Docker tags are not automatically updated.
     types: [published]
   schedule:
-    # Run every monday at 09:00 UTC to re-scan the latest image against fresh CVE data.
+    # Re-scan the currently-deployed :edge image every Monday at 09:00 UTC
+    # against a fresh CVE database. We pull and scan that image rather than
+    # rebuilding from master, so the scan tracks what's actually running.
     - cron: '0 9 * * 1'
   workflow_dispatch:
 
@@ -40,33 +42,39 @@ jobs:
         uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0
         with:
           images: ghcr.io/${{ steps.image.outputs.name }}
-          # :X.Y.Z   — release publish (matched by type=semver)
-          # :edge    — any run targeting master (push / schedule / dispatch).
-          #            The push step is skipped on schedule + pull_request, so
-          #            schedule still gets a re-scan without overwriting :edge.
+          # :X.Y.Z    — release publish (matched by type=semver)
+          # :edge     — push / workflow_dispatch on master. Schedule runs are
+          #             excluded so a re-scan against fresh CVE data doesn't
+          #             republish an unchanged source as a new :edge.
           # :<branch> — workflow_dispatch on a non-master branch (ad-hoc test
-          #            build); never overrides :edge when dispatched on master.
-          # :pr-<n>  — pull_request builds. Not pushed (push step skipped on
-          #            pull_request), but giving metadata-action a matching
-          #            rule silences the "No tag generated" warning and means
-          #            the local scan image still carries a sensible name.
+          #             build); never overrides :edge.
+          # :pr-<n>   — pull_request builds. Not pushed (push step skipped on
+          #             pull_request); the tag exists so metadata-action has a
+          #             matching rule and the local scan image gets a sensible name.
           tags: |
             type=semver,pattern={{major}}.{{minor}}.{{patch}}
-            type=edge,enable=${{ github.ref == 'refs/heads/master' }}
+            type=edge,enable=${{ github.ref == 'refs/heads/master' && github.event_name != 'schedule' }}
             type=ref,event=branch,enable=${{ github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master' }}
             type=ref,event=pr
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
 
+      # Authentication is needed both for pushing (push / release / dispatch)
+      # and for pulling the deployed :edge image during the scheduled re-scan.
+      # PR runs neither push nor pull from GHCR, so skip the login there.
       - name: Login to GitHub Container Registry
+        if: ${{ github.event_name != 'pull_request' }}
         uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build container and export to local Docker for scanning
+      # Non-schedule events build the image from source and load it locally
+      # under the local/<repo>:scan tag for Anchore to scan.
+      - name: Build container locally for scanning
+        if: ${{ github.event_name != 'schedule' }}
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
         with:
           context: .
@@ -75,18 +83,41 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # only-fixed: true means we only FAIL the build for CVEs that have a fix
+      # Scheduled events pull the published :edge image and scan that instead,
+      # so the scan reflects what's actually deployed (not whatever master
+      # happens to look like at scan time).
+      - name: Pull deployed :edge image for scheduled re-scan
+        if: ${{ github.event_name == 'schedule' }}
+        run: docker pull ghcr.io/${{ steps.image.outputs.name }}:edge
+
+      - name: Compute scan target
+        id: scan_target
+        env:
+          IMAGE_NAME: ${{ steps.image.outputs.name }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "schedule" ]; then
+            printf 'image=ghcr.io/%s:edge\n' "$IMAGE_NAME" >> "$GITHUB_OUTPUT"
+          else
+            printf 'image=local/%s:scan\n' "$IMAGE_NAME" >> "$GITHUB_OUTPUT"
+          fi
+
+      # only-fixed: true — only FAIL the build for CVEs that have a fix
       # available upstream. Unfixable highs+ still appear in the SARIF report
-      # (Code Scanning UI) — uploaded unconditionally below — but don't block
-      # merges; we'd just be blocking on something we can't actually patch.
-      # Re-evaluate this if a workaround pattern becomes the norm.
+      # (Code Scanning UI), but don't block merges; we'd just be blocking on
+      # something we can't actually patch.
+      #
+      # fail-build is only true on publishing events. A newly-disclosed
+      # fixable CVE in the base image otherwise blocks every open PR until
+      # the base is bumped, which has nothing to do with the PR's own changes.
+      # PRs still produce a SARIF report — they just don't gate merges.
       - name: Scan image with Anchore
         uses: anchore/scan-action@e1165082ffb1fe366ebaf02d8526e7c4989ea9d2 # v7.4.0
         id: scan
         with:
-          image: local/${{ steps.image.outputs.name }}:scan
+          image: ${{ steps.scan_target.outputs.image }}
           only-fixed: true
-          fail-build: true
+          fail-build: ${{ github.event_name != 'pull_request' }}
           severity-cutoff: high
           output-format: sarif
 

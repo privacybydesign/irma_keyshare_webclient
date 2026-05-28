@@ -6,6 +6,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [4.0.0] - 2026-05-28
+### Changed
+- **Bundler:** Replace the unmaintained `react-scripts@5` with Vite 8 + `@vitejs/plugin-react@6`. Build output directory stays at `build/`; dev server boots in ~100 ms (was 10–15 s); main bundle is 158 kB gzipped (Terser).
+- **Package manager:** Migrate from yarn 1.22 to yarn 4.15 via corepack with `nodeLinker: node-modules`. The `yarn-4.15.0.cjs` release is committed under `.yarn/releases/`; CI / Docker pick it up via the `packageManager` field.
+- **JSX file extension:** 29 files containing JSX renamed from `.js` to `.jsx` (Vite 8 / Rolldown only parses JSX in `.jsx` files).
+- **Default language:** `public/config.js` now picks the first browser-preferred language we support (`nl` / `en`) and falls back to `en` instead of being hard-coded. Users' explicit choices are persisted in `localStorage.lang` and take precedence on subsequent loads. **Operators who relied on the old hard-coded `en` default should pin the language explicitly in their deployed `config.js`.**
+- **SCSS:** Migrate every `@import 'src/theme';` to `@use 'src/theme' as *;` (Sass 3 removes `@import`).
+- Move `src/fonts/` to `public/fonts/`; `@font-face` URLs use absolute `/fonts/...` paths that Vite's CSS asset pipeline rewrites based on `base` so sub-path deploys work.
+- Node bumped 16 → 24 in CI (`status-checks.yml`) and in the build image (`Dockerfile`).
+
+### Added
+- **Major dependency bumps:** React + ReactDOM 18 → 19, Redux 4 → 5, react-redux 8 → 9, i18next 22 → 26, react-i18next 12 → 17, TypeScript 4.9 → 6.
+- **EN/NL language switcher** in `YiviAppBar`. Click flips `i18n.changeLanguage()` + the `<html lang>` attribute + `localStorage.lang`. Active button is `disabled` + `aria-disabled` so screen readers and keyboard users get the right semantics. Wrapper has `role="group"` and a translated `aria-label`.
+- **`workflow_dispatch` trigger** on the Delivery workflow so PR branches can be built manually via the Actions UI.
+- **Container vulnerability scanning** via `anchore/scan-action` on every PR / push / release / scheduled run. SARIF reports always upload to the Code Scanning UI; `fail-build` only gates publishing events so a newly-disclosed upstream CVE doesn't block unrelated PRs. Weekly `cron` pulls and re-scans the deployed `:edge` image so the scan reflects what's actually running.
+- New `:pr-<n>` and `:<branch>` (workflow_dispatch) image tag rules in `docker/metadata-action` for diagnostics.
+
+### Fixed
+- Language switcher's translated text now actually swaps language — class components were caching `props.t` in their constructor, so post-switch renders still used the stale `t` (react-i18next 17 returns a new `t` reference on language change).
+- App-bar layout no longer hides the language switcher behind the absolutely-positioned title on the login page.
+- Heading row no longer leaves ~128 px of dead vertical space around the App-ID line on the account overview.
+- Mobile header collapses cleanly into a single row instead of stacking three rows with empty gaps.
+- Remove broken `https://privacybydesign.foundation/issuance/` link; LoadCards section now points at `https://yivi.app/storing_and_sharing/`.
+
+### Security
+- `yarn npm audit --severity high --all` returns no findings (was 32 across critical/high/moderate/low under `react-scripts`' devDep subtree).
+- Pin every GitHub Action to a full commit SHA with a `# vX.Y.Z` trailer.
+- Drop `contents: write` permission from the Delivery workflow (reduces blast radius).
+- `github.repository` value interpolated via `env:` rather than directly into a `run:` script — eliminates one expression-injection vector.
+- Stylelint deprecation `scss/at-import-no-partial-leading-underscore` replaced with its successor `scss/load-no-partial-leading-underscore`.
+
+### Internal
+- Drop the standalone `yarn build` job from `status-checks.yml`; the Delivery workflow's Docker build (which now runs on every PR) exercises the same code path and also produces a vulnerability report.
+
 ## [3.1.3] - 2024-04-18
 ### Fixed
 - JSON parsing error is shown when deleting account
