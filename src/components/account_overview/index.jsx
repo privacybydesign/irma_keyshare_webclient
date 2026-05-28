@@ -40,9 +40,7 @@ class AccountOverview extends React.Component {
     } else {
       return (
         <Column>
-          <Spacer />
           {this.renderUsername()}
-          <Spacer />
           <Logs />
           <Spacer />
           <LoadCards />
