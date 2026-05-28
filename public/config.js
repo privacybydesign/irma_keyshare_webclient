@@ -22,8 +22,8 @@ window.config = {
   server: 'http://localhost:8081',
   lang: detectLanguage(),
   emailIssuanceUrl: {
-    en: 'https://privacybydesign.foundation/issuance/email/',
-    nl: 'https://privacybydesign.foundation/uitgifte/email/',
+    en: 'https://email-issuer.yivi.app/en',
+    nl: 'https://email-issuer.yivi.app/nl',
   },
   attributesOverviewUrl: {
     en: 'https://yivi.app/en/storing_and_sharing/',

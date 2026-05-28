@@ -7,11 +7,6 @@ import styles from './logs_table.module.scss';
 import YiviTable from '../../widgets/yivi_table';
 
 class LogsTable extends React.Component {
-  constructor(props) {
-    super(props);
-    this.t = props.t;
-  }
-
   renderLogEntryTime(timestamp) {
     const time = moment.unix(timestamp).locale(this.props.i18n.language);
 
@@ -26,7 +21,9 @@ class LogsTable extends React.Component {
     return (
       <tr key={index}>
         {this.renderLogEntryTime(logEntry.timestamp)}
-        <td className={styles.eventColumn}>{this.t(`logs-events:${logEntry.event}`, { param: logEntry.param })}</td>
+        <td className={styles.eventColumn}>
+          {this.props.t(`logs-events:${logEntry.event}`, { param: logEntry.param })}
+        </td>
       </tr>
     );
   }
@@ -36,8 +33,8 @@ class LogsTable extends React.Component {
       <YiviTable>
         <thead>
           <tr>
-            <th className={styles.whenColumn}>{this.t('when')}</th>
-            <th className={styles.eventColumn}>{this.t('event')}</th>
+            <th className={styles.whenColumn}>{this.props.t('when')}</th>
+            <th className={styles.eventColumn}>{this.props.t('event')}</th>
           </tr>
         </thead>
         <tbody>{this.props.logEntries.map((entry, index) => this.renderLogEntry(entry, index))}</tbody>

@@ -19,15 +19,10 @@ const mapStateToProps = (state) => {
 };
 
 class AccountOverview extends React.Component {
-  constructor(props) {
-    super(props);
-    this.t = props.t;
-  }
-
   renderUsername() {
     return (
       <p>
-        {this.t('logged-in-as')}
+        {this.props.t('logged-in-as')}
         &nbsp;
         <span>{this.props.username}</span>
       </p>
@@ -56,7 +51,7 @@ class AccountOverview extends React.Component {
   render() {
     return (
       <>
-        <YiviAppBar title={this.t('title')} onLogout={() => this.props.dispatch({ type: 'logout' })} />
+        <YiviAppBar title={this.props.t('title')} onLogout={() => this.props.dispatch({ type: 'logout' })} />
         {this.renderBody()}
       </>
     );

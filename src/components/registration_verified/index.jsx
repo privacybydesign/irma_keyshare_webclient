@@ -8,11 +8,6 @@ import Column from '../../widgets/column';
 import YiviButton from '../../widgets/yivi_button';
 
 class RegistrationVerified extends React.Component {
-  constructor(props) {
-    super(props);
-    this.t = props.t;
-  }
-
   continueToMyYivi(e) {
     e.preventDefault();
     this.props.dispatch({ type: 'loggedIn' });
@@ -55,23 +50,23 @@ class RegistrationVerified extends React.Component {
   render() {
     return (
       <>
-        <YiviAppBar title={this.t('title')} />
+        <YiviAppBar title={this.props.t('title')} />
         <Column className={styles.center}>
           <SuccessIcon />
-          <h2>{this.t('success')}</h2>
-          <p>{this.t('explanation')}</p>
+          <h2>{this.props.t('success')}</h2>
+          <p>{this.props.t('explanation')}</p>
           <p>
             {this.isMobile() ? (
               <YiviButton theme={'primary'} onClick={() => this.launchReturnUrl()}>
-                {this.t('return-to-yivi')}
+                {this.props.t('return-to-yivi')}
               </YiviButton>
             ) : (
-              this.t('app-is-ready')
+              this.props.t('app-is-ready')
             )}
           </p>
           <p>
             <a href={'/#'} onClick={(e) => this.continueToMyYivi(e)}>
-              {this.t('continue-to-myyivi')}
+              {this.props.t('continue-to-myyivi')}
             </a>
           </p>
         </Column>

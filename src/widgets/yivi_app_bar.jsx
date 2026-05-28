@@ -4,11 +4,6 @@ import YiviButton from './yivi_button';
 import { withTranslation } from 'react-i18next';
 
 class YiviAppBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.t = props.t;
-  }
-
   changeLanguage(lang) {
     if (this.props.i18n.language === lang) return;
     this.props.i18n.changeLanguage(lang);
@@ -24,7 +19,7 @@ class YiviAppBar extends React.Component {
     const current = this.props.i18n.language;
     const langs = ['nl', 'en'];
     return (
-      <div className={styles.languageSwitcher} role="group" aria-label={this.t('language-switcher-label')}>
+      <div className={styles.languageSwitcher} role="group" aria-label={this.props.t('language-switcher-label')}>
         {langs.map((lang, idx) => {
           const isActive = current === lang;
           return (
@@ -55,7 +50,7 @@ class YiviAppBar extends React.Component {
         {this.props.onLogout ? (
           <div className={styles.logout}>
             <YiviButton theme={'primary'} onClick={this.props.onLogout} type={'button'}>
-              {this.t('logout')}
+              {this.props.t('logout')}
             </YiviButton>
           </div>
         ) : null}

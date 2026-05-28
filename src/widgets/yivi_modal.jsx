@@ -8,11 +8,6 @@ import CrossIcon from './cross_icon';
 import Spacer from './spacer';
 
 class YiviModal extends React.Component {
-  constructor(props) {
-    super(props);
-    this.t = props.t;
-  }
-
   render() {
     return (
       <div className={styles.overlay}>
@@ -29,7 +24,7 @@ class YiviModal extends React.Component {
               <Spacer size={'small'} />
               <div className={styles.buttonBar}>
                 <YiviButton theme={'secondary'} onClick={() => this.props.onDismiss()}>
-                  {this.t('cancel')}
+                  {this.props.t('cancel')}
                 </YiviButton>
                 <YiviButton theme={'primary'} onClick={() => this.props.onConfirm()}>
                   {this.props.action}

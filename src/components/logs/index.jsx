@@ -21,7 +21,6 @@ const mapStateToProps = (state) => {
 class Logs extends React.Component {
   constructor(props) {
     super(props);
-    this.t = props.t;
     this.mounting = true;
   }
 
@@ -47,7 +46,7 @@ class Logs extends React.Component {
         <>
           <div className={styles.buttonRow}>
             <div>
-              <h2>{this.t('header')}</h2>
+              <h2>{this.props.t('header')}</h2>
             </div>
             <div>
               <YiviButton
@@ -57,7 +56,7 @@ class Logs extends React.Component {
                 onClick={() => this.loadLogs(0)}
               >
                 <UpdateIcon />
-                <span>{this.t('refresh')}</span>
+                <span>{this.props.t('refresh')}</span>
               </YiviButton>
             </div>
           </div>
@@ -72,7 +71,7 @@ class Logs extends React.Component {
                 onClick={() => this.loadLogs(-LOGS_PER_PAGE)}
               >
                 <ChevronLeftIcon />
-                {this.t('previous')}
+                {this.props.t('previous')}
               </YiviButton>
             </div>
             <div className={'right'}>
@@ -82,7 +81,7 @@ class Logs extends React.Component {
                 disabled={!this.props.haveMore}
                 onClick={() => this.loadLogs(LOGS_PER_PAGE)}
               >
-                {this.t('next')}
+                {this.props.t('next')}
                 <ChevronRightIcon />
               </YiviButton>
             </div>

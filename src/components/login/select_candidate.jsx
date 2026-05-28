@@ -11,11 +11,6 @@ import Spacer from '../../widgets/spacer';
 import YiviTable from '../../widgets/yivi_table';
 
 class SelectCandidate extends React.Component {
-  constructor(props) {
-    super(props);
-    this.t = props.t;
-  }
-
   handleSelectCandidate(username) {
     this.props.dispatch({ type: 'finishTokenLogin', token: this.props.token, username });
   }
@@ -29,7 +24,7 @@ class SelectCandidate extends React.Component {
           <td title={lastActive.format('dddd, D MMM YYYY, H:mm:ss')}>{lastActive.fromNow()}</td>
           <td className={styles.buttonCol}>
             <YiviButton theme={'ghost'} onClick={() => this.handleSelectCandidate(candidate.username)}>
-              {this.t('login')}
+              {this.props.t('login')}
             </YiviButton>
           </td>
         </tr>
@@ -40,27 +35,27 @@ class SelectCandidate extends React.Component {
   render() {
     return (
       <>
-        <YiviAppBar title={this.t('title')} />
+        <YiviAppBar title={this.props.t('title')} />
         <Column>
           <Spacer />
-          <p>{this.t('explanation')}</p>
+          <p>{this.props.t('explanation')}</p>
           <ul>
             <li>
-              <strong>{this.t('username')}:</strong>
+              <strong>{this.props.t('username')}:</strong>
               &ensp;
-              {this.t('candidates-item-1')}
+              {this.props.t('candidates-item-1')}
             </li>
             <li>
-              <strong>{this.t('last-seen')}:</strong>
+              <strong>{this.props.t('last-seen')}:</strong>
               &ensp;
-              {this.t('candidates-item-2')}
+              {this.props.t('candidates-item-2')}
             </li>
           </ul>
           <YiviTable id="user-candidates">
             <thead>
               <tr>
-                <th>{this.t('username')}</th>
-                <th>{this.t('last-seen')}</th>
+                <th>{this.props.t('username')}</th>
+                <th>{this.props.t('last-seen')}</th>
                 <th className={styles.buttonCol} />
               </tr>
             </thead>

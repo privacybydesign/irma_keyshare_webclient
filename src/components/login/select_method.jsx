@@ -8,11 +8,6 @@ import YiviButton from '../../widgets/yivi_button';
 import Spacer from '../../widgets/spacer';
 
 class SelectMethod extends React.Component {
-  constructor(props) {
-    super(props);
-    this.t = props.t;
-  }
-
   componentDidMount() {
     this._yiviWeb = YiviFrontend.newWeb({
       element: '#yivi-web-form',
@@ -55,17 +50,17 @@ class SelectMethod extends React.Component {
     return (
       <>
         <p>
-          <b>{this.t('login-method-yivi-title')}</b>
+          <b>{this.props.t('login-method-yivi-title')}</b>
           <br />
-          {this.t('login-method-yivi-description')}
+          {this.props.t('login-method-yivi-description')}
         </p>
         <Spacer size={'small'} />
         {this.renderYiviLogin()}
         <Spacer />
         <p>
-          <b>{this.t('login-method-email-title')}</b>
+          <b>{this.props.t('login-method-email-title')}</b>
           <br />
-          {this.t('login-method-email-description')}
+          {this.props.t('login-method-email-description')}
         </p>
         <Spacer size={'small'} />
         {this.renderEmailLogin()}
@@ -89,12 +84,12 @@ class SelectMethod extends React.Component {
           type={'email'}
           id={'input-email'}
           className={styles.groupEmail}
-          placeholder={this.t('email-address')}
+          placeholder={this.props.t('email-address')}
           required
           autoFocus
         />
         <YiviButton theme={'primary'} className={styles.groupButton} type={'submit'} id={'sign-in-button-email'}>
-          {this.t('email-link')}
+          {this.props.t('email-link')}
         </YiviButton>
       </form>
     );
@@ -103,13 +98,13 @@ class SelectMethod extends React.Component {
   render() {
     return (
       <>
-        <YiviAppBar title={this.t('title')} />
+        <YiviAppBar title={this.props.t('title')} />
         <Column>
           <Spacer />
-          <p>{this.t('intro-par1')}</p>
-          <p>{this.t('intro-par2')}</p>
+          <p>{this.props.t('intro-par1')}</p>
+          <p>{this.props.t('intro-par2')}</p>
 
-          <p>{this.t('login-methods')}</p>
+          <p>{this.props.t('login-methods')}</p>
           <Spacer size={'small'} />
           {this.renderLoginMethods()}
         </Column>

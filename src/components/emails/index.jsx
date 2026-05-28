@@ -20,7 +20,6 @@ function mapStateToProps(state) {
 class Emails extends React.Component {
   constructor(props) {
     super(props);
-    this.t = props.t;
     this.state = {
       emailToBeDeleted: null,
     };
@@ -69,12 +68,12 @@ class Emails extends React.Component {
   renderDeleteEmailConfirmation() {
     return (
       <YiviModal
-        title={this.t('delete-confirm-header')}
-        action={this.t('delete')}
+        title={this.props.t('delete-confirm-header')}
+        action={this.props.t('delete')}
         onConfirm={() => this.onConfirmDeleteEmail()}
         onDismiss={() => this.setState({ emailToBeDeleted: null })}
       >
-        <p>{this.t('delete-confirm-explanation', { email: this.state.emailToBeDeleted })}</p>
+        <p>{this.props.t('delete-confirm-explanation', { email: this.state.emailToBeDeleted })}</p>
       </YiviModal>
     );
   }
@@ -83,7 +82,7 @@ class Emails extends React.Component {
     return (
       <thead>
         <tr>
-          <th>{this.t('emailaddress')}</th>
+          <th>{this.props.t('emailaddress')}</th>
           <th />
         </tr>
       </thead>
@@ -100,23 +99,23 @@ class Emails extends React.Component {
               role="button"
               tabIndex="0"
               className={styles.tooltip}
-              data-title={this.t('delete-in-progress-explanation')}
+              data-title={this.props.t('delete-in-progress-explanation')}
             >
-              {this.t('delete-in-progress')}
+              {this.props.t('delete-in-progress')}
             </a>
           ) : address.revalidate_in_progress ? (
             <a
               role="button"
               tabIndex="0"
               className={styles.tooltip}
-              data-title={this.t('revalidate-in-progress-explanation')}
+              data-title={this.props.t('revalidate-in-progress-explanation')}
             >
-              {this.t('revalidate-in-progress')}
+              {this.props.t('revalidate-in-progress')}
             </a>
           ) : (
             <YiviButton theme={'ghost'} onClick={() => this.onDeleteEmail(address.email)}>
               <CrossIcon />
-              {this.t('delete')}
+              {this.props.t('delete')}
             </YiviButton>
           )}
         </td>
@@ -126,7 +125,7 @@ class Emails extends React.Component {
 
   renderEmailList() {
     if (this.props.emails.length === 0) {
-      return <p>{this.t('no-email-addresses')}</p>;
+      return <p>{this.props.t('no-email-addresses')}</p>;
     } else {
       return (
         <YiviTable>
@@ -140,10 +139,10 @@ class Emails extends React.Component {
   render() {
     return (
       <>
-        <h2>{this.t('header')}</h2>
+        <h2>{this.props.t('header')}</h2>
         <p>
           <Trans
-            t={this.t}
+            t={this.props.t}
             i18nKey="explanation"
             // eslint-disable-next-line
             components={[ <a href={window.config.emailIssuanceUrl[this.props.i18n.language]} /> ]}
@@ -152,7 +151,7 @@ class Emails extends React.Component {
         {this.renderEmailList()}
         <YiviButton theme={'tertiary'} className={'add-email'} onClick={() => this.onAddEmail()}>
           <PlusIcon />
-          {this.t('add-email')}
+          {this.props.t('add-email')}
         </YiviButton>
         {this.state.emailToBeDeleted ? this.renderDeleteEmailConfirmation() : null}
       </>
