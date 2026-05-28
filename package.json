@@ -38,6 +38,7 @@
   },
   "scripts": {
     "lint": "eslint . --ext .js,.jsx && stylelint 'src/**/*.scss'",
+    "test": "echo \"No tests yet.\"",
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview"

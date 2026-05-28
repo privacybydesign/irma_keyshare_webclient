@@ -1,35 +1,34 @@
+# Delivery builds and pushes the :edge image to GHCR.
+#
+# Triggers:
+#   - push to master      → automatic :edge after every merge
+#   - workflow_dispatch   → manual :edge build from any branch (lets you cut
+#                           an :edge off a PR branch to test the deployment
+#                           path before merging)
+#
+# Code-quality + vulnerability gating lives in ci.yml. Tagged releases
+# (:X.Y.Z) live in release.yml.
+
 name: Delivery
 
 on:
-  pull_request:
-    types: [synchronize, opened, reopened]
   push:
     branches: [master]
-  release:
-    # Note: a current limitation is that when a release is edited after publication, then the Docker tags are not automatically updated.
-    types: [published]
-  schedule:
-    # Re-scan the currently-deployed :edge image every Monday at 09:00 UTC
-    # against a fresh CVE database. We pull and scan that image rather than
-    # rebuilding from master, so the scan tracks what's actually running.
-    - cron: '0 9 * * 1'
   workflow_dispatch:
 
 permissions:
   contents: read
   packages: write
-  security-events: write
 
 jobs:
-  publish-docker-image:
+  publish-edge:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       # Docker rejects uppercase characters in image tags. github.repository
-      # is mixed-case if the org/repo name has any. metadata-action's `images`
-      # input is internally normalized, but the local scan tag below is raw.
+      # is mixed-case if the org/repo name has any.
       - name: Compute lowercase image name
         id: image
         env:
@@ -37,103 +36,21 @@ jobs:
         run: |
           printf 'name=%s\n' "$(echo "$REPO" | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
 
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0
-        with:
-          images: ghcr.io/${{ steps.image.outputs.name }}
-          # :X.Y.Z    — release publish (matched by type=semver)
-          # :edge     — push / workflow_dispatch on master. Schedule runs are
-          #             excluded so a re-scan against fresh CVE data doesn't
-          #             republish an unchanged source as a new :edge.
-          # :<branch> — workflow_dispatch on a non-master branch (ad-hoc test
-          #             build); never overrides :edge.
-          # :pr-<n>   — pull_request builds. Not pushed (push step skipped on
-          #             pull_request); the tag exists so metadata-action has a
-          #             matching rule and the local scan image gets a sensible name.
-          tags: |
-            type=semver,pattern={{major}}.{{minor}}.{{patch}}
-            type=edge,enable=${{ github.ref == 'refs/heads/master' && github.event_name != 'schedule' }}
-            type=ref,event=branch,enable=${{ github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/master' }}
-            type=ref,event=pr
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
 
-      # Authentication is needed both for pushing (push / release / dispatch)
-      # and for pulling the deployed :edge image during the scheduled re-scan.
-      # PR runs neither push nor pull from GHCR, so skip the login there.
       - name: Login to GitHub Container Registry
-        if: ${{ github.event_name != 'pull_request' }}
         uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Non-schedule events build the image from source and load it locally
-      # under the local/<repo>:scan tag for Anchore to scan.
-      - name: Build container locally for scanning
-        if: ${{ github.event_name != 'schedule' }}
+      - name: Build and push :edge
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
-        with:
-          context: .
-          load: true
-          tags: local/${{ steps.image.outputs.name }}:scan
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      # Scheduled events pull the published :edge image and scan that instead,
-      # so the scan reflects what's actually deployed (not whatever master
-      # happens to look like at scan time).
-      - name: Pull deployed :edge image for scheduled re-scan
-        if: ${{ github.event_name == 'schedule' }}
-        run: docker pull ghcr.io/${{ steps.image.outputs.name }}:edge
-
-      - name: Compute scan target
-        id: scan_target
-        env:
-          IMAGE_NAME: ${{ steps.image.outputs.name }}
-          EVENT_NAME: ${{ github.event_name }}
-        run: |
-          if [ "$EVENT_NAME" = "schedule" ]; then
-            printf 'image=ghcr.io/%s:edge\n' "$IMAGE_NAME" >> "$GITHUB_OUTPUT"
-          else
-            printf 'image=local/%s:scan\n' "$IMAGE_NAME" >> "$GITHUB_OUTPUT"
-          fi
-
-      # only-fixed: true — only FAIL the build for CVEs that have a fix
-      # available upstream. Unfixable highs+ still appear in the SARIF report
-      # (Code Scanning UI), but don't block merges; we'd just be blocking on
-      # something we can't actually patch.
-      #
-      # fail-build is only true on publishing events. A newly-disclosed
-      # fixable CVE in the base image otherwise blocks every open PR until
-      # the base is bumped, which has nothing to do with the PR's own changes.
-      # PRs still produce a SARIF report — they just don't gate merges.
-      - name: Scan image with Anchore
-        uses: anchore/scan-action@e1165082ffb1fe366ebaf02d8526e7c4989ea9d2 # v7.4.0
-        id: scan
-        with:
-          image: ${{ steps.scan_target.outputs.image }}
-          only-fixed: true
-          fail-build: ${{ github.event_name != 'pull_request' }}
-          severity-cutoff: high
-          output-format: sarif
-
-      - name: Upload Anchore scan SARIF report
-        uses: github/codeql-action/upload-sarif@f52b05f4acaaa234e44466e66d29050e135ea9ef # v4.36.0
-        if: ${{ !cancelled() }}
-        with:
-          sarif_file: ${{ steps.scan.outputs.sarif }}
-
-      - name: Build container and push to GitHub Container Registry
-        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
-        if: ${{ ! contains(fromJSON('["schedule", "pull_request"]'), github.event_name) }}
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ghcr.io/${{ steps.image.outputs.name }}:edge
           cache-from: type=gha
           cache-to: type=gha,mode=max
