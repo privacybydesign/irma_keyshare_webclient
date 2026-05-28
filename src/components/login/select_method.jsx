@@ -6,12 +6,13 @@ import Column from '../../widgets/column';
 import YiviAppBar from '../../widgets/yivi_app_bar';
 import YiviButton from '../../widgets/yivi_button';
 import Spacer from '../../widgets/spacer';
+import { baseLanguage } from '../../i18n';
 
 class SelectMethod extends React.Component {
   componentDidMount() {
     this._yiviWeb = YiviFrontend.newWeb({
       element: '#yivi-web-form',
-      language: this.props.i18n.language,
+      language: baseLanguage(this.props.i18n),
       session: this.props.yiviSession,
     });
     this._yiviWeb

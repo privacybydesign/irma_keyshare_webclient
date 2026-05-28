@@ -19,4 +19,15 @@ i18n
     },
   });
 
+// i18n.language may carry a region tag (e.g. 'nl-NL') if a future fallbackLng
+// tweak introduces one. Translations and Vite's CSS pipeline tolerate that,
+// but anywhere we index a two-key map keyed by base subtag — config.js URL
+// maps, the language switcher's `isActive` compare, the language hint we
+// pass to @privacybydesign/yivi-frontend — needs the base. Use this helper
+// at those sites so a regression silently producing `nl-NL` doesn't make
+// `href=undefined` or break the QR widget.
+export function baseLanguage(instance = i18n) {
+  return (instance.language || '').toLowerCase().split('-')[0];
+}
+
 export default i18n;

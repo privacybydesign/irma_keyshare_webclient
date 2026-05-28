@@ -9,6 +9,7 @@ import PlusIcon from '../../widgets/plus_icon';
 import styles from './index.module.scss';
 import * as YiviFrontend from '@privacybydesign/yivi-frontend';
 import CrossIcon from '../../widgets/cross_icon';
+import { baseLanguage } from '../../i18n';
 
 function mapStateToProps(state) {
   return {
@@ -52,7 +53,7 @@ class Emails extends React.Component {
 
   onAddEmail() {
     YiviFrontend.newPopup({
-      language: this.props.i18n.language,
+      language: baseLanguage(this.props.i18n),
       session: this.props.addEmailYiviSession,
     })
       .start()
@@ -145,7 +146,7 @@ class Emails extends React.Component {
             t={this.props.t}
             i18nKey="explanation"
             // eslint-disable-next-line
-            components={[ <a href={window.config.emailIssuanceUrl[this.props.i18n.language]} /> ]}
+            components={[ <a href={window.config.emailIssuanceUrl[baseLanguage(this.props.i18n)]} /> ]}
           />
         </p>
         {this.renderEmailList()}

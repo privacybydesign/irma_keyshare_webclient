@@ -2,10 +2,11 @@ import React from 'react';
 import styles from './yivi_app_bar.module.scss';
 import YiviButton from './yivi_button';
 import { withTranslation } from 'react-i18next';
+import { baseLanguage } from '../i18n';
 
 class YiviAppBar extends React.Component {
   async changeLanguage(lang) {
-    if (this.normalizedLanguage() === lang) return;
+    if (baseLanguage(this.props.i18n) === lang) return;
     try {
       await this.props.i18n.changeLanguage(lang);
     } catch (err) {
@@ -20,15 +21,8 @@ class YiviAppBar extends React.Component {
     }
   }
 
-  // i18n.language may carry a region tag (e.g. 'nl-NL') if fallbacks are
-  // configured upstream. Compare on the base subtag.
-  normalizedLanguage() {
-    const current = this.props.i18n.language || '';
-    return current.toLowerCase().split('-')[0];
-  }
-
   renderLanguageSwitcher() {
-    const current = this.normalizedLanguage();
+    const current = baseLanguage(this.props.i18n);
     const langs = ['nl', 'en'];
     return (
       <div className={styles.languageSwitcher} role="group" aria-label={this.props.t('language-switcher-label')}>

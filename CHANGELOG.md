@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Node bumped 16 → 24 in CI (`status-checks.yml`) and in the build image (`Dockerfile`).
 
 ### Added
-- **Major dependency bumps:** React + ReactDOM 18 → 19, Redux 4 → 5, react-redux 8 → 9, i18next 22 → 26, react-i18next 12 → 17, TypeScript 4.9 → 6.
+- **Major dependency bumps:** React + ReactDOM 18 → 19, Redux 4 → 5, react-redux 8 → 9, i18next 22 → 26, react-i18next 12 → 17.
 - **EN/NL language switcher** in `YiviAppBar`. Click flips `i18n.changeLanguage()` + the `<html lang>` attribute + `localStorage.lang`. Active button is `disabled` + `aria-disabled` so screen readers and keyboard users get the right semantics. Wrapper has `role="group"` and a translated `aria-label`.
 - **`workflow_dispatch` trigger** on the Delivery workflow so PR branches can be built manually via the Actions UI.
 - **Container vulnerability scanning** via `anchore/scan-action` on every PR / push / release / scheduled run. SARIF reports always upload to the Code Scanning UI; `fail-build` only gates publishing events so a newly-disclosed upstream CVE doesn't block unrelated PRs. Weekly `cron` pulls and re-scans the deployed `:edge` image so the scan reflects what's actually running.
