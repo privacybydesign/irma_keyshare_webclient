@@ -43,9 +43,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Runtime base image pinned by manifest-list digest (`joseluisq/static-web-server:2.42.0@sha256:2d67e47…`) so a silent upstream re-tag of `:latest` can't flip Anchore scan results without a source change.
 - README "Container vulnerability scanning" section documents the scope of the build-failing gate (cutoff `high`, `only-fixed: true`, PR runs scan-only) so future maintainers don't assume merges block on all known CVEs.
 
-### Internal
-- CI no longer runs a standalone `yarn build`; the image-scan job's Docker build exercises the same code path and also produces a vulnerability report.
-
 ## [3.1.3] - 2024-04-18
 ### Fixed
 - JSON parsing error is shown when deleting account
