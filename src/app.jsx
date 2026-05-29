@@ -1,12 +1,18 @@
-import React from 'react';
+import { Suspense, lazy } from 'react';
 import { connect } from 'react-redux';
-import Login from './components/login/';
 import LoadingSpinner from './widgets/loading_spinner';
-import AccountOverview from './components/account_overview';
-import RegistrationVerified from './components/registration_verified';
-import TokenInvalid from './components/token_invalid';
-import WarningMessage from './components/warning_message';
-import ErrorMessage from './components/error_message';
+
+// Route-level code-splitting. Each top-level "screen" is only fetched when
+// the corresponding session state activates, dropping the initial bundle
+// well below Vite's 500 kB warning. LoadingSpinner is kept static so the
+// Suspense fallback (and the explicit `props.loading` path) can render
+// without waiting on another chunk.
+const Login = lazy(() => import('./components/login/'));
+const AccountOverview = lazy(() => import('./components/account_overview'));
+const RegistrationVerified = lazy(() => import('./components/registration_verified'));
+const TokenInvalid = lazy(() => import('./components/token_invalid'));
+const WarningMessage = lazy(() => import('./components/warning_message'));
+const ErrorMessage = lazy(() => import('./components/error_message'));
 
 const mapStateToProps = (state) => {
   return {
@@ -19,23 +25,17 @@ const mapStateToProps = (state) => {
   };
 };
 
+function pickScreen(props) {
+  if (props.errorRaised) return <ErrorMessage />;
+  if (props.loading) return <LoadingSpinner />;
+  if (props.loggedIn) return <AccountOverview />;
+  if (props.registrationVerified) return <RegistrationVerified dispatch={props.dispatch} />;
+  if (props.tokenInvalid) return <TokenInvalid dispatch={props.dispatch} />;
+  if (props.warningRaised) return <WarningMessage />;
+  return <Login />;
+}
+
 // TODO: Maybe convert into router to improve URL structure.
-const App = (props) => {
-  if (props.errorRaised) {
-    return <ErrorMessage />;
-  } else if (props.loading) {
-    return <LoadingSpinner />;
-  } else if (props.loggedIn) {
-    return <AccountOverview />;
-  } else if (props.registrationVerified) {
-    return <RegistrationVerified dispatch={props.dispatch} />;
-  } else if (props.tokenInvalid) {
-    return <TokenInvalid dispatch={props.dispatch} />;
-  } else if (props.warningRaised) {
-    return <WarningMessage />;
-  } else {
-    return <Login />;
-  }
-};
+const App = (props) => <Suspense fallback={<LoadingSpinner />}>{pickScreen(props)}</Suspense>;
 
 export default connect(mapStateToProps)(App);

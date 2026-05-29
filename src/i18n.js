@@ -11,6 +11,10 @@ i18n
   .init({
     resources,
     lng: window.config.lang,
+    // Guard against a misconfigured config.js (typo'd lang, empty string,
+    // unsupported tag) — without a fallback, i18next would render raw
+    // translation keys instead of falling back to English.
+    fallbackLng: 'en',
 
     keySeparator: false,
 

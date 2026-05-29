@@ -293,7 +293,7 @@ export default function buildStore() {
       handleRegistrationVerify,
       handleVerifySession,
       handleLoggedIn,
-      handleLogout
-    )
+      handleLogout,
+    ),
   );
 }

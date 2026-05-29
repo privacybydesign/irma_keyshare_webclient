@@ -1,5 +1,3 @@
-import React from 'react';
-
 const SuccessIcon = () => {
   return Icons[Math.floor(Math.random() * Icons.length)]();
 };

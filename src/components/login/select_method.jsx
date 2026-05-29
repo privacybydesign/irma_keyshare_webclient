@@ -29,7 +29,7 @@ class SelectMethod extends React.Component {
       });
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate() {
     // Never update this element, since YiviFrontend handles state changes itself.
     // When updates need to be enabled, make sure the yivi-web-form is excluded from re-render.
     return false;

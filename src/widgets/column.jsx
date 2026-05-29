@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './column.module.scss';
 
 const Column = ({ children, className, ...columnProps }) => {

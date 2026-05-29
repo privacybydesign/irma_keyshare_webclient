@@ -3,10 +3,13 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     environment: 'jsdom',
+    // jsdom only enables localStorage when the document has a real origin.
+    // Override the default 'about:blank' so window.localStorage is defined.
+    environmentOptions: {
+      jsdom: { url: 'http://localhost/' },
+    },
     globals: false,
     setupFiles: ['./vitest.setup.js'],
-    // Source-only tests for now — reducers, helpers, config normalisation.
-    // Component/integration tests can be added under src/**/__tests__ later.
     include: ['src/**/*.test.js', 'src/**/*.test.jsx', '*.test.js'],
   },
 });

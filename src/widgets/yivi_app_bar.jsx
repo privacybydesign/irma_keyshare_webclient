@@ -7,6 +7,13 @@ import { baseLanguage } from '../i18n';
 class YiviAppBar extends React.Component {
   async changeLanguage(lang) {
     if (baseLanguage(this.props.i18n) === lang) return;
+    // Persist the user's choice *before* awaiting i18next. A reload between
+    // the await and a later persist call would silently lose the pick.
+    try {
+      window.localStorage.setItem('lang', lang);
+    } catch (e) {
+      // localStorage unavailable — pick won't survive reload, but the page still works.
+    }
     try {
       await this.props.i18n.changeLanguage(lang);
     } catch (err) {
@@ -14,11 +21,6 @@ class YiviAppBar extends React.Component {
       return;
     }
     document.documentElement.setAttribute('lang', lang);
-    try {
-      window.localStorage.setItem('lang', lang);
-    } catch (e) {
-      // localStorage unavailable — pick won't survive reload, but the page still works.
-    }
   }
 
   renderLanguageSwitcher() {
@@ -36,7 +38,6 @@ class YiviAppBar extends React.Component {
                 className={`${styles.languageButton} ${isActive ? styles.languageButtonActive : ''}`}
                 onClick={() => this.changeLanguage(lang)}
                 aria-pressed={isActive}
-                aria-disabled={isActive}
                 disabled={isActive}
               >
                 {lang.toUpperCase()}

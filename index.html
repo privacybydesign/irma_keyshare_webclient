@@ -1,5 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--
+  No `lang` attribute on <html> on purpose. src/index.jsx sets it from
+  window.config.lang (which resolves via localStorage → navigator.languages
+  → "en") before the React tree mounts. The yivi-app-bar switcher then
+  mutates it on every change. Hardcoding `lang="en"` here would mislead
+  crawlers / pre-JS assistive tech on Dutch-default deployments.
+-->
+<html>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

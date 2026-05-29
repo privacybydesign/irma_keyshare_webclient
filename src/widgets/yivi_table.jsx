@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styles from './yivi_table.module.scss';
 
 const YiviTable = ({ children, ...tableProps }) => {

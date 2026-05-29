@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import SelectMethod from './select_method';
 import SelectCandidate from './select_candidate';

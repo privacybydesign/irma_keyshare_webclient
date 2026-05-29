@@ -1,4 +1,3 @@
-import React from 'react';
 import { withTranslation } from 'react-i18next';
 
 import YiviAppBar from '../../widgets/yivi_app_bar';

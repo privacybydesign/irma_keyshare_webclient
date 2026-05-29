@@ -1,4 +1,3 @@
-import React from 'react';
 import { Trans, withTranslation } from 'react-i18next';
 import { baseLanguage } from '../../i18n';
 
