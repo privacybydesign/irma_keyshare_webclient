@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'node:url';
+import { normaliseBase } from './vite-base.js';
 
 const repoRoot = fileURLToPath(new URL('.', import.meta.url));
 
@@ -9,7 +10,10 @@ export default defineConfig({
   // VITE_BASE env var, honoured below) for sub-path deploys. Vite rewrites
   // absolute /foo paths in both HTML and CSS — including the @font-face URLs
   // in src/theme.scss — to include this prefix.
-  base: process.env.VITE_BASE || '/',
+  //
+  // normaliseBase() tolerates the common operator footguns: `/sub` (missing
+  // trailing /), `sub/` (missing leading /), unset (defaults to `/`).
+  base: normaliseBase(process.env.VITE_BASE),
   plugins: [react()],
   // SCSS files use `@use 'src/theme' as *;` — make that resolve via Sass loadPaths.
   css: {

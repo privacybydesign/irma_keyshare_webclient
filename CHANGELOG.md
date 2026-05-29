@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Changed
+- **Workflow split.** `status-checks.yml` is replaced by `ci.yml` (lint / test / build / image-scan jobs in parallel, no image push). The Delivery workflow is now narrowly focused: it pushes `:edge` to GHCR on every merge to `master` and on `workflow_dispatch` from any branch (so a PR branch can be deployed as `:edge` for end-to-end testing). A new `release.yml` handles versioned releases — on a published GitHub Release it builds, scans, and pushes `:X.Y.Z`, `:X.Y`, `:X`, and `:latest`.
+- The previous `:pr-<n>` and `:<branch>` (workflow_dispatch) tag rules are gone — `delivery.yml` always tags `:edge`. Running `workflow_dispatch` from a PR branch overwrites the previously-deployed `:edge`.
+- The weekly cron that re-scanned the deployed `:edge` image is gone with the split; restore as a separate `scan.yml` if periodic CVE re-checks are still wanted.
+- Add a `yarn test` script and a `test` job in `ci.yml`. The script currently wraps Vitest; coverage is intentionally narrow on this first pass (reducers, helpers, and a single component smoke).
 
 ## [4.0.0] - 2026-05-28
 ### Changed
@@ -14,14 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Default language:** `public/config.js` now picks the first browser-preferred language we support (`nl` / `en`) and falls back to `en` instead of being hard-coded. Users' explicit choices are persisted in `localStorage.lang` and take precedence on subsequent loads. **Operators who relied on the old hard-coded `en` default should pin the language explicitly in their deployed `config.js`.**
 - **SCSS:** Migrate every `@import 'src/theme';` to `@use 'src/theme' as *;` (Sass 3 removes `@import`).
 - Move `src/fonts/` to `public/fonts/`; `@font-face` URLs use absolute `/fonts/...` paths that Vite's CSS asset pipeline rewrites based on `base` so sub-path deploys work.
-- Node bumped 16 → 24 in CI (`status-checks.yml`) and in the build image (`Dockerfile`).
+- Node bumped 16 → 24 in CI and in the build image (`Dockerfile`).
 
 ### Added
 - **Major dependency bumps:** React + ReactDOM 18 → 19, Redux 4 → 5, react-redux 8 → 9, i18next 22 → 26, react-i18next 12 → 17.
 - **EN/NL language switcher** in `YiviAppBar`. Click flips `i18n.changeLanguage()` + the `<html lang>` attribute + `localStorage.lang`. Active button is `disabled` + `aria-disabled` so screen readers and keyboard users get the right semantics. Wrapper has `role="group"` and a translated `aria-label`.
-- **`workflow_dispatch` trigger** on the Delivery workflow so PR branches can be built manually via the Actions UI.
-- **Container vulnerability scanning** via `anchore/scan-action` on every PR / push / release / scheduled run. SARIF reports always upload to the Code Scanning UI; `fail-build` only gates publishing events so a newly-disclosed upstream CVE doesn't block unrelated PRs. Weekly `cron` pulls and re-scans the deployed `:edge` image so the scan reflects what's actually running.
-- New `:pr-<n>` and `:<branch>` (workflow_dispatch) image tag rules in `docker/metadata-action` for diagnostics.
+- **`workflow_dispatch` trigger** on the Delivery workflow so any branch can be built and published as `:edge` manually via the Actions UI.
+- **Container vulnerability scanning** via `anchore/scan-action` on every PR, every push to `master`, and every published release. SARIF reports always upload to the Code Scanning UI; `fail-build` only gates non-PR events so a newly-disclosed upstream CVE doesn't block unrelated PRs.
 
 ### Fixed
 - Language switcher's translated text now actually swaps language — class components were caching `props.t` in their constructor, so post-switch renders still used the stale `t` (react-i18next 17 returns a new `t` reference on language change).
@@ -40,7 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - README "Container vulnerability scanning" section documents the scope of the build-failing gate (cutoff `high`, `only-fixed: true`, PR runs scan-only) so future maintainers don't assume merges block on all known CVEs.
 
 ### Internal
-- Drop the standalone `yarn build` job from `status-checks.yml`; the Delivery workflow's Docker build (which now runs on every PR) exercises the same code path and also produces a vulnerability report.
+- CI no longer runs a standalone `yarn build`; the image-scan job's Docker build exercises the same code path and also produces a vulnerability report.
 
 ## [3.1.3] - 2024-04-18
 ### Fixed

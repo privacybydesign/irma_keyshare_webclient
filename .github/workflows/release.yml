@@ -16,6 +16,7 @@ on:
 permissions:
   contents: read
   packages: write
+  security-events: write
 
 jobs:
   publish-release:
@@ -44,6 +45,36 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
+
+      # Build locally first so the scan runs on the exact image that will be
+      # pushed. Same cache as ci.yml's image-scan job, so this is usually
+      # warm by the time a release fires.
+      - name: Build container locally for scanning
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
+        with:
+          context: .
+          load: true
+          tags: local/${{ steps.image.outputs.name }}:scan
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Same gate as ci.yml: fixable highs+ fail the build. A release must
+      # clear the bar — there's no PR-style escape hatch here.
+      - name: Scan image with Anchore
+        uses: anchore/scan-action@e1165082ffb1fe366ebaf02d8526e7c4989ea9d2 # v7.4.0
+        id: scan
+        with:
+          image: local/${{ steps.image.outputs.name }}:scan
+          only-fixed: true
+          fail-build: true
+          severity-cutoff: high
+          output-format: sarif
+
+      - name: Upload Anchore scan SARIF report
+        uses: github/codeql-action/upload-sarif@f52b05f4acaaa234e44466e66d29050e135ea9ef # v4.36.0
+        if: ${{ !cancelled() }}
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0

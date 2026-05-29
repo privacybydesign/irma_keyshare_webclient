@@ -79,13 +79,20 @@ window.config = {
 
 The in-app EN/NL switcher in the header writes the user's pick to `localStorage.lang` regardless of how the initial language was chosen, so subsequent loads honour the explicit pick.
 
+## CI / Delivery / Release
+
+Three workflows split the work:
+
+- **`ci.yml`** runs on every PR and every push to `master`. Four parallel jobs: `lint`, `test`, `build`, `image-scan`. The image-scan job builds the production Docker image locally and runs `anchore/scan-action`, but never pushes. This is the PR gate.
+- **`delivery.yml`** runs on push to `master` and on `workflow_dispatch`. Single job: build and push `:edge` to GHCR. Dispatch works from any branch — including PR branches — so you can deploy a PR's code as `:edge` for testing. The tag is always `:edge`; dispatching on a PR branch overwrites the previously-deployed `:edge` until master is re-merged or you dispatch again on master. There is no image scan here; `ci.yml` is the safety gate, and discipline at the dispatch step is on the operator. PRs are not built and never push.
+- **`release.yml`** runs on `release: published`. Builds + scans + pushes `:X.Y.Z`, `:X.Y`, `:X`, and `:latest` based on the release tag.
+
 ## Container vulnerability scanning
 
-The Delivery workflow (`.github/workflows/delivery.yml`) runs [`anchore/scan-action`](https://github.com/anchore/scan-action) against the built image on every PR / push / release / scheduled run, with SARIF uploaded to GitHub Code Scanning. The scope of the build-failing gate is deliberately narrow — note what does **not** block merges:
+Both `ci.yml` (image-scan job) and `release.yml` run [`anchore/scan-action`](https://github.com/anchore/scan-action) against the built image, with SARIF uploaded to GitHub Code Scanning. The scope of the build-failing gate is deliberately narrow — note what does **not** block merges or releases:
 
-- **Severity cutoff is `high`.** Moderate and low CVEs surface in Code Scanning but do not fail the build. Bump `severity-cutoff` in `delivery.yml` if you want a stricter gate.
+- **Severity cutoff is `high`.** Moderate and low CVEs surface in Code Scanning but do not fail the build. Bump `severity-cutoff` in both workflows if you want a stricter gate.
 - **`only-fixed: true`.** Unfixable CVEs (no upstream patch available) are reported via SARIF but don't fail the build — blocking on something we can't actually patch isn't useful. They become "fixable" automatically once a fix is published.
-- **`fail-build` is gated to non-PR events.** PR runs always upload a SARIF report but never block the PR on its content. The intent is that a freshly-disclosed upstream CVE shouldn't block every open PR until the base image is bumped. The gate kicks back in on `push` / `release` / `workflow_dispatch` so anything merged or released has to clear the bar.
-- **Schedule runs scan the deployed `:edge` image**, not a rebuild of `master`. A new CVE that affects the running image shows up the next Monday at 09:00 UTC even if no code has changed.
+- **`fail-build` is gated to non-PR events.** PR runs always upload a SARIF report but never block the PR on its content. The intent is that a freshly-disclosed upstream CVE shouldn't block every open PR until the base image is bumped. The gate kicks back in on `push` to master and on a published release.
 
 Base images are pinned by digest (`joseluisq/static-web-server@sha256:…` for the runtime stage, `node:24-alpine` for the build stage) so an upstream silent re-tag of `:latest` can't shift scan results without a source change. Bump both the tag and the digest together when reviewing CVE fixes.
