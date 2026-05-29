@@ -2,6 +2,7 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import login from './loginstate';
 import logs from './logs';
 import userdata from './userdata';
+import i18n, { baseLanguage } from '../i18n';
 
 // Catch and deal with log loading
 function handleLoadLogs({ getState, dispatch }) {
@@ -171,7 +172,7 @@ function handleEmailLogin({ dispatch }) {
         credentials: 'include',
         body: JSON.stringify({
           email: action.email,
-          language: window.config.lang,
+          language: baseLanguage(i18n),
         }),
       })
         .then((res) => {

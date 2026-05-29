@@ -28,7 +28,12 @@ window.addEventListener('hashchange', checkUrlHash);
 checkUrlHash();
 
 document.documentElement.setAttribute('lang', window.config.lang);
-document.title = i18n.t('app:title');
+
+const refreshDocumentTitle = () => {
+  document.title = i18n.t('app:title');
+};
+refreshDocumentTitle();
+i18n.on('languageChanged', refreshDocumentTitle);
 
 root.render(
   <React.StrictMode>
