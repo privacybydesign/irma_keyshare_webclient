@@ -27,24 +27,23 @@ class YiviWebFormMount extends React.Component {
 class SelectMethod extends React.Component {
   componentDidMount() {
     // React 19 StrictMode runs componentDidMount → componentWillUnmount →
-    // componentDidMount in development to surface unsafe lifecycle patterns.
-    // The cycle is safe here because componentWillUnmount aborts the
-    // widget and clears `this._yiviWeb` before the second mount, so
-    // yivi-frontend's `newWeb()` only ever runs against a fresh
-    // `#yivi-web-form` node.
-    this._unmounted = false;
-    this._yiviWeb = YiviFrontend.newWeb({
+    // componentDidMount on the *same* instance in development to surface
+    // unsafe lifecycle patterns. A simple `_unmounted` flag isn't enough:
+    // when mount #2 runs it resets the flag, and a still-pending `.then`
+    // from mount #1's `start()` would then incorrectly pass the guard.
+    // Capture the widget reference in closure scope so each mount's
+    // callbacks compare against their own widget; if `this._yiviWeb` no
+    // longer matches, the resolution belongs to a stale mount.
+    const widget = YiviFrontend.newWeb({
       element: '#yivi-web-form',
       language: baseLanguage(this.props.i18n),
       session: this.props.yiviSession,
     });
-    this._yiviWeb
+    this._yiviWeb = widget;
+    widget
       .start()
       .then(() => {
-        // If `start()` resolves microseconds before componentWillUnmount
-        // (or in the brief window before its `.then()` runs), the
-        // scheduled timer would otherwise fire on a torn-down tree.
-        if (this._unmounted) return;
+        if (widget !== this._yiviWeb) return;
         // Delay dispatch to make Yivi success animation visible. Stash the
         // timer id so componentWillUnmount can cancel it — otherwise the
         // dispatch fires on an unmounted tree if the user navigates away
@@ -55,14 +54,13 @@ class SelectMethod extends React.Component {
         }, 1000);
       })
       .catch((err) => {
-        if (this._unmounted) return;
+        if (widget !== this._yiviWeb) return;
         if (err !== 'Aborted')
           this.props.dispatch({ type: 'raiseError', errorMessage: `Error while logging in with Yivi: ${err}` });
       });
   }
 
   componentWillUnmount() {
-    this._unmounted = true;
     if (this._verifyTimer) {
       clearTimeout(this._verifyTimer);
       this._verifyTimer = undefined;

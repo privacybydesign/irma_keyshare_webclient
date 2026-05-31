@@ -14,10 +14,10 @@ const store = buildStore();
 function checkUrlHash() {
   const fragment = window.location.hash;
   if (fragment.startsWith('#token=')) {
-    const token = fragment.substr(7);
+    const token = fragment.slice(7);
     store.dispatch({ type: 'startTokenLogin', token });
   } else if (fragment.startsWith('#verify=')) {
-    const token = fragment.substr(8);
+    const token = fragment.slice(8);
     store.dispatch({ type: 'startRegistrationVerify', token });
   } else {
     store.dispatch({ type: 'verifySession' });

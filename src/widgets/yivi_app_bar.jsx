@@ -75,7 +75,13 @@ export class YiviAppBar extends React.Component {
     // back via the catch path above) — calling `i18n.changeLanguage(undefined)`
     // tells i18next to re-run language detection, which is non-deterministic.
     if (YiviAppBar._latestRequestedLang !== undefined && this.props.i18n.language !== YiviAppBar._latestRequestedLang) {
-      this.props.i18n.changeLanguage(YiviAppBar._latestRequestedLang).catch(() => {});
+      // Log the failure rather than swallow it silently — if convergence
+      // itself rejects, i18next stays at the stale language while DOM and
+      // localStorage already advertise the new one, and translations would
+      // render mismatched with no audit trail.
+      this.props.i18n.changeLanguage(YiviAppBar._latestRequestedLang).catch((err) => {
+        console.error('Language convergence failed', err);
+      });
     }
     // Only the most recent click writes `<html lang>`. Stale resolutions
     // return silently.
