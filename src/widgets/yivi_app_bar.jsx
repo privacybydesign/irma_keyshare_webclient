@@ -16,9 +16,15 @@ export class YiviAppBar extends React.Component {
     // current value — rapid clicks (NL → EN) fire while NL's changeLanguage
     // is still pending and i18n.language is stale, and we want the second
     // click to still proceed.
-    const current = YiviAppBar._latestRequestedLang || baseLanguage(this.props.i18n);
+    const previousLatest = YiviAppBar._latestRequestedLang;
+    const current = previousLatest || baseLanguage(this.props.i18n);
     if (current === lang) return;
-    const previousLang = baseLanguage(this.props.i18n);
+    // Capture rollback target from the *logical* previous language (the
+    // last-requested or, if no request is in flight, the live i18n value).
+    // Reading baseLanguage(i18n) directly here would catch a stale value
+    // mid-flight, and a rollback would then write a language nobody asked
+    // for to localStorage.
+    const rollbackLang = current;
     YiviAppBar._latestRequestedLang = lang;
     // Persist the user's choice *before* awaiting i18next. A reload between
     // the await and a later persist call would silently lose the pick.
@@ -34,13 +40,16 @@ export class YiviAppBar extends React.Component {
       // Roll back so detectLanguage() on next reload doesn't read a language
       // we never successfully switched to — but only if no later click has
       // already overwritten our state (that newer click owns localStorage).
+      // Restore _latestRequestedLang to the prior pending value rather than
+      // clearing it, so a still-pending earlier request retains ownership
+      // of the convergence step.
       if (YiviAppBar._latestRequestedLang === lang) {
         try {
-          window.localStorage.setItem('lang', previousLang);
+          window.localStorage.setItem('lang', rollbackLang);
         } catch (e) {
           // see above
         }
-        YiviAppBar._latestRequestedLang = undefined;
+        YiviAppBar._latestRequestedLang = previousLatest;
       }
       return;
     }
@@ -59,7 +68,11 @@ export class YiviAppBar extends React.Component {
     // trade-off is that an *external* `i18n.changeLanguage` call (not via
     // this switcher) could leave `_latestRequestedLang` stale, but nothing
     // in this codebase calls changeLanguage outside the switcher.
-    if (this.props.i18n.language !== YiviAppBar._latestRequestedLang) {
+    //
+    // Guard against `latest === undefined` (all in-flight requests rolled
+    // back via the catch path above) — calling `i18n.changeLanguage(undefined)`
+    // tells i18next to re-run language detection, which is non-deterministic.
+    if (YiviAppBar._latestRequestedLang !== undefined && this.props.i18n.language !== YiviAppBar._latestRequestedLang) {
       this.props.i18n.changeLanguage(YiviAppBar._latestRequestedLang).catch(() => {});
     }
     // Only the most recent click writes `<html lang>`. Stale resolutions
