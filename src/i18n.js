@@ -12,8 +12,13 @@ const SUPPORTED_LANGUAGES = Object.keys(resources);
 // i18n.language would stay 'fr' (i18next records what was requested, not what
 // can actually be rendered), so `<html lang>` would advertise a language we
 // have no resources for. Validate against the supported set instead.
-const requestedLang = (window.config.lang || '').toLowerCase().split('-')[0];
-const initialLang = SUPPORTED_LANGUAGES.includes(requestedLang) ? requestedLang : 'en';
+export function resolveInitialLang(configLang, supported = SUPPORTED_LANGUAGES) {
+  const trimmed = (configLang ?? '').toString().trim().toLowerCase();
+  const base = trimmed.split('-')[0];
+  return supported.includes(base) ? base : 'en';
+}
+
+const initialLang = resolveInitialLang(window.config.lang);
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next

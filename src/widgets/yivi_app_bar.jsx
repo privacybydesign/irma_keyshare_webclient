@@ -17,7 +17,9 @@ export class YiviAppBar extends React.Component {
     // is still pending and i18n.language is stale, and we want the second
     // click to still proceed.
     const previousLatest = YiviAppBar._latestRequestedLang;
-    const current = previousLatest || baseLanguage(this.props.i18n);
+    // `??` not `||` — an accidentally-set empty-string marker would
+    // otherwise incorrectly fall through to baseLanguage().
+    const current = previousLatest ?? baseLanguage(this.props.i18n);
     if (current === lang) return;
     // Capture rollback target from the *logical* previous language (the
     // last-requested or, if no request is in flight, the live i18n value).

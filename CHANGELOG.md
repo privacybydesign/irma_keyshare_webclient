@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.0] - 2026-05-28
 ### Changed
-- **Bundler:** Replace the unmaintained `react-scripts@5` with Vite 8 + `@vitejs/plugin-react@6`. Build output directory stays at `build/`; dev server boots in ~100 ms (was 10–15 s); main bundle is 158 kB gzipped (Terser).
+- **Bundler:** Replace the unmaintained `react-scripts@5` with Vite 8 + `@vitejs/plugin-react@6`. Build output directory stays at `build/`; dev server boots in ~100 ms (was 10–15 s); main bundle is 85.76 kB gzipped (Terser, route-split — `moment/nl` ships in its own 56.84 kB on-demand chunk).
 - **Package manager:** Migrate from yarn 1.22 to yarn 4.15 via corepack with `nodeLinker: node-modules`. The `yarn-4.15.0.cjs` release is committed under `.yarn/releases/`; CI / Docker pick it up via the `packageManager` field.
 - **JSX file extension:** 29 files containing JSX renamed from `.js` to `.jsx` (Vite 8 / Rolldown only parses JSX in `.jsx` files).
 - **Default language:** `public/config.js` now picks the first browser-preferred language we support (`nl` / `en`) and falls back to `en` instead of being hard-coded. Users' explicit choices are persisted in `localStorage.lang` and take precedence on subsequent loads. **Operators who relied on the old hard-coded `en` default should pin the language explicitly in their deployed `config.js`.**
