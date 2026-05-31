@@ -146,6 +146,53 @@ describe('YiviAppBar language switcher', () => {
     expect(calls.filter((c) => c === 'en').length).toBeGreaterThanOrEqual(2);
   });
 
+  it('survives three rapid clicks with arbitrary resolution order — last click wins', async () => {
+    // NL → EN → NL with arbitrary promise resolution order. The convergence
+    // step should pull i18next back to whichever language was requested
+    // last regardless of which earlier promise settled when.
+    const pending = []; // FIFO of resolver entries: { lang, fire }
+    const mockI18n = {
+      language: 'en',
+      changeLanguage: vi.fn(
+        (lang) =>
+          new Promise((resolve) => {
+            pending.push({
+              lang,
+              fire: () => {
+                mockI18n.language = lang;
+                resolve();
+              },
+            });
+          }),
+      ),
+    };
+    const instance = new YiviAppBarClass({ i18n: mockI18n });
+
+    const p1 = instance.changeLanguage('nl');
+    const p2 = instance.changeLanguage('en');
+    const p3 = instance.changeLanguage('nl');
+
+    expect(window.localStorage.getItem('lang')).toBe('nl');
+    expect(YiviAppBarClass._latestRequestedLang).toBe('nl');
+
+    // pending = [nl(p1), en(p2), nl(p3)]. Resolve in chaotic order: EN
+    // first (the middle click), then NL#1, then the final NL.
+    pending.splice(1, 1)[0].fire(); // EN (p2)
+    pending.shift().fire(); // NL (p1)
+    pending.shift().fire(); // NL (p3)
+    await Promise.all([p1, p2, p3]);
+
+    // Drain any fire-and-forget convergence calls the post-await steps
+    // queued (each pulled from the head of `pending`).
+    while (pending.length) {
+      pending.shift().fire();
+      await Promise.resolve();
+    }
+
+    expect(mockI18n.language).toBe('nl');
+    expect(document.documentElement.getAttribute('lang')).toBe('nl');
+  });
+
   it('survives rapid clicks: the last requested language wins even if i18next resolves out of order', async () => {
     // The disabled state on the inactive button prevents this race via the
     // DOM in normal flow, but withTranslation can re-render off Redux /

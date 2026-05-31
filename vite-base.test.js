@@ -48,13 +48,13 @@ describe('normaliseBase', () => {
     expect(normaliseBase('foo//bar')).toBe('/foo/bar/');
   });
 
-  it('rejects path-traversal segments by collapsing to "/"', () => {
-    expect(normaliseBase('..')).toBe('/');
-    expect(normaliseBase('../sub')).toBe('/');
-    expect(normaliseBase('/sub/../etc')).toBe('/');
+  it('throws on path-traversal segments so operator misconfigs fail loudly', () => {
+    expect(() => normaliseBase('..')).toThrow(/path-traversal/);
+    expect(() => normaliseBase('../sub')).toThrow(/path-traversal/);
+    expect(() => normaliseBase('/sub/../etc')).toThrow(/path-traversal/);
   });
 
-  it('rejects path-traversal segments inside absolute URLs too', () => {
-    expect(normaliseBase('https://cdn.example.com/foo/../etc/')).toBe('/');
+  it('throws on path-traversal segments inside absolute URLs too', () => {
+    expect(() => normaliseBase('https://cdn.example.com/foo/../etc/')).toThrow(/path-traversal/);
   });
 });

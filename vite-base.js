@@ -8,10 +8,14 @@ export function normaliseBase(raw) {
   const trimmed = String(raw).trim();
   if (trimmed === '' || trimmed === '/') return '/';
   if (trimmed === '.' || trimmed === './') return './';
-  // Apply the same path-traversal rejection to absolute URLs as relative
-  // paths — operator-controlled at build time, but the test suite claims
-  // .. is always rejected and the previous short-circuit broke that.
-  if (trimmed.split('/').some((segment) => segment === '..')) return '/';
+  // Path-traversal segments are an operator misconfig — fail the build
+  // loudly rather than silently shipping a wrong base URL.
+  if (trimmed.split('/').some((segment) => segment === '..')) {
+    throw new Error(
+      `VITE_BASE rejected: path-traversal segment ('..') in ${JSON.stringify(raw)}. ` +
+        `Use an absolute path like '/sub/' or a full URL.`,
+    );
+  }
   if (/^https?:\/\//i.test(trimmed)) {
     return trimmed.endsWith('/') ? trimmed : `${trimmed}/`;
   }

@@ -32,6 +32,7 @@ class SelectMethod extends React.Component {
     // widget and clears `this._yiviWeb` before the second mount, so
     // yivi-frontend's `newWeb()` only ever runs against a fresh
     // `#yivi-web-form` node.
+    this._unmounted = false;
     this._yiviWeb = YiviFrontend.newWeb({
       element: '#yivi-web-form',
       language: baseLanguage(this.props.i18n),
@@ -40,6 +41,10 @@ class SelectMethod extends React.Component {
     this._yiviWeb
       .start()
       .then(() => {
+        // If `start()` resolves microseconds before componentWillUnmount
+        // (or in the brief window before its `.then()` runs), the
+        // scheduled timer would otherwise fire on a torn-down tree.
+        if (this._unmounted) return;
         // Delay dispatch to make Yivi success animation visible. Stash the
         // timer id so componentWillUnmount can cancel it — otherwise the
         // dispatch fires on an unmounted tree if the user navigates away
@@ -50,12 +55,14 @@ class SelectMethod extends React.Component {
         }, 1000);
       })
       .catch((err) => {
+        if (this._unmounted) return;
         if (err !== 'Aborted')
           this.props.dispatch({ type: 'raiseError', errorMessage: `Error while logging in with Yivi: ${err}` });
       });
   }
 
   componentWillUnmount() {
+    this._unmounted = true;
     if (this._verifyTimer) {
       clearTimeout(this._verifyTimer);
       this._verifyTimer = undefined;
