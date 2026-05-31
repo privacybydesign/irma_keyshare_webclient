@@ -61,7 +61,10 @@ class RegistrationVerified extends React.Component {
             )}
           </p>
           <p>
-            <a href={'/#'} onClick={(e) => this.continueToMyYivi(e)}>
+            {/* href is just for link semantics — onClick preventDefaults and
+                dispatches. Plain '#' so a sub-path deploy doesn't navigate
+                to the host root (a host-rooted '/#' would lose the app). */}
+            <a href={'#'} onClick={(e) => this.continueToMyYivi(e)}>
               {this.props.t('continue-to-myyivi')}
             </a>
           </p>

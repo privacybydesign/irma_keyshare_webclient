@@ -34,9 +34,14 @@ describe('resolveInitialLang', () => {
     expect(resolveInitialLang('   ')).toBe('en');
   });
 
-  it('honours an explicit supported-set override', () => {
+  it('honours an explicit supported-set override and falls back to its first entry', () => {
     expect(resolveInitialLang('de', ['de', 'fr'])).toBe('de');
-    expect(resolveInitialLang('en', ['de', 'fr'])).toBe('en');
+    expect(resolveInitialLang('fr', ['de', 'fr'])).toBe('fr');
+    // Unsupported input falls back to the first entry of the override set,
+    // not the hardcoded default — verifies the supported argument is
+    // actually honoured (and not silently ignored when input is missing).
+    expect(resolveInitialLang('en', ['de', 'fr'])).toBe('de');
+    expect(resolveInitialLang(undefined, ['de', 'fr'])).toBe('de');
   });
 });
 

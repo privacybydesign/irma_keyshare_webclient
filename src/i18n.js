@@ -15,7 +15,10 @@ const SUPPORTED_LANGUAGES = Object.keys(resources);
 export function resolveInitialLang(configLang, supported = SUPPORTED_LANGUAGES) {
   const trimmed = (configLang ?? '').toString().trim().toLowerCase();
   const base = trimmed.split('-')[0];
-  return supported.includes(base) ? base : 'en';
+  // Fall back to the first entry of the supported set rather than a
+  // hardcoded 'en' — otherwise an override that doesn't include 'en'
+  // could leak a value not present in `supported`.
+  return supported.includes(base) ? base : supported[0];
 }
 
 const initialLang = resolveInitialLang(window.config.lang);

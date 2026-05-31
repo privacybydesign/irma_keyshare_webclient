@@ -79,6 +79,13 @@ export class YiviAppBar extends React.Component {
       // itself rejects, i18next stays at the stale language while DOM and
       // localStorage already advertise the new one, and translations would
       // render mismatched with no audit trail.
+      //
+      // Limitation: the convergence call is itself fire-and-forget with no
+      // chained re-convergence. If *it* resolves out of order against
+      // another in-flight call, i18next.language can drift again until the
+      // next user click. Bounded recursive re-convergence would close that,
+      // but realistic rapid-click sequences resolve in one to two passes
+      // and this is good enough.
       this.props.i18n.changeLanguage(YiviAppBar._latestRequestedLang).catch((err) => {
         console.error('Language convergence failed', err);
       });

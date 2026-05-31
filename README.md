@@ -18,7 +18,7 @@ Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in a browser.
 
 The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Lint is not run inline by the Vite dev server — use `yarn lint` (or the CI workflow) to surface ESLint and Stylelint findings.
 
 If you want your local React app to communicate with the MyIRMA backend, you will face CORS issues in your browser.
 Even if you use a local setup, the MyIRMA backend server will use another port to host its endpoints on.
