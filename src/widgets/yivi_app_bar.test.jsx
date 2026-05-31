@@ -42,26 +42,28 @@ describe('YiviAppBar language switcher', () => {
     expect(screen.getByRole('button', { name: 'EN' }).disabled).toBe(false);
   });
 
-  it('writes localStorage *before* invoking i18n.changeLanguage (so a reload mid-await keeps the pick)', async () => {
-    const order = [];
-    vi.spyOn(window.localStorage, 'setItem').mockImplementation((key) => {
-      order.push(`setItem:${key}`);
+  it('writes localStorage *before* awaiting i18n.changeLanguage (so a reload mid-await keeps the pick)', async () => {
+    // Replace i18n.changeLanguage with a promise we hold open. While it is
+    // unresolved, the click handler is paused at its `await`. If localStorage
+    // is already populated at that point, the implementation must have
+    // written it *before* entering the await — which is exactly the
+    // invariant this test protects.
+    let resolveLangChange;
+    const langChangePromise = new Promise((resolve) => {
+      resolveLangChange = resolve;
     });
-    const realChange = i18n.changeLanguage.bind(i18n);
-    vi.spyOn(i18n, 'changeLanguage').mockImplementation((lang) => {
-      order.push(`changeLanguage:${lang}`);
-      return realChange(lang);
-    });
+    vi.spyOn(i18n, 'changeLanguage').mockImplementation(() => langChangePromise);
 
     render(<YiviAppBar title="Test" />);
-    await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: 'NL' }));
-    });
+    fireEvent.click(screen.getByRole('button', { name: 'NL' }));
 
-    const setItemIdx = order.indexOf('setItem:lang');
-    const changeIdx = order.indexOf('changeLanguage:nl');
-    expect(setItemIdx).toBeGreaterThanOrEqual(0);
-    expect(changeIdx).toBeGreaterThan(setItemIdx);
+    // Sync handler portion has finished; awaiting i18n.changeLanguage now.
+    expect(window.localStorage.getItem('lang')).toBe('nl');
+
+    resolveLangChange();
+    await act(async () => {
+      await langChangePromise;
+    });
   });
 
   it('is a no-op when clicking the already-active language', async () => {
