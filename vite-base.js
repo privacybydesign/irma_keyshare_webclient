@@ -8,11 +8,13 @@ export function normaliseBase(raw) {
   const trimmed = String(raw).trim();
   if (trimmed === '' || trimmed === '/') return '/';
   if (trimmed === '.' || trimmed === './') return './';
+  // Apply the same path-traversal rejection to absolute URLs as relative
+  // paths — operator-controlled at build time, but the test suite claims
+  // .. is always rejected and the previous short-circuit broke that.
+  if (trimmed.split('/').some((segment) => segment === '..')) return '/';
   if (/^https?:\/\//i.test(trimmed)) {
     return trimmed.endsWith('/') ? trimmed : `${trimmed}/`;
   }
-  // Reject path-traversal segments — they make Vite hard-fail at build.
-  if (trimmed.split('/').some((segment) => segment === '..')) return '/';
   const withLeading = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
   // Collapse runs of slashes ('//foo', 'foo//bar') down to a single '/'.
   const collapsed = withLeading.replace(/\/+/g, '/');

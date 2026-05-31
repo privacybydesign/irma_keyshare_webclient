@@ -5,6 +5,12 @@ import { withTranslation } from 'react-i18next';
 import { baseLanguage } from '../i18n';
 
 export class YiviAppBar extends React.Component {
+  // Pending-language marker, shared across all instances (only one app bar
+  // is mounted at a time). `undefined` means "no switch in flight; trust
+  // i18next's own state". The explicit field declaration documents the
+  // invariant — tests reset it in beforeEach.
+  static _latestRequestedLang = undefined;
+
   async changeLanguage(lang) {
     // Compare against the *latest-requested* language, not just i18next's
     // current value — rapid clicks (NL → EN) fire while NL's changeLanguage
@@ -38,8 +44,26 @@ export class YiviAppBar extends React.Component {
       }
       return;
     }
-    // i18next promises can resolve out of order; only the most recent click
-    // gets to write `<html lang>`.
+    // i18next's promises can resolve out of order. If our awaited promise
+    // resolved *after* a later click's promise already finished, i18next
+    // will have stamped `language` with our (now-stale) value, even though
+    // a newer click has logically superseded us. Force convergence: if
+    // i18next disagrees with the latest-requested language, re-issue.
+    // Fire-and-forget — whichever convergence call resolves last will hit
+    // this branch with i18n.language already matching latest and stop.
+    //
+    // `_latestRequestedLang` is intentionally *not* cleared on success.
+    // Clearing it after the latest click would let an out-of-order stale
+    // resolution from an earlier click see `latest === undefined` and skip
+    // the convergence, leaving i18next pinned at the wrong language. The
+    // trade-off is that an *external* `i18n.changeLanguage` call (not via
+    // this switcher) could leave `_latestRequestedLang` stale, but nothing
+    // in this codebase calls changeLanguage outside the switcher.
+    if (this.props.i18n.language !== YiviAppBar._latestRequestedLang) {
+      this.props.i18n.changeLanguage(YiviAppBar._latestRequestedLang).catch(() => {});
+    }
+    // Only the most recent click writes `<html lang>`. Stale resolutions
+    // return silently.
     if (YiviAppBar._latestRequestedLang !== lang) return;
     document.documentElement.setAttribute('lang', lang);
   }

@@ -14,8 +14,9 @@ on:
     types: [published]
 
 # Serialise per-release-tag so a re-publish of the same release can't race
-# with the original publish (Vite + the meta-action both produce the same
-# tag set, so a parallel run would step on the published image).
+# with the original publish (docker/build-push-action + the meta-action
+# resolve to the same tag set, so a parallel run would step on the
+# published image).
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false

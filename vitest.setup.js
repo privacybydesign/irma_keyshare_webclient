@@ -3,14 +3,16 @@
 // use the jsdom/polyfilled localStorage instead — Node's built-in is irrelevant
 // to these tests and the warning just drowns out real test output.
 //
-// Add a filter without clearing existing handlers — `removeAllListeners` would
-// also drop Node's default emit-to-stderr handler, and we still want to see
-// every other warning.
+// Narrow filter: must be both an ExperimentalWarning *and* carry the specific
+// CLI flag string Node emits. If Node ever rephrases the message but keeps the
+// flag, this still matches; if Node drops the flag entirely, we'd notice
+// because some other warning would stop firing — that's the desired behaviour.
+const LOCALSTORAGE_WARNING = /--localstorage-file/;
 const originalEmitWarning = process.emitWarning;
 process.emitWarning = (warning, ...rest) => {
   const name = typeof warning === 'object' ? warning?.name : (rest[0]?.type ?? rest[0]);
   const message = typeof warning === 'object' ? warning?.message : warning;
-  if (name === 'ExperimentalWarning' && /localStorage/.test(String(message))) return;
+  if (name === 'ExperimentalWarning' && LOCALSTORAGE_WARNING.test(String(message))) return;
   originalEmitWarning.call(process, warning, ...rest);
 };
 

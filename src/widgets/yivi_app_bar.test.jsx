@@ -107,6 +107,45 @@ describe('YiviAppBar language switcher', () => {
     expect(YiviAppBarClass._latestRequestedLang).toBeUndefined();
   });
 
+  it('re-issues changeLanguage when an out-of-order resolution leaves i18next at the wrong language', async () => {
+    // Two changeLanguage calls (NL then EN) with resources that resolve in
+    // reverse order — EN's promise settles first, NL's later. Without the
+    // convergence step, i18next.language would end up `nl` (whichever
+    // promise resolves last wins inside i18next) while localStorage and
+    // <html lang> point at `en`, so translations would silently render
+    // in the wrong language. Verify the switcher re-issues a
+    // changeLanguage('en') to bring i18next back in sync.
+    const calls = [];
+    const resolvers = {};
+    const mockI18n = {
+      language: 'en',
+      changeLanguage: vi.fn((lang) => {
+        calls.push(lang);
+        return new Promise((resolve) => {
+          resolvers[lang] = () => {
+            // Mimic i18next: setting language on resolution.
+            mockI18n.language = lang;
+            resolve();
+          };
+        });
+      }),
+    };
+    const instance = new YiviAppBarClass({ i18n: mockI18n });
+
+    const nlPromise = instance.changeLanguage('nl');
+    const enPromise = instance.changeLanguage('en');
+
+    // Resolve EN first, NL second — i18next.language will end at 'nl'.
+    resolvers.en();
+    resolvers.nl();
+    await Promise.all([nlPromise, enPromise]);
+
+    // The post-await convergence in the second-resolving call (NL) must
+    // have detected the drift and re-issued changeLanguage('en').
+    expect(calls).toContain('en');
+    expect(calls.filter((c) => c === 'en').length).toBeGreaterThanOrEqual(2);
+  });
+
   it('survives rapid clicks: the last requested language wins even if i18next resolves out of order', async () => {
     // The disabled state on the inactive button prevents this race via the
     // DOM in normal flow, but withTranslation can re-render off Redux /

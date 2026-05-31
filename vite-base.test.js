@@ -53,4 +53,8 @@ describe('normaliseBase', () => {
     expect(normaliseBase('../sub')).toBe('/');
     expect(normaliseBase('/sub/../etc')).toBe('/');
   });
+
+  it('rejects path-traversal segments inside absolute URLs too', () => {
+    expect(normaliseBase('https://cdn.example.com/foo/../etc/')).toBe('/');
+  });
 });

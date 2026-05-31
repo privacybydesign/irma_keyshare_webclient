@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <!--
-  No `lang` attribute on <html> on purpose. src/index.jsx sets it from
-  window.config.lang (which resolves via localStorage → navigator.languages
-  → "en") before the React tree mounts. The yivi-app-bar switcher then
-  mutates it on every change. Hardcoding `lang="en"` here would mislead
-  crawlers / pre-JS assistive tech on Dutch-default deployments.
+  `lang="en"` is the conservative fallback that crawlers and pre-JS
+  assistive tech see for the brief window before src/index.jsx mounts.
+  Once the React tree mounts, it overrides this attribute with whatever
+  i18next resolved (window.config.lang → localStorage → navigator.languages
+  → "en"); the yivi-app-bar switcher then mutates it on every change.
+  We pick "en" over no attribute because some screen readers fall back to
+  the system locale (not the page content) when lang is absent, which is
+  worse than a temporary mismatch.
 -->
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

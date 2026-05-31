@@ -26,6 +26,16 @@ class YiviWebFormMount extends React.Component {
 
 class SelectMethod extends React.Component {
   componentDidMount() {
+    // React 19 StrictMode runs componentDidMount → componentWillUnmount →
+    // componentDidMount again in development to surface unsafe lifecycle
+    // patterns. yivi-frontend's `newWeb()`/`.start()`/`abort()` flow is
+    // idempotent under that mount→abort→mount cycle in our manual smoke
+    // test, but guard against re-entry anyway: if a prior session is
+    // still attached, abort and rebuild instead of stacking two widgets
+    // on the same #yivi-web-form node.
+    if (this._yiviWeb) {
+      this._yiviWeb.abort();
+    }
     this._yiviWeb = YiviFrontend.newWeb({
       element: '#yivi-web-form',
       language: baseLanguage(this.props.i18n),
@@ -56,6 +66,7 @@ class SelectMethod extends React.Component {
     }
     if (this._yiviWeb) {
       this._yiviWeb.abort();
+      this._yiviWeb = undefined;
     }
   }
 
