@@ -16,6 +16,14 @@ on:
     branches: [master]
   workflow_dispatch:
 
+# Serialise :edge publishes so two near-simultaneous merges to master (or a
+# merge plus a manual workflow_dispatch) can't race on the GHCR push. Don't
+# cancel in flight — the in-flight push already represents committed code
+# that we want shipped.
+concurrency:
+  group: delivery-edge
+  cancel-in-progress: false
+
 permissions:
   contents: read
   packages: write

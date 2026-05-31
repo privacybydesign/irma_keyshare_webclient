@@ -41,4 +41,16 @@ describe('normaliseBase', () => {
     expect(normaliseBase('https://cdn.example.com/app')).toBe('https://cdn.example.com/app/');
     expect(normaliseBase('http://cdn.example.com/')).toBe('http://cdn.example.com/');
   });
+
+  it('collapses runs of slashes so Vite does not reject the config', () => {
+    expect(normaliseBase('//')).toBe('/');
+    expect(normaliseBase('//foo//bar//')).toBe('/foo/bar/');
+    expect(normaliseBase('foo//bar')).toBe('/foo/bar/');
+  });
+
+  it('rejects path-traversal segments by collapsing to "/"', () => {
+    expect(normaliseBase('..')).toBe('/');
+    expect(normaliseBase('../sub')).toBe('/');
+    expect(normaliseBase('/sub/../etc')).toBe('/');
+  });
 });

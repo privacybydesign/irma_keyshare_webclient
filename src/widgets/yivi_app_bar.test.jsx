@@ -90,6 +90,23 @@ describe('YiviAppBar language switcher', () => {
     expect(document.documentElement.getAttribute('lang')).toBe('nl');
   });
 
+  it('rolls back localStorage when i18n.changeLanguage rejects', async () => {
+    const mockI18n = {
+      language: 'en',
+      changeLanguage: vi.fn(() => Promise.reject(new Error('load failed'))),
+    };
+    const instance = new YiviAppBarClass({ i18n: mockI18n });
+
+    window.localStorage.setItem('lang', 'en');
+    await instance.changeLanguage('nl');
+
+    // localStorage must reflect the *previous* (still-current) language, not
+    // the failed one — otherwise detectLanguage() on next reload would start
+    // the user in a language they never successfully switched to.
+    expect(window.localStorage.getItem('lang')).toBe('en');
+    expect(YiviAppBarClass._latestRequestedLang).toBeUndefined();
+  });
+
   it('survives rapid clicks: the last requested language wins even if i18next resolves out of order', async () => {
     // The disabled state on the inactive button prevents this race via the
     // DOM in normal flow, but withTranslation can re-render off Redux /

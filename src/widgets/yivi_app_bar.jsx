@@ -12,6 +12,7 @@ export class YiviAppBar extends React.Component {
     // click to still proceed.
     const current = YiviAppBar._latestRequestedLang || baseLanguage(this.props.i18n);
     if (current === lang) return;
+    const previousLang = baseLanguage(this.props.i18n);
     YiviAppBar._latestRequestedLang = lang;
     // Persist the user's choice *before* awaiting i18next. A reload between
     // the await and a later persist call would silently lose the pick.
@@ -24,6 +25,17 @@ export class YiviAppBar extends React.Component {
       await this.props.i18n.changeLanguage(lang);
     } catch (err) {
       console.error('Language switch failed', err);
+      // Roll back so detectLanguage() on next reload doesn't read a language
+      // we never successfully switched to — but only if no later click has
+      // already overwritten our state (that newer click owns localStorage).
+      if (YiviAppBar._latestRequestedLang === lang) {
+        try {
+          window.localStorage.setItem('lang', previousLang);
+        } catch (e) {
+          // see above
+        }
+        YiviAppBar._latestRequestedLang = undefined;
+      }
       return;
     }
     // i18next promises can resolve out of order; only the most recent click

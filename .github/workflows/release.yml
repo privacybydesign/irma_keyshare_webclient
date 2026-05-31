@@ -13,6 +13,13 @@ on:
   release:
     types: [published]
 
+# Serialise per-release-tag so a re-publish of the same release can't race
+# with the original publish (Vite + the meta-action both produce the same
+# tag set, so a parallel run would step on the published image).
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: read
   packages: write
@@ -46,15 +53,28 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
 
-      # Build locally first so the scan runs on the exact image that will be
-      # pushed. Same cache as ci.yml's image-scan job, so this is usually
-      # warm by the time a release fires.
-      - name: Build container locally for scanning
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Single build: load the image locally with both the scan tag and every
+      # final GHCR tag, *with* the meta-action labels baked in. The scan and
+      # the push then run against the exact same image digest — a previous
+      # iteration of this workflow ran two separate build-push-action calls
+      # (one without labels for scan, one with labels for push) and a release
+      # could pass the scan while shipping different bytes.
+      - name: Build image with all final tags and labels
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
         with:
           context: .
           load: true
-          tags: local/${{ steps.image.outputs.name }}:scan
+          tags: |
+            local/${{ steps.image.outputs.name }}:scan
+            ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -76,19 +96,12 @@ jobs:
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push tagged image
-        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      # Push the locally-tagged GHCR images. Same image bytes as scanned.
+      - name: Push tagged images to GHCR
+        env:
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          while IFS= read -r tag; do
+            [ -z "$tag" ] && continue
+            docker push "$tag"
+          done <<< "$TAGS"

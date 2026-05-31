@@ -11,6 +11,14 @@ on:
   pull_request:
     branches: [master]
 
+# A push storm to a PR re-runs the full lint/test/build/image-scan matrix in
+# parallel for every commit; cancel the older run on the same branch. On
+# master we want every commit to be checked, so the master path skips this
+# block via the `if`-style ref check below.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
 permissions:
   contents: read
 

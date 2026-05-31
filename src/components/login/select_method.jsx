@@ -34,8 +34,12 @@ class SelectMethod extends React.Component {
     this._yiviWeb
       .start()
       .then(() => {
-        // Delay dispatch to make Yivi success animation visible.
-        setTimeout(() => {
+        // Delay dispatch to make Yivi success animation visible. Stash the
+        // timer id so componentWillUnmount can cancel it — otherwise the
+        // dispatch fires on an unmounted tree if the user navigates away
+        // in this 1s window.
+        this._verifyTimer = setTimeout(() => {
+          this._verifyTimer = undefined;
           this.props.dispatch({ type: 'verifySession' });
         }, 1000);
       })
@@ -46,6 +50,10 @@ class SelectMethod extends React.Component {
   }
 
   componentWillUnmount() {
+    if (this._verifyTimer) {
+      clearTimeout(this._verifyTimer);
+      this._verifyTimer = undefined;
+    }
     if (this._yiviWeb) {
       this._yiviWeb.abort();
     }

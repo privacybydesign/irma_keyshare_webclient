@@ -11,6 +11,11 @@ export function normaliseBase(raw) {
   if (/^https?:\/\//i.test(trimmed)) {
     return trimmed.endsWith('/') ? trimmed : `${trimmed}/`;
   }
+  // Reject path-traversal segments — they make Vite hard-fail at build.
+  if (trimmed.split('/').some((segment) => segment === '..')) return '/';
   const withLeading = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
-  return withLeading.endsWith('/') ? withLeading : `${withLeading}/`;
+  // Collapse runs of slashes ('//foo', 'foo//bar') down to a single '/'.
+  const collapsed = withLeading.replace(/\/+/g, '/');
+  if (collapsed === '/') return '/';
+  return collapsed.endsWith('/') ? collapsed : `${collapsed}/`;
 }
