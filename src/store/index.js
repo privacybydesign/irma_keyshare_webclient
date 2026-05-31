@@ -149,6 +149,7 @@ function handleTokenLogin({ dispatch }) {
     if (action.type === 'finishTokenLogin') {
       fetch(`${window.config.server}/login/token`, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: action.token, username: action.username }),
         credentials: 'include',
       })
@@ -170,6 +171,7 @@ function handleEmailLogin({ dispatch }) {
       fetch(`${window.config.server}/login/email`, {
         method: 'POST',
         credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: action.email,
           language: baseLanguage(i18n),

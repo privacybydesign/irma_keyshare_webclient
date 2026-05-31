@@ -59,6 +59,12 @@ jobs:
       - run: yarn install --immutable
       - run: yarn build
 
+  # Note: `security-events: write` is downgraded to read-only when this
+  # workflow runs from a forked PR (GitHub's default for untrusted code).
+  # The SARIF upload step will fail in that case — the scan itself still
+  # runs and surfaces in the action log, but Code Scanning won't ingest
+  # it until the fork's contributor opens a follow-up from a same-repo
+  # branch, or a maintainer runs `pull_request_target` against the PR.
   image-scan:
     runs-on: ubuntu-latest
     permissions:

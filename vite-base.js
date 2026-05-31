@@ -19,6 +19,13 @@ export function normaliseBase(raw) {
   if (/^https?:\/\//i.test(trimmed)) {
     return trimmed.endsWith('/') ? trimmed : `${trimmed}/`;
   }
+  // Relative input ('./sub', './sub/foo') — preserve the leading dot, just
+  // ensure the trailing slash. Passing this through the absolute-path
+  // branch would otherwise produce '/./sub/' which Vite treats as an
+  // absolute path with a literal '.' segment.
+  if (trimmed.startsWith('./')) {
+    return trimmed.endsWith('/') ? trimmed : `${trimmed}/`;
+  }
   const withLeading = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
   // Collapse runs of slashes ('//foo', 'foo//bar') down to a single '/'.
   const collapsed = withLeading.replace(/\/+/g, '/');

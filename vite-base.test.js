@@ -18,6 +18,11 @@ describe('normaliseBase', () => {
     expect(normaliseBase('./')).toBe('./');
   });
 
+  it('preserves the leading dot for relative sub-paths', () => {
+    expect(normaliseBase('./sub')).toBe('./sub/');
+    expect(normaliseBase('./sub/nested/')).toBe('./sub/nested/');
+  });
+
   it('adds the missing trailing slash', () => {
     expect(normaliseBase('/sub')).toBe('/sub/');
     expect(normaliseBase('/sub/nested')).toBe('/sub/nested/');

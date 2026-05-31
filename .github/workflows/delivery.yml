@@ -66,12 +66,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Two build-push-action calls that resolve to the same image digest:
-      # both pass identical `labels` from the meta-action and re-use the GHA
-      # cache, so buildkit returns the same content-addressable manifest in
-      # the second invocation. The first call loads locally for the Anchore
-      # scan; the second call pushes the :edge tag to GHCR.
-      - name: Build image locally for scanning (labels baked in)
+      # Single-build, scan-then-push pattern. One docker/build-push-action
+      # call produces the local image; the same image (identical digest, by
+      # definition) is then tagged and pushed. An earlier iteration ran two
+      # build-push-action calls relying on GHA cache to converge on the same
+      # digest — theoretically robust, but no digest verification, so a
+      # cache divergence could publish an unscanned artifact past the gate.
+      - name: Build image locally with labels baked in
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
         with:
           context: .
@@ -103,12 +104,18 @@ jobs:
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
 
-      - name: Build and push :edge (same digest as scanned)
-        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      # Tag the scanned image with the final GHCR tags and push. Each push
+      # uses the exact bytes Anchore just scanned (same content-addressable
+      # digest). Non-atomic for multi-tag pushes, but delivery only pushes
+      # a single :edge tag so that's moot here.
+      - name: Tag and push scanned image to GHCR
+        env:
+          SCAN_IMAGE: local/${{ steps.image.outputs.name }}:scan
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          set -euo pipefail
+          while IFS= read -r tag; do
+            [ -z "$tag" ] && continue
+            docker tag "$SCAN_IMAGE" "$tag"
+            docker push "$tag"
+          done <<< "$TAGS"
