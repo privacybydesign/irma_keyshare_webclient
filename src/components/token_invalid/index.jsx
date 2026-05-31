@@ -19,7 +19,30 @@ const TokenInvalid = (props) => {
         <p>{props.t('explanation-details')}</p>
         <ul>
           <li>
-            <Trans t={props.t} i18nKey="point-1" components={[<a href={undefined} onClick={onRetry} key={0} />]} />
+            <Trans
+              t={props.t}
+              i18nKey="point-1"
+              components={[
+                // Inline button styled as a link — the prior `<a href={undefined}>`
+                // wasn't keyboard-focusable and broke WCAG focus order.
+                <button
+                  key="retry"
+                  type="button"
+                  onClick={onRetry}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: 0,
+                    color: 'inherit',
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                    font: 'inherit',
+                  }}
+                >
+                  {/* Trans fills in the link text from the translation. */}
+                </button>,
+              ]}
+            />
           </li>
           <li>{props.t('point-2')}</li>
           <li>{props.t('point-3')}</li>

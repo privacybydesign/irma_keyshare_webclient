@@ -9,8 +9,16 @@ const LoadCards = (props) => {
         <Trans
           t={props.t}
           i18nKey="explanation"
-          // eslint-disable-next-line
-          components={[ <a href={window.config.attributesOverviewUrl[baseLanguage(props.i18n)]} /> ]}
+          components={[
+            <a
+              key="overview-link"
+              href={
+                window.config.attributesOverviewUrl[baseLanguage(props.i18n)] || window.config.attributesOverviewUrl.en
+              }
+            >
+              {/* Trans fills in the link text from the translation. */}
+            </a>,
+          ]}
         />
       </p>
     </>

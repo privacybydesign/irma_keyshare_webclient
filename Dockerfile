@@ -4,8 +4,15 @@ WORKDIR /app
 # field (currently 4.x via .yarn/releases) is used instead of any classic
 # yarn binary that might ship in the base image.
 RUN corepack enable
-COPY . /app
+
+# Install deps in a separate layer keyed on manifest + lockfile + yarn
+# release, so Docker only re-runs `yarn install` when one of those actually
+# changes. A source-only edit reuses the cached install layer.
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn ./.yarn
 RUN yarn install --immutable
+
+COPY . /app
 RUN yarn build
 
 # Pinned by manifest-list digest so an upstream re-tag of :latest can't flip

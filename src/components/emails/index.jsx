@@ -145,8 +145,16 @@ class Emails extends React.Component {
           <Trans
             t={this.props.t}
             i18nKey="explanation"
-            // eslint-disable-next-line
-            components={[ <a href={window.config.emailIssuanceUrl[baseLanguage(this.props.i18n)]} /> ]}
+            components={[
+              <a
+                key="issuer-link"
+                href={
+                  window.config.emailIssuanceUrl[baseLanguage(this.props.i18n)] || window.config.emailIssuanceUrl.en
+                }
+              >
+                {/* Trans fills in the link text from the translation. */}
+              </a>,
+            ]}
           />
         </p>
         {this.renderEmailList()}

@@ -1,16 +1,20 @@
-// ESLint 9 flat config. Replaces the previous .eslintrc.json (which
-// chained through prettier-standard → eslint-config-standard, a dead
-// upstream that pinned us to ESLint 8). Layers, top-down:
+// ESLint 10 flat config. `eslint-plugin-react@7.37` doesn't support eslint
+// 10 at runtime (the peer dep cap is real — the version-detection helper
+// breaks), so this config uses the modular successor
+// `@eslint-react/eslint-plugin`. The bundle's `recommended` preset works
+// for plain JSX without requiring TypeScript type-checking.
+//
+// Layers, top-down:
 //   - eslint:recommended baseline
-//   - eslint-plugin-react recommended + new-JSX-transform (React 17+)
-//   - eslint-config-prettier to disable formatting rules that would
-//     conflict with prettier-as-a-rule below
+//   - @eslint-react/eslint-plugin recommended (React + JSX rules)
+//   - eslint-config-prettier to disable formatting rules that conflict
+//     with prettier-as-a-rule below
 //   - eslint-plugin-prettier as an actual lint rule so `yarn lint` fails
-//     on formatting drift (same behaviour as before the migration)
-//   - The project-specific code-style rules from the old .eslintrc.json
+//     on formatting drift
+//   - The project-specific code-style rules
 
 import js from '@eslint/js';
-import react from 'eslint-plugin-react';
+import eslintReact from '@eslint-react/eslint-plugin';
 import prettierConfig from 'eslint-config-prettier';
 import prettierPlugin from 'eslint-plugin-prettier';
 import globals from 'globals';
@@ -18,8 +22,7 @@ import globals from 'globals';
 export default [
   { ignores: ['build/**', 'node_modules/**', '.yarn/**', '.pnp.*'] },
   js.configs.recommended,
-  react.configs.flat.recommended,
-  react.configs.flat['jsx-runtime'],
+  eslintReact.configs.recommended,
   prettierConfig,
   {
     files: ['**/*.js', '**/*.jsx'],
@@ -33,7 +36,6 @@ export default [
       },
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
-    settings: { react: { version: 'detect' } },
     rules: {
       'block-scoped-var': 'error',
       'consistent-return': 'error',
@@ -49,7 +51,6 @@ export default [
       'prefer-spread': 'error',
       'prefer-template': 'error',
       'prettier/prettier': ['error', { singleQuote: true, printWidth: 120 }],
-      'react/prop-types': 'off',
     },
   },
   {

@@ -6,13 +6,15 @@ import { normaliseBase } from './vite-base.js';
 const repoRoot = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
-  // Override at build time with `vite build --base=/sub/` (or set the
-  // VITE_BASE env var, honoured below) for sub-path deploys. Vite rewrites
-  // absolute /foo paths in both HTML and CSS — including the @font-face URLs
-  // in src/theme.scss — to include this prefix.
+  // VITE_BASE env var is the primary knob for sub-path deploys. Vite
+  // rewrites absolute /foo paths in both HTML and CSS — including the
+  // @font-face URLs in src/theme.scss — to include this prefix.
   //
   // normaliseBase() tolerates the common operator footguns: `/sub` (missing
   // trailing /), `sub/` (missing leading /), unset (defaults to `/`).
+  //
+  // The `vite build --base=/sub/` CLI flag still overrides this value after
+  // defineConfig returns — Vite merges CLI args into the resolved config.
   base: normaliseBase(process.env.VITE_BASE),
   plugins: [react()],
   // SCSS files use `@use 'src/theme' as *;` — make that resolve via Sass loadPaths.
