@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 
 import buildStore from './store';
 import App from './app';
-import i18n from './i18n';
+import i18n, { baseLanguage } from './i18n';
 import './index.scss';
 
 const container = document.getElementById('root');
@@ -27,7 +27,13 @@ function checkUrlHash() {
 window.addEventListener('hashchange', checkUrlHash);
 checkUrlHash();
 
-document.documentElement.setAttribute('lang', window.config.lang);
+// Use i18n's resolved language rather than the raw window.config.lang so the
+// DOM attribute agrees with i18next at first paint. They normally match, but
+// if config.lang is unset/typo'd, i18next's `fallbackLng` kicks in and we'd
+// otherwise advertise the wrong language to crawlers / pre-render AT.
+// Subsequent updates to <html lang> happen in YiviAppBar's switcher (which
+// also guards against the rapid double-click race).
+document.documentElement.setAttribute('lang', baseLanguage(i18n));
 
 const refreshDocumentTitle = () => {
   document.title = i18n.t('app:title');

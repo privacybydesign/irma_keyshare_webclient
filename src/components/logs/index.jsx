@@ -52,7 +52,7 @@ class Logs extends React.Component {
               <YiviButton
                 theme={'tertiary'}
                 className={'responsive'}
-                disabled={this.props.currentIndex > 0}
+                disabled={this.props.loading}
                 onClick={() => this.loadLogs(0)}
               >
                 <UpdateIcon />

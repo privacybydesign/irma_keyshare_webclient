@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, act, cleanup } from '@testing-library/react';
-import YiviAppBar from './yivi_app_bar.jsx';
+import YiviAppBar, { YiviAppBar as YiviAppBarClass } from './yivi_app_bar.jsx';
 import i18n from '../i18n.js';
 
 describe('YiviAppBar language switcher', () => {
@@ -8,6 +8,7 @@ describe('YiviAppBar language switcher', () => {
     await i18n.changeLanguage('en');
     document.documentElement.removeAttribute('lang');
     window.localStorage.clear();
+    YiviAppBarClass._latestRequestedLang = undefined;
   });
 
   afterEach(() => {
@@ -87,6 +88,41 @@ describe('YiviAppBar language switcher', () => {
     });
     expect(i18n.language).toBe('nl');
     expect(document.documentElement.getAttribute('lang')).toBe('nl');
+  });
+
+  it('survives rapid clicks: the last requested language wins even if i18next resolves out of order', async () => {
+    // The disabled state on the inactive button prevents this race via the
+    // DOM in normal flow, but withTranslation can re-render off Redux /
+    // other state mid-flight too, briefly re-enabling the other button.
+    // Test the underlying method directly so the guard is verified
+    // independently of the disabled-button rendering path.
+    const resolvers = {};
+    const mockI18n = {
+      language: 'en',
+      changeLanguage: vi.fn(
+        (lang) =>
+          new Promise((resolve) => {
+            resolvers[lang] = resolve;
+          }),
+      ),
+    };
+    const instance = new YiviAppBarClass({ i18n: mockI18n });
+
+    const nlPromise = instance.changeLanguage('nl');
+    const enPromise = instance.changeLanguage('en');
+
+    // localStorage reflects the latest call immediately (sync writes before
+    // the await), even though no i18next promise has resolved yet.
+    expect(window.localStorage.getItem('lang')).toBe('en');
+
+    // Resolve EN first, then NL — the *earlier* request finishes last.
+    resolvers.en();
+    resolvers.nl();
+    await Promise.all([nlPromise, enPromise]);
+
+    // The post-await setAttribute from NL must bail out because EN is the
+    // latest-requested language; the DOM has to settle at EN.
+    expect(document.documentElement.getAttribute('lang')).toBe('en');
   });
 
   it('notifies a languageChanged subscriber so consumers like document.title can react', async () => {

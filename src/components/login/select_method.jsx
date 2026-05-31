@@ -8,6 +8,22 @@ import YiviButton from '../../widgets/yivi_button';
 import Spacer from '../../widgets/spacer';
 import { baseLanguage } from '../../i18n';
 
+// The yivi-web-form section must keep the same DOM node forever — the
+// underlying yivi-frontend widget writes its QR code / status messages into
+// it imperatively and would lose all state on a re-render. Isolating that
+// node in its own component with `shouldComponentUpdate => false` lets the
+// rest of SelectMethod (intro text, login-method labels, email form) react
+// to language changes normally.
+class YiviWebFormMount extends React.Component {
+  shouldComponentUpdate() {
+    return false;
+  }
+
+  render() {
+    return <section id="yivi-web-form" />;
+  }
+}
+
 class SelectMethod extends React.Component {
   componentDidMount() {
     this._yiviWeb = YiviFrontend.newWeb({
@@ -27,12 +43,6 @@ class SelectMethod extends React.Component {
         if (err !== 'Aborted')
           this.props.dispatch({ type: 'raiseError', errorMessage: `Error while logging in with Yivi: ${err}` });
       });
-  }
-
-  shouldComponentUpdate() {
-    // Never update this element, since YiviFrontend handles state changes itself.
-    // When updates need to be enabled, make sure the yivi-web-form is excluded from re-render.
-    return false;
   }
 
   componentWillUnmount() {
@@ -56,7 +66,7 @@ class SelectMethod extends React.Component {
           {this.props.t('login-method-yivi-description')}
         </p>
         <Spacer size={'small'} />
-        {this.renderYiviLogin()}
+        <YiviWebFormMount />
         <Spacer />
         <p>
           <b>{this.props.t('login-method-email-title')}</b>
@@ -67,15 +77,6 @@ class SelectMethod extends React.Component {
         {this.renderEmailLogin()}
       </>
     );
-  }
-
-  renderYiviLogin() {
-    const prevElement = document.getElementById('yivi-web-form');
-    if (prevElement) {
-      return React.createElement('section', { id: 'yivi-web-form', innerHTML: prevElement.innerHTML });
-    } else {
-      return <section id={'yivi-web-form'} />;
-    }
   }
 
   renderEmailLogin() {

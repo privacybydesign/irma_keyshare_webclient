@@ -2,11 +2,17 @@
 // worker because Node sees no --localstorage-file CLI flag, but we deliberately
 // use the jsdom/polyfilled localStorage instead — Node's built-in is irrelevant
 // to these tests and the warning just drowns out real test output.
-process.removeAllListeners('warning');
-process.on('warning', (w) => {
-  if (w.name === 'ExperimentalWarning' && /localStorage/.test(w.message)) return;
-  console.warn(w);
-});
+//
+// Add a filter without clearing existing handlers — `removeAllListeners` would
+// also drop Node's default emit-to-stderr handler, and we still want to see
+// every other warning.
+const originalEmitWarning = process.emitWarning;
+process.emitWarning = (warning, ...rest) => {
+  const name = typeof warning === 'object' ? warning?.name : (rest[0]?.type ?? rest[0]);
+  const message = typeof warning === 'object' ? warning?.message : warning;
+  if (name === 'ExperimentalWarning' && /localStorage/.test(String(message))) return;
+  originalEmitWarning.call(process, warning, ...rest);
+};
 
 // jsdom 29 inside vitest 4 does not consistently expose `window.localStorage`
 // (Node's own experimental localStorage shadows the jsdom one in some

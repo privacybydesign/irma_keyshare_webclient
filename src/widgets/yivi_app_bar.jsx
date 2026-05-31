@@ -4,9 +4,15 @@ import YiviButton from './yivi_button';
 import { withTranslation } from 'react-i18next';
 import { baseLanguage } from '../i18n';
 
-class YiviAppBar extends React.Component {
+export class YiviAppBar extends React.Component {
   async changeLanguage(lang) {
-    if (baseLanguage(this.props.i18n) === lang) return;
+    // Compare against the *latest-requested* language, not just i18next's
+    // current value — rapid clicks (NL → EN) fire while NL's changeLanguage
+    // is still pending and i18n.language is stale, and we want the second
+    // click to still proceed.
+    const current = YiviAppBar._latestRequestedLang || baseLanguage(this.props.i18n);
+    if (current === lang) return;
+    YiviAppBar._latestRequestedLang = lang;
     // Persist the user's choice *before* awaiting i18next. A reload between
     // the await and a later persist call would silently lose the pick.
     try {
@@ -20,6 +26,9 @@ class YiviAppBar extends React.Component {
       console.error('Language switch failed', err);
       return;
     }
+    // i18next promises can resolve out of order; only the most recent click
+    // gets to write `<html lang>`.
+    if (YiviAppBar._latestRequestedLang !== lang) return;
     document.documentElement.setAttribute('lang', lang);
   }
 

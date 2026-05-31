@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Major dependency bumps:** React + ReactDOM 18 → 19, Redux 4 → 5, react-redux 8 → 9, i18next 22 → 26, react-i18next 12 → 17.
-- **EN/NL language switcher** in `YiviAppBar`. Click flips `i18n.changeLanguage()` + the `<html lang>` attribute + `localStorage.lang`. Active button is `disabled` + `aria-disabled` so screen readers and keyboard users get the right semantics. Wrapper has `role="group"` and a translated `aria-label`.
+- **EN/NL language switcher** in `YiviAppBar`. Click flips `i18n.changeLanguage()` + the `<html lang>` attribute + `localStorage.lang`. The active button is the native `disabled` plus `aria-pressed="true"` so screen readers and keyboard users get the right semantics without the double-announce that `aria-disabled` would cause. Wrapper has `role="group"` and a translated `aria-label`.
 - **`workflow_dispatch` trigger** on the Delivery workflow so any branch can be built and published as `:edge` manually via the Actions UI.
 - **Container vulnerability scanning** via `anchore/scan-action` on every PR, every push to `master`, and every published release. SARIF reports always upload to the Code Scanning UI; `fail-build` only gates non-PR events so a newly-disclosed upstream CVE doesn't block unrelated PRs.
 
