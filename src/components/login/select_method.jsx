@@ -35,6 +35,15 @@ class YiviWebFormMount extends React.Component {
 }
 
 class SelectMethod extends React.Component {
+  // Hold the email input via a React ref instead of fishing it back out
+  // with `document.getElementById('input-email')`. The id is still useful
+  // (it labels the form's submit button for any external automation and
+  // matches the autofill convention) but reading via getElementById makes
+  // the id load-bearing for correctness — rename it or accidentally mount
+  // a second SelectMethod and the submit silently picks up the wrong
+  // node. The ref is owned by this instance and is therefore unambiguous.
+  _emailInputRef = React.createRef();
+
   componentDidMount() {
     // React 19 StrictMode runs componentDidMount → componentWillUnmount →
     // componentDidMount on the *same* instance in development to surface
@@ -83,8 +92,7 @@ class SelectMethod extends React.Component {
 
   handleEmailLogin(e) {
     e.preventDefault();
-    const emailInput = document.getElementById('input-email');
-    this.props.dispatch({ type: 'startEmailLogin', email: emailInput.value });
+    this.props.dispatch({ type: 'startEmailLogin', email: this._emailInputRef.current.value });
   }
 
   renderLoginMethods() {
@@ -115,6 +123,7 @@ class SelectMethod extends React.Component {
         <input
           type={'email'}
           id={'input-email'}
+          ref={this._emailInputRef}
           className={styles.groupEmail}
           placeholder={this.props.t('email-address')}
           required

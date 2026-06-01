@@ -41,6 +41,17 @@ const refreshDocumentTitle = () => {
 refreshDocumentTitle();
 i18n.on('languageChanged', refreshDocumentTitle);
 
+// HMR safety: each dev-time full reload re-runs this module and registers
+// a fresh listener. Vite's `import.meta.hot.dispose` fires right before
+// the old module is discarded, so we drop the previous listener there.
+// Production builds strip `import.meta.hot` (it's undefined), so the
+// optional chaining no-ops at runtime.
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    i18n.off('languageChanged', refreshDocumentTitle);
+  });
+}
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>

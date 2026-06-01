@@ -2,6 +2,16 @@
 # published. Tag `vX.Y.Z` on the release produces image tags :X.Y.Z, :X.Y,
 # :X, and :latest.
 #
+# Pre-releases are explicitly skipped (`if: !github.event.release.prerelease`
+# on the publish job). The `release: published` trigger fires for both
+# stable and pre-release publishes, but our tag set includes `:latest` and
+# unconditional semver patterns — without the guard, publishing
+# `v2.0.0-rc.1` would clobber `:latest` and the stable `:2.0.0` / `:2.0` /
+# `:2` tags with the RC image, which is rarely what anyone wants. If RC
+# tagging is ever needed, add a dedicated pre-release path that pushes
+# only the full RC tag (`:2.0.0-rc.1`) and skips the bare-major / minor /
+# latest rollups.
+#
 # Code-quality + vulnerability gating happens in ci.yml before the merge;
 # this workflow just stamps the artifact. Edit-after-publish on a release
 # will not retag the image — re-publishing or running this workflow manually
@@ -29,6 +39,11 @@ permissions:
 jobs:
   publish-release:
     runs-on: ubuntu-latest
+    # Skip pre-releases — see the header comment above. A `v2.0.0-rc.1`
+    # publish has `release.prerelease == true`; with `:latest` and the
+    # unconditional semver rollups in the meta-action step below, letting
+    # such a publish through would overwrite the stable tag set.
+    if: ${{ !github.event.release.prerelease }}
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -54,11 +69,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
 
+      # See delivery.yml for the github.repository_owner rationale.
       - name: Login to GitHub Container Registry
         uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Single-build, scan-then-push pattern: build once locally, scan that

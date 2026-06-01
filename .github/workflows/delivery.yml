@@ -80,11 +80,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
 
+      # GHCR login uses `github.repository_owner` rather than `github.actor`
+      # so the username is decoupled from whoever triggered the workflow.
+      # GITHUB_TOKEN's `packages: write` is granted by the workflow-level
+      # permissions block above, not by the actor's personal package ACL,
+      # so this is more of a hygiene change than a fix — but it removes
+      # the implicit dependency on the merger's GHCR permissions and is
+      # the pattern docker/login-action's own README recommends for GHCR.
       - name: Login to GitHub Container Registry
         uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Single-build, scan-then-push pattern. One docker/build-push-action
