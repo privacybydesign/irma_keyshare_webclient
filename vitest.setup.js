@@ -51,7 +51,7 @@ if (!window.localStorage) {
 // that indexes window.config can load cleanly under jsdom — including the
 // per-language URL maps that components import lazily.
 window.config = {
-  server: 'http://localhost:8080',
+  server: 'http://localhost:8081',
   lang: 'en',
   emailIssuanceUrl: {
     en: 'https://email-issuer.test/en',

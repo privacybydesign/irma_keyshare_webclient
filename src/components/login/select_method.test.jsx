@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { render, act, cleanup } from '@testing-library/react';
+import { render, act, cleanup, fireEvent } from '@testing-library/react';
 import * as YiviFrontend from '@privacybydesign/yivi-frontend';
 import SelectMethod from './select_method.jsx';
 import i18n from '../../i18n.js';
@@ -131,5 +131,49 @@ describe('SelectMethod', () => {
     expect(dispatch).toHaveBeenCalledWith({ type: 'verifySession' });
 
     vi.useRealTimers();
+  });
+
+  it('dispatches raiseError when widget.start() rejects with a non-Aborted error', async () => {
+    // The catch path in componentDidMount filters out the 'Aborted' sentinel
+    // (which yivi-frontend uses for user-initiated cancellation; we don't
+    // want a noisy error toast in that case) and dispatches a raiseError
+    // for everything else. Pin both branches.
+    YiviFrontend.newWeb.mockImplementation(() => ({
+      start: vi.fn(() => Promise.reject('boom')),
+      abort: vi.fn(),
+    }));
+    const dispatch = vi.fn();
+    await act(async () => {
+      render(<SelectMethod dispatch={dispatch} yiviSession={{ url: 'http://x' }} />);
+    });
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'raiseError',
+      errorMessage: 'Error while logging in with Yivi: boom',
+    });
+  });
+
+  it('swallows the Aborted sentinel without dispatching raiseError', async () => {
+    // Companion to the test above — yivi-frontend rejects with the literal
+    // string 'Aborted' when the user cancels; that path must stay silent.
+    YiviFrontend.newWeb.mockImplementation(() => ({
+      start: vi.fn(() => Promise.reject('Aborted')),
+      abort: vi.fn(),
+    }));
+    const dispatch = vi.fn();
+    await act(async () => {
+      render(<SelectMethod dispatch={dispatch} yiviSession={{ url: 'http://x' }} />);
+    });
+    expect(dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'raiseError' }));
+  });
+
+  it('dispatches startEmailLogin with the typed address when the email form is submitted', async () => {
+    const dispatch = vi.fn();
+    const { container } = render(<SelectMethod dispatch={dispatch} yiviSession={{ url: 'http://x' }} />);
+    const input = container.querySelector('#input-email');
+    fireEvent.change(input, { target: { value: 'alice@example.test' } });
+    await act(async () => {
+      fireEvent.submit(container.querySelector('#login-form-email'));
+    });
+    expect(dispatch).toHaveBeenCalledWith({ type: 'startEmailLogin', email: 'alice@example.test' });
   });
 });
