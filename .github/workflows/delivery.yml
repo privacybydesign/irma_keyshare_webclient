@@ -2,15 +2,19 @@
 #
 # Triggers:
 #   - push to master      → automatic :edge after every merge
-#   - workflow_dispatch   → manual :edge build from any branch (lets you cut
-#                           an :edge off a PR branch to test the deployment
-#                           path before merging)
+#   - workflow_dispatch   → manual :edge re-run, restricted to master (see
+#                           ref gate below). Lets you re-publish :edge for
+#                           the current master commit without forcing an
+#                           empty push.
 #
-# Both paths run the same Anchore scan before pushing, so :edge is never
-# published from an unscanned source — workflow_dispatch from a PR branch
-# still goes through the same vulnerability gate that ci.yml uses on PRs
-# (with fail-build: true here, since publishing has no PR-style escape
-# hatch). Tagged releases (:X.Y.Z) live in release.yml.
+# The dispatch trigger used to accept any branch (to allow cutting an :edge
+# from a PR branch as a deployment-path smoke test pre-merge), but that
+# meant any maintainer with write access could overwrite the deployed
+# :edge tag with un-reviewed PR-branch code — the Anchore scan blocks
+# vulnerable code, not arbitrary code. The branch gate below restores
+# master as the single source of truth for :edge; pre-merge deployment
+# testing should use a feature branch tag in a personal repo instead.
+# Tagged releases (:X.Y.Z) live in release.yml.
 
 name: Delivery
 
@@ -35,6 +39,11 @@ permissions:
 jobs:
   publish-edge:
     runs-on: ubuntu-latest
+    # Gate workflow_dispatch on master. `push` paths are already constrained
+    # by the `on.push.branches` filter above, so this guard only kicks in
+    # for the dispatch trigger, but writing it unconditionally keeps the
+    # rule visible at the job level and survives future on:-section edits.
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

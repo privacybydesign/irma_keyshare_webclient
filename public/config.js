@@ -1,7 +1,15 @@
 // Resolution order: previously saved choice (localStorage) -> browser preference
 // -> 'en' fallback. The switcher in YiviAppBar writes back to localStorage so the
-// user's pick survives reloads. Operators can hard-code a language by replacing
-// the call with a literal e.g. 'nl'.
+// user's pick survives reloads.
+//
+// Operator override: replacing `detectLanguage()` with a literal (e.g. `'nl'`)
+// pins the initial language across all sessions, but be aware that this
+// disables persistence of the in-app NL/EN switcher: the user can still
+// click to switch within a session, and localStorage is still written, but
+// the next page load reads this literal — not localStorage — so the pick
+// silently reverts. From the user's perspective the switcher will appear
+// broken on reload. If you pin, you almost certainly also want to hide
+// the switcher in YiviAppBar (and drop the unused localStorage writes).
 function detectLanguage() {
   const supported = ['nl', 'en'];
   try {

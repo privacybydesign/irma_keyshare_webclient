@@ -53,7 +53,11 @@ export default function login(state = initialState, action) {
         ...state,
         sessionState: 'loggedOut',
         yiviSession: {
-          url: window.config.server,
+          // Optional chaining: see userdata.js for rationale. This reducer
+          // case runs after a logout dispatch, well after module load, but
+          // applying the same guard here keeps the pattern consistent and
+          // avoids a TypeError if /config.js loaded but lacks `server`.
+          url: window.config?.server,
           start: {
             url: (o) => `${o.url}/login/irma`,
             method: 'POST',

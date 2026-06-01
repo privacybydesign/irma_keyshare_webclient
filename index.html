@@ -26,7 +26,17 @@
     <title>MyYivi</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!--
+      Localised noscript pair. The in-app NL/EN switcher and the
+      navigator.languages detection in /config.js only run after JS loads,
+      so for users without JS we show both languages back-to-back rather
+      than guessing one. Keep the order EN then NL — `<html lang>` advertises
+      "en" before mount, which matches what screen readers will speak first.
+    -->
+    <noscript>
+      <p>You need to enable JavaScript to run this app.</p>
+      <p lang="nl">Je moet JavaScript inschakelen om deze app te gebruiken.</p>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/index.jsx"></script>
   </body>

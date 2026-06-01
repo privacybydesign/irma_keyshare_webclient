@@ -228,6 +228,56 @@ describe('YiviAppBar language switcher', () => {
     expect(document.documentElement.getAttribute('lang')).toBe('en');
   });
 
+  it('logs but does not corrupt state when the post-await convergence call itself rejects', async () => {
+    // Same out-of-order scenario as the convergence test, but make the
+    // fire-and-forget convergence call (the re-issued changeLanguage that
+    // pulls i18next back into sync) reject. The .catch must log via
+    // console.error and the surrounding state must remain consistent with
+    // the user's most recent click — otherwise a transient network/load
+    // hiccup during convergence would silently corrupt localStorage and
+    // the latest-requested marker.
+    const calls = [];
+    const resolvers = {};
+    const mockI18n = {
+      language: 'en',
+      changeLanguage: vi.fn((lang) => {
+        calls.push(lang);
+        // First two calls (the user's NL then EN) resolve. The third call
+        // is the convergence re-issue — reject it.
+        if (calls.length >= 3) {
+          return Promise.reject(new Error('convergence failed'));
+        }
+        return new Promise((resolve) => {
+          resolvers[lang] = () => {
+            mockI18n.language = lang;
+            resolve();
+          };
+        });
+      }),
+    };
+    const instance = new YiviAppBarClass({ i18n: mockI18n });
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const nlPromise = instance.changeLanguage('nl');
+    const enPromise = instance.changeLanguage('en');
+
+    // EN resolves first, NL second — NL's post-await convergence detects the
+    // drift (i18next stuck on 'nl') and fires a third changeLanguage('en')
+    // which rejects.
+    resolvers.en();
+    resolvers.nl();
+    await Promise.all([nlPromise, enPromise]);
+    // Microtask drain for the fire-and-forget rejection to hit .catch.
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(errorSpy).toHaveBeenCalledWith('Language convergence failed', expect.any(Error));
+    // localStorage and the latest-requested marker reflect the user's final
+    // pick (EN), not the failed-convergence intermediate state.
+    expect(window.localStorage.getItem('lang')).toBe('en');
+    expect(YiviAppBarClass._latestRequestedLang).toBe('en');
+  });
+
   it('notifies a languageChanged subscriber so consumers like document.title can react', async () => {
     const subscriber = vi.fn();
     i18n.on('languageChanged', subscriber);

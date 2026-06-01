@@ -21,7 +21,11 @@ export function resolveInitialLang(configLang, supported = SUPPORTED_LANGUAGES) 
   return supported.includes(base) ? base : supported[0];
 }
 
-const initialLang = resolveInitialLang(window.config.lang);
+// Optional chaining: if /config.js 404s or fails to parse (operator misconfig,
+// CDN hiccup) window.config is undefined and dereferencing `.lang` would throw
+// at module load, blanking the page before React mounts. resolveInitialLang
+// already treats undefined as "fall back to supported[0]".
+const initialLang = resolveInitialLang(window.config?.lang);
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next

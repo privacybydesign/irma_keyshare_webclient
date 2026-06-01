@@ -1,10 +1,15 @@
+// Optional chaining on window.config: this reducer module is imported at
+// startup, so if /config.js failed to load (operator misconfig, CDN hiccup)
+// the unguarded `.server` access would throw before React mounts and the
+// user sees a blank page. Falling through to `undefined` lets the app
+// render an error UI when a session is later attempted instead.
 const initialState = {
   username: '',
   emails: [],
   deleting: false,
   fetching: false,
   addEmailYiviSession: {
-    url: window.config.server,
+    url: window.config?.server,
     start: {
       url: (o) => `${o.url}/email/add`,
       method: 'POST',
