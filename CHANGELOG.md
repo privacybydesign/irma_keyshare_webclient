@@ -6,8 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Changed
-- **Workflow split.** `status-checks.yml` is replaced by `ci.yml` (lint / test / build / image-scan jobs in parallel, no image push). The Delivery workflow is now narrowly focused: it pushes `:edge` to GHCR on every merge to `master` and on `workflow_dispatch` from any branch (so a PR branch can be deployed as `:edge` for end-to-end testing). A new `release.yml` handles versioned releases — on a published GitHub Release it builds, scans, and pushes `:X.Y.Z`, `:X.Y`, `:X`, and `:latest`.
-- The previous `:pr-<n>` and `:<branch>` (workflow_dispatch) tag rules are gone — `delivery.yml` always tags `:edge`. Running `workflow_dispatch` from a PR branch overwrites the previously-deployed `:edge`.
+- **Workflow split.** `status-checks.yml` is replaced by `ci.yml` (lint / test / build / image-scan jobs in parallel, no image push). The Delivery workflow is now narrowly focused: it pushes `:edge` to GHCR on every merge to `master` and on `workflow_dispatch` against `master` (the job is gated on `github.ref == 'refs/heads/master'`; dispatch from a non-master ref silently skips the publish step). A new `release.yml` handles versioned releases — on a published GitHub Release it builds, scans, and pushes `:X.Y.Z`, `:X.Y`, `:X`, and `:latest`.
+- The previous `:pr-<n>` and `:<branch>` (workflow_dispatch) tag rules are gone — `delivery.yml` always tags `:edge`. Pre-merge end-to-end testing of a PR branch can no longer overwrite the deployed `:edge`; build and push to a personal GHCR namespace instead.
 - The weekly cron that re-scanned the deployed `:edge` image is gone with the split; restore as a separate `scan.yml` if periodic CVE re-checks are still wanted.
 - Add a `yarn test` script and a `test` job in `ci.yml`. The script currently wraps Vitest; coverage is intentionally narrow on this first pass (reducers, helpers, and a single component smoke).
 
@@ -17,14 +17,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Package manager:** Migrate from yarn 1.22 to yarn 4.15 via corepack with `nodeLinker: node-modules`. The `yarn-4.15.0.cjs` release is committed under `.yarn/releases/`; CI / Docker pick it up via the `packageManager` field.
 - **JSX file extension:** 29 files containing JSX renamed from `.js` to `.jsx` (Vite 8 / Rolldown only parses JSX in `.jsx` files).
 - **Default language:** `public/config.js` now picks the first browser-preferred language we support (`nl` / `en`) and falls back to `en` instead of being hard-coded. Users' explicit choices are persisted in `localStorage.lang` and take precedence on subsequent loads. **Operators who relied on the old hard-coded `en` default should pin the language explicitly in their deployed `config.js`.**
-- **SCSS:** Migrate every `@import 'src/theme';` to `@use 'src/theme' as *;` (Sass 3 removes `@import`).
+- **SCSS:** Migrate every `@import 'src/theme';` to `@use 'theme' as *;` (Sass 3 removes `@import`). Vite's Sass `loadPaths` is narrowed to `src/` so partials resolve by bare name without granting cross-module access to the repo root.
 - Move `src/fonts/` to `public/fonts/`; `@font-face` URLs use absolute `/fonts/...` paths that Vite's CSS asset pipeline rewrites based on `base` so sub-path deploys work.
 - Node bumped 16 → 24 in CI and in the build image (`Dockerfile`).
 
 ### Added
 - **Major dependency bumps:** React + ReactDOM 18 → 19, Redux 4 → 5, react-redux 8 → 9, i18next 22 → 26, react-i18next 12 → 17.
 - **EN/NL language switcher** in `YiviAppBar`. Click flips `i18n.changeLanguage()` + the `<html lang>` attribute + `localStorage.lang`. The active button is the native `disabled` plus `aria-pressed="true"` so screen readers and keyboard users get the right semantics without the double-announce that `aria-disabled` would cause. Wrapper has `role="group"` and a translated `aria-label`.
-- **`workflow_dispatch` trigger** on the Delivery workflow so any branch can be built and published as `:edge` manually via the Actions UI.
+- **`workflow_dispatch` trigger** on the Delivery workflow so `:edge` can be re-published from the current `master` commit manually via the Actions UI without forcing an empty push (the job is gated to `master`).
 - **Container vulnerability scanning** via `anchore/scan-action` on every PR, every push to `master`, and every published release. SARIF reports always upload to the Code Scanning UI; `fail-build` only gates non-PR events so a newly-disclosed upstream CVE doesn't block unrelated PRs.
 
 ### Fixed

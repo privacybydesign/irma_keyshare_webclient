@@ -67,13 +67,17 @@ describe('YiviAppBar language switcher', () => {
     });
   });
 
-  it('is a no-op when clicking the already-active language', async () => {
-    render(<YiviAppBar title="Test" />);
+  it('is a no-op when called with the already-active language', async () => {
+    // Call the method directly. `fireEvent.click` on the active button is a
+    // false positive in jsdom: HTMLButtonElement.disabled suppresses the
+    // synthetic click before React's handler ever runs, so the internal
+    // `if (current === lang) return` guard is never exercised that way. The
+    // disabled-button rendering is covered by a separate test; this one
+    // pins the method-level guard regardless of how the click was issued.
     const setItemSpy = vi.spyOn(window.localStorage, 'setItem');
     const changeSpy = vi.spyOn(i18n, 'changeLanguage');
-    await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: 'EN' }));
-    });
+    const instance = new YiviAppBarClass({ i18n });
+    await instance.changeLanguage('en');
     expect(setItemSpy).not.toHaveBeenCalled();
     expect(changeSpy).not.toHaveBeenCalled();
   });

@@ -1,11 +1,12 @@
-@use 'src/theme' as *;
+@use 'theme' as *;
 
 // Font files live in `public/fonts/` and are served at the host root in
 // production. Vite's CSS asset pipeline rewrites the leading-slash paths
 // to include the build `base` (set via `vite build --base=/sub/` or the
 // `base:` option in vite.config.js), so these URLs follow whatever sub-
 // path the app is deployed under. Lives here (not in theme.scss) on
-// purpose: every module `*.scss` does `@use 'src/theme' as *;` to pull
+// purpose: every module `*.scss` does `@use 'theme' as *;` (resolved via
+// the `src/`-narrowed Sass loadPaths in vite.config.js) to pull
 // in mixins/variables, and if @font-face rules sat in theme.scss they
 // would be emitted into every per-module CSS chunk.
 @font-face {

@@ -149,7 +149,11 @@ class Emails extends React.Component {
               <a
                 key="issuer-link"
                 href={
-                  window.config.emailIssuanceUrl[baseLanguage(this.props.i18n)] || window.config.emailIssuanceUrl.en
+                  // Optional chaining: see load_cards/index.jsx for rationale —
+                  // a missing /config.js shouldn't crash the AccountOverview
+                  // render path on top of the reducer-level guards.
+                  window.config?.emailIssuanceUrl?.[baseLanguage(this.props.i18n)] ||
+                  window.config?.emailIssuanceUrl?.en
                 }
               >
                 {/* Trans fills in the link text from the translation. */}

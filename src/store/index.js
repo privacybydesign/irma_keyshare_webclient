@@ -4,12 +4,19 @@ import logs from './logs';
 import userdata from './userdata';
 import i18n, { baseLanguage } from '../i18n';
 
+// All fetch() calls below use `window.config?.server` rather than the bare
+// dereference. Mirrors the same defensive pattern as i18n.js / store/userdata.js
+// / store/loginstate.js so a missing /config.js doesn't cause every dispatched
+// action to throw — the fetch instead resolves to a URL starting with
+// "undefined/" and falls into the existing .catch handler, which raises a
+// user-visible error instead of an uncaught TypeError.
+
 // Catch and deal with log loading
 function handleLoadLogs({ getState, dispatch }) {
   return (next) => (action) => {
     if (action.type === 'loadLogs' && !getState().logs.loading) {
       // load logs if needed
-      fetch(`${window.config.server}/user/logs/${action.index}`, {
+      fetch(`${window.config?.server}/user/logs/${action.index}`, {
         method: 'GET',
         credentials: 'include',
       })
@@ -36,7 +43,7 @@ function handleUpdateData({ getState, dispatch }) {
   // It would be nice to reduce this overhead when more functionality is being introduced.
   return (next) => (action) => {
     if ((action.type === 'startUpdateInfo' && !getState().userdata.fetching) || action.type === 'emailRemoved') {
-      fetch(`${window.config.server}/user`, {
+      fetch(`${window.config?.server}/user`, {
         method: 'GET',
         credentials: 'include',
       })
@@ -59,7 +66,7 @@ function handleUpdateData({ getState, dispatch }) {
 function handleEmail({ dispatch }) {
   return (next) => (action) => {
     if (action.type === 'removeEmail') {
-      fetch(`${window.config.server}/email/remove`, {
+      fetch(`${window.config?.server}/email/remove`, {
         method: 'POST',
         body: action.email,
         credentials: 'include',
@@ -92,7 +99,7 @@ function handleEmail({ dispatch }) {
 function handleDeleteAccount({ dispatch }) {
   return (next) => (action) => {
     if (action.type === 'removeAccount') {
-      fetch(`${window.config.server}/user/delete`, {
+      fetch(`${window.config?.server}/user/delete`, {
         method: 'POST',
         credentials: 'include',
       })
@@ -124,7 +131,7 @@ function handleDeleteAccount({ dispatch }) {
 function handleTokenLogin({ dispatch }) {
   return (next) => (action) => {
     if (action.type === 'startTokenLogin') {
-      fetch(`${window.config.server}/login/token/candidates`, {
+      fetch(`${window.config?.server}/login/token/candidates`, {
         method: 'POST',
         body: action.token,
         credentials: 'include',
@@ -147,7 +154,7 @@ function handleTokenLogin({ dispatch }) {
         });
     }
     if (action.type === 'finishTokenLogin') {
-      fetch(`${window.config.server}/login/token`, {
+      fetch(`${window.config?.server}/login/token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: action.token, username: action.username }),
@@ -168,7 +175,7 @@ function handleTokenLogin({ dispatch }) {
 function handleEmailLogin({ dispatch }) {
   return (next) => (action) => {
     if (action.type === 'startEmailLogin') {
-      fetch(`${window.config.server}/login/email`, {
+      fetch(`${window.config?.server}/login/email`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -192,7 +199,7 @@ function handleEmailLogin({ dispatch }) {
 function handleRegistrationVerify({ dispatch }) {
   return (next) => (action) => {
     if (action.type === 'startRegistrationVerify') {
-      fetch(`${window.config.server}/verify`, {
+      fetch(`${window.config?.server}/verify`, {
         method: 'POST',
         body: action.token,
         credentials: 'include',
@@ -217,7 +224,7 @@ function handleRegistrationVerify({ dispatch }) {
 function handleVerifySession({ dispatch }) {
   return (next) => (action) => {
     if (action.type === 'verifySession') {
-      fetch(`${window.config.server}/checksession`, {
+      fetch(`${window.config?.server}/checksession`, {
         method: 'POST',
         credentials: 'include',
       })
@@ -256,7 +263,7 @@ function handleLogout({ dispatch }) {
     // When resolving an error, logout is performed without raising an error if it fails.
     // This is done to prevent errors being raised recursively.
     if (action.type === 'logout' || action.type === 'resolveError') {
-      fetch(`${window.config.server}/logout`, {
+      fetch(`${window.config?.server}/logout`, {
         method: 'POST',
         credentials: 'include',
       })

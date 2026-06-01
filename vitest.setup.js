@@ -20,18 +20,29 @@ process.emitWarning = (warning, ...rest) => {
 // (Node's own experimental localStorage shadows the jsdom one in some
 // configurations). Drop in a small in-memory polyfill so the switcher tests
 // can spy on getItem/setItem and the i18n config-detection code can read it.
+//
+// Use `Object.defineProperty` rather than `window.localStorage = …`:
+// `localStorage` is exposed as a prototype getter on `Window`, and direct
+// assignment under strict-mode ES modules throws ("Cannot set property
+// localStorage of #<Window> which has only a getter"). The fall-through
+// `configurable: true` lets a future setup file overwrite the polyfill if
+// jsdom starts shipping a real localStorage.
 if (!window.localStorage) {
   const store = new Map();
-  window.localStorage = {
-    getItem: (k) => (store.has(k) ? store.get(k) : null),
-    setItem: (k, v) => store.set(k, String(v)),
-    removeItem: (k) => store.delete(k),
-    clear: () => store.clear(),
-    key: (i) => Array.from(store.keys())[i] ?? null,
-    get length() {
-      return store.size;
+  Object.defineProperty(window, 'localStorage', {
+    configurable: true,
+    writable: true,
+    value: {
+      getItem: (k) => (store.has(k) ? store.get(k) : null),
+      setItem: (k, v) => store.set(k, String(v)),
+      removeItem: (k) => store.delete(k),
+      clear: () => store.clear(),
+      key: (i) => Array.from(store.keys())[i] ?? null,
+      get length() {
+        return store.size;
+      },
     },
-  };
+  });
 }
 
 // Several modules read window.config at import time (i18n.js for the

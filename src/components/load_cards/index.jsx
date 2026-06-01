@@ -13,7 +13,13 @@ const LoadCards = (props) => {
             <a
               key="overview-link"
               href={
-                window.config.attributesOverviewUrl[baseLanguage(props.i18n)] || window.config.attributesOverviewUrl.en
+                // Optional chaining mirrors the defensive pattern used at module
+                // load in i18n.js / store/userdata.js / store/loginstate.js so a
+                // missing or malformed /config.js doesn't crash the render here
+                // either. Falls through to `undefined`, which renders as an
+                // empty href — degrades gracefully rather than throwing.
+                window.config?.attributesOverviewUrl?.[baseLanguage(props.i18n)] ||
+                window.config?.attributesOverviewUrl?.en
               }
             >
               {/* Trans fills in the link text from the translation. */}

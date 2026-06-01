@@ -17,7 +17,15 @@ export function normaliseBase(raw) {
     );
   }
   if (/^https?:\/\//i.test(trimmed)) {
-    return trimmed.endsWith('/') ? trimmed : `${trimmed}/`;
+    // Collapse runs of slashes in the path portion only, so an operator
+    // passing 'https://cdn.example.com//foo' lands on a single-slash path
+    // like the bare-path branch does ('//foo' → '/foo/'). Splitting around
+    // the scheme+host leaves the protocol's `://` untouched.
+    const collapsed = trimmed.replace(
+      /^(https?:\/\/[^/]*)(\/.*)?$/i,
+      (_, prefix, path) => prefix + (path ? path.replace(/\/+/g, '/') : ''),
+    );
+    return collapsed.endsWith('/') ? collapsed : `${collapsed}/`;
   }
   // Relative input ('./sub', './sub/foo') — preserve the leading dot, just
   // ensure the trailing slash. Passing this through the absolute-path

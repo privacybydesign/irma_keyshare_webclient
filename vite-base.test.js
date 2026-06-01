@@ -62,4 +62,10 @@ describe('normaliseBase', () => {
   it('throws on path-traversal segments inside absolute URLs too', () => {
     expect(() => normaliseBase('https://cdn.example.com/foo/../etc/')).toThrow(/path-traversal/);
   });
+
+  it('collapses path-slash runs inside absolute URLs (preserves the scheme //)', () => {
+    expect(normaliseBase('https://cdn.example.com//foo')).toBe('https://cdn.example.com/foo/');
+    expect(normaliseBase('https://cdn.example.com//foo//bar//')).toBe('https://cdn.example.com/foo/bar/');
+    expect(normaliseBase('https://cdn.example.com//')).toBe('https://cdn.example.com/');
+  });
 });

@@ -84,7 +84,7 @@ The in-app EN/NL switcher in the header writes the user's pick to `localStorage.
 Three workflows split the work:
 
 - **`ci.yml`** runs on every PR and every push to `master`. Four parallel jobs: `lint`, `test`, `build`, `image-scan`. The image-scan job builds the production Docker image locally and runs `anchore/scan-action`, but never pushes. This is the PR gate.
-- **`delivery.yml`** runs on push to `master` and on `workflow_dispatch`. Builds, scans, and pushes `:edge` to GHCR — same scan as `ci.yml` / `release.yml`, with `fail-build: true` since publishing has no PR-style escape hatch. Dispatch works from any branch — including PR branches — so you can deploy a PR's code as `:edge` for testing; the scan still runs, so an unscanned branch cannot publish `:edge`. The tag is always `:edge`; dispatching on a PR branch overwrites the previously-deployed `:edge` until master is re-merged or you dispatch again on master.
+- **`delivery.yml`** runs on push to `master` and on `workflow_dispatch`. Builds, scans, and pushes `:edge` to GHCR — same scan as `ci.yml` / `release.yml`, with `fail-build: true` since publishing has no PR-style escape hatch. Dispatch is restricted to `master` (`if: github.ref == 'refs/heads/master'` at the job level): re-publishing `:edge` from the current `master` commit is supported, but dispatching from a PR branch silently skips the publish step. This keeps `master` as the single source of truth for the deployed `:edge` tag — for pre-merge end-to-end testing of a PR branch, build and push the image to your own GHCR namespace instead.
 - **`release.yml`** runs on `release: published`. Builds + scans + pushes `:X.Y.Z`, `:X.Y`, `:X`, and `:latest` based on the release tag.
 
 ## Container vulnerability scanning
