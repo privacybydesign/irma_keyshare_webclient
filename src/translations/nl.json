@@ -120,6 +120,7 @@
   },
   "yivi-app-bar": {
     "logout": "Uitloggen",
-    "language-switcher-label": "Taal"
+    "language-switcher-label": "Taal",
+    "language-switcher-locked-title": "Rond de Yivi-sessie af of annuleer deze voordat je van taal wisselt."
   }
 }

@@ -53,8 +53,6 @@ You can easily test the React app using Docker and Go:
 4. Run `irma keyshare myirmaserver --static-path /path/to/irma_keyshare_webclient/build -c ./testdata/configurations/myirmaserver.yml`
 5. Open [http://localhost:8081](http://localhost:8081) to view it in a browser.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
 ## Configuration
 
 The deployed app reads its runtime config from `public/config.js`, which sets `window.config`. The file in this repo is the local-development template; deployments (e.g. the Kubernetes manifests in `irma-keyshare-ops`) overwrite it with environment-specific values.
@@ -84,7 +82,7 @@ The in-app EN/NL switcher in the header writes the user's pick to `localStorage.
 Three workflows split the work:
 
 - **`ci.yml`** runs on every PR and every push to `master`. Four parallel jobs: `lint`, `test`, `build`, `image-scan`. The image-scan job builds the production Docker image locally and runs `anchore/scan-action`, but never pushes. This is the PR gate.
-- **`delivery.yml`** runs on push to `master` and on `workflow_dispatch`. Builds, scans, and pushes `:edge` to GHCR — same scan as `ci.yml` / `release.yml`, with `fail-build: true` since publishing has no PR-style escape hatch. Dispatch is restricted to `master` (`if: github.ref == 'refs/heads/master'` at the job level): re-publishing `:edge` from the current `master` commit is supported, but dispatching from a PR branch silently skips the publish step. This keeps `master` as the single source of truth for the deployed `:edge` tag — for pre-merge end-to-end testing of a PR branch, build and push the image to your own GHCR namespace instead.
+- **`delivery.yml`** runs on push to `master` and on `workflow_dispatch`. Builds, scans, and pushes `:edge` to GHCR — same scan as `ci.yml` / `release.yml`, with `fail-build: true` since publishing has no PR-style escape hatch. Dispatch is restricted to `master`: re-publishing `:edge` from the current `master` commit is supported, but dispatching from a PR branch hard-fails at the first job step with an explanatory message (so a stray "Run workflow" click can't masquerade as a successful republish). This keeps `master` as the single source of truth for the deployed `:edge` tag — for pre-merge end-to-end testing of a PR branch, build and push the image to your own GHCR namespace instead.
 - **`release.yml`** runs on `release: published`. Builds + scans + pushes `:X.Y.Z`, `:X.Y`, `:X`, and `:latest` based on the release tag.
 
 ## Container vulnerability scanning

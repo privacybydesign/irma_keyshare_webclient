@@ -11,10 +11,13 @@
 # from a PR branch as a deployment-path smoke test pre-merge), but that
 # meant any maintainer with write access could overwrite the deployed
 # :edge tag with un-reviewed PR-branch code — the Anchore scan blocks
-# vulnerable code, not arbitrary code. The branch gate below restores
-# master as the single source of truth for :edge; pre-merge deployment
-# testing should use a feature branch tag in a personal repo instead.
-# Tagged releases (:X.Y.Z) live in release.yml.
+# vulnerable code, not arbitrary code. The first guard step below hard-
+# fails any non-master dispatch so an accidental "Run workflow" on a PR
+# branch is loudly rejected instead of silently no-opping (which would
+# show a green checkmark and trick the operator into thinking :edge was
+# republished). Pre-merge deployment testing should use a feature branch
+# tag in a personal repo instead. Tagged releases (:X.Y.Z) live in
+# release.yml.
 
 name: Delivery
 
@@ -39,12 +42,21 @@ permissions:
 jobs:
   publish-edge:
     runs-on: ubuntu-latest
-    # Gate workflow_dispatch on master. `push` paths are already constrained
-    # by the `on.push.branches` filter above, so this guard only kicks in
-    # for the dispatch trigger, but writing it unconditionally keeps the
-    # rule visible at the job level and survives future on:-section edits.
-    if: github.ref == 'refs/heads/master'
     steps:
+      # Gate workflow_dispatch on master. `push` paths are already
+      # constrained by `on.push.branches` above, so this guard only fires
+      # for the dispatch trigger from a non-master ref — but we want a
+      # *loud* failure there rather than a silent no-op, otherwise the
+      # maintainer who clicked "Run workflow" on a PR branch sees a green
+      # checkmark and assumes :edge was republished when nothing happened.
+      - name: Refuse non-master workflow_dispatch
+        if: github.ref != 'refs/heads/master'
+        run: |
+          echo "::error::delivery.yml only publishes from master."
+          echo "::error::Got ref=${{ github.ref }} via ${{ github.event_name }}."
+          echo "::error::For pre-merge :edge testing of a PR branch, push to your own GHCR namespace instead."
+          exit 1
+
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 

@@ -8,12 +8,22 @@ import YiviButton from '../../widgets/yivi_button';
 import Spacer from '../../widgets/spacer';
 import { baseLanguage } from '../../i18n';
 
-// The yivi-web-form section must keep the same DOM node forever — the
-// underlying yivi-frontend widget writes its QR code / status messages into
-// it imperatively and would lose all state on a re-render. Isolating that
-// node in its own component with `shouldComponentUpdate => false` lets the
-// rest of SelectMethod (intro text, login-method labels, email form) react
-// to language changes normally.
+// The yivi-web-form section must keep the same DOM node *and* its
+// imperatively-appended children (QR canvas, status messages) forever —
+// yivi-frontend writes into it via the DOM, outside React's tracking.
+//
+// React's reconciler already preserves the section's *element identity*
+// across re-renders (same type, same id, no React-tracked children), so
+// `shouldComponentUpdate => false` is not load-bearing for that on its
+// own — the surrounding select_method.test.jsx pins node identity end-
+// to-end. The guard's actual job is defense-in-depth: if a future edit
+// to the JSX below accidentally adds children to `<section>` (e.g. a
+// translated placeholder caption), React would diff those new JSX
+// children against the DOM, conclude yivi's imperatively-appended
+// canvas is "extra", and rip it out mid-session. `shouldComponentUpdate
+// => false` short-circuits render() entirely so no such JSX edit can
+// reach reconciliation without also touching this guard, surfacing the
+// regression at code-review time instead of runtime.
 class YiviWebFormMount extends React.Component {
   shouldComponentUpdate() {
     return false;
@@ -120,7 +130,13 @@ class SelectMethod extends React.Component {
   render() {
     return (
       <>
-        <YiviAppBar title={this.props.t('title')} />
+        {/* The yivi-frontend widget reads its `language` argument once at
+            mount and never refreshes its labels — switching EN↔NL while
+            the QR is on screen would leave the widget's own strings in
+            the original language. Lock the switcher for the duration of
+            SelectMethod so users can't end up in that mismatched state;
+            the rest of the app re-renders normally on language change. */}
+        <YiviAppBar title={this.props.t('title')} lockLanguageSwitcher />
         <Column>
           <Spacer />
           <p>{this.props.t('intro-par1')}</p>

@@ -120,6 +120,7 @@
   },
   "yivi-app-bar": {
     "logout": "Logout",
-    "language-switcher-label": "Language"
+    "language-switcher-label": "Language",
+    "language-switcher-locked-title": "Finish or cancel the Yivi session before switching languages."
   }
 }

@@ -94,6 +94,33 @@ describe('YiviAppBar language switcher', () => {
     expect(document.documentElement.getAttribute('lang')).toBe('nl');
   });
 
+  it('cascading-rollback does not persist a never-applied language when two clicks both reject', async () => {
+    // Bug scenario: clicks A (NL) then B (EN) both reject. A's catch
+    // skips because _latestRequestedLang === 'en', not 'nl'. B's catch
+    // runs. The earlier code captured `previousLatest` at call time and
+    // wrote it back — B's previousLatest was 'nl' (set by A's sync
+    // prologue), itself a language i18next never reached. The next
+    // reload would then read 'nl' from localStorage even though the
+    // user is still effectively in the initial language. Fix: rollback
+    // target is `i18n.language` *now* — the actually-applied language —
+    // so a cascade of failures always settles localStorage on the last
+    // known-applied value (here: the initial 'en').
+    const mockI18n = {
+      language: 'en',
+      changeLanguage: vi.fn(() => Promise.reject(new Error('load failed'))),
+    };
+    const instance = new YiviAppBarClass({ i18n: mockI18n });
+    window.localStorage.setItem('lang', 'en');
+
+    const a = instance.changeLanguage('nl');
+    const b = instance.changeLanguage('en');
+    await Promise.all([a, b]);
+
+    // Neither click applied; localStorage must reflect the initial 'en',
+    // not the never-applied 'nl' captured at click-B time.
+    expect(window.localStorage.getItem('lang')).toBe('en');
+  });
+
   it('rolls back localStorage when i18n.changeLanguage rejects', async () => {
     const mockI18n = {
       language: 'en',
@@ -280,6 +307,51 @@ describe('YiviAppBar language switcher', () => {
     // pick (EN), not the failed-convergence intermediate state.
     expect(window.localStorage.getItem('lang')).toBe('en');
     expect(YiviAppBarClass._latestRequestedLang).toBe('en');
+  });
+
+  it('bounded recursive convergence caps re-issues at MAX_CONVERGENCE_PASSES', async () => {
+    // Pathological i18next stub that "resolves" without actually applying
+    // the language. Without the cap, _converge would loop forever; with
+    // the cap, the chain stops after MAX_CONVERGENCE_PASSES recursive
+    // calls (independent of the initial user-issued changeLanguage).
+    let calls = 0;
+    const mockI18n = {
+      language: 'en',
+      changeLanguage: vi.fn(() => {
+        calls += 1;
+        // Never advances mockI18n.language — every convergence pass sees
+        // the same drift and would re-issue without the cap.
+        return Promise.resolve();
+      }),
+    };
+    const instance = new YiviAppBarClass({ i18n: mockI18n });
+
+    await instance.changeLanguage('nl');
+    // Drain queued microtasks so the recursive .then callbacks all fire.
+    for (let i = 0; i < 20; i += 1) {
+      await Promise.resolve();
+    }
+
+    // One initial call + MAX_CONVERGENCE_PASSES convergence calls.
+    expect(calls).toBe(1 + YiviAppBarClass.MAX_CONVERGENCE_PASSES);
+  });
+
+  it('renders the language switcher locked when lockLanguageSwitcher is set (yivi-session-in-flight)', () => {
+    // The yivi-frontend widget reads its `language` argument once at
+    // mount and never refreshes — switching EN↔NL during an active
+    // session would leave its labels stuck in the original language.
+    // SelectMethod passes `lockLanguageSwitcher` to disable the switcher
+    // for the duration of the QR/email-login page; this test pins that
+    // both buttons are disabled and the tooltip is set when locked.
+    render(<YiviAppBar title="Test" lockLanguageSwitcher />);
+    const en = screen.getByRole('button', { name: 'EN' });
+    const nl = screen.getByRole('button', { name: 'NL' });
+    expect(en.disabled).toBe(true);
+    expect(nl.disabled).toBe(true);
+    // Tooltip is set on both individual buttons and on the wrapping
+    // group so hover anywhere on the switcher surfaces the explanation.
+    expect(en.getAttribute('title')).toBeTruthy();
+    expect(nl.getAttribute('title')).toBeTruthy();
   });
 
   it('notifies a languageChanged subscriber so consumers like document.title can react', async () => {

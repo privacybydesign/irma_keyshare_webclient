@@ -42,6 +42,17 @@ i18n
     // avoid accidental nesting from keys that happen to contain a dot.
     keySeparator: false,
 
+    // Pin `nsSeparator` to i18next's default ':' rather than relying on the
+    // default. This is the same separator the codebase already uses at every
+    // call site (`t('app:title')`, `withTranslation('yivi-app-bar')`); making
+    // it explicit documents the constraint that **translation keys must not
+    // contain ':'**. A future translation that legitimately needed a colon
+    // (e.g. `"time-format": "{{h}}:{{m}}"` as a key, not a value) would
+    // otherwise silently route to a non-existent namespace and render the
+    // raw key. If that ever becomes desirable, swap this for an unlikely
+    // sentinel (e.g. `'::'`) and migrate every call site in lockstep.
+    nsSeparator: ':',
+
     interpolation: {
       escapeValue: false, // react already safes from xss
     },

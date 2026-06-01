@@ -61,10 +61,12 @@ jobs:
 
   # Note: `security-events: write` is downgraded to read-only when this
   # workflow runs from a forked PR (GitHub's default for untrusted code).
-  # The SARIF upload step will fail in that case — the scan itself still
-  # runs and surfaces in the action log, but Code Scanning won't ingest
-  # it until the fork's contributor opens a follow-up from a same-repo
-  # branch, or a maintainer runs `pull_request_target` against the PR.
+  # The SARIF upload step then 403s — `continue-on-error: true` on that
+  # step keeps the job green so fork-originated PRs don't show a red
+  # `image-scan` even when the scan itself passed. The scan output still
+  # surfaces in the action log; Code Scanning just won't ingest it until
+  # the fork's contributor opens a follow-up from a same-repo branch, or
+  # a maintainer re-runs the scan against the merged code on master.
   image-scan:
     runs-on: ubuntu-latest
     permissions:
@@ -117,5 +119,9 @@ jobs:
       - name: Upload Anchore scan SARIF report
         uses: github/codeql-action/upload-sarif@f52b05f4acaaa234e44466e66d29050e135ea9ef # v4.36.0
         if: ${{ !cancelled() }}
+        # Forked PRs lose `security-events: write`; the upload 403s. Mark
+        # the step itself non-fatal so the job stays green — the scan ran
+        # and any findings still appear in the workflow log.
+        continue-on-error: true
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
