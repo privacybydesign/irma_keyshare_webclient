@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './yivi_app_bar.module.scss';
 import YiviButton from './yivi_button';
 import { withTranslation } from 'react-i18next';
-import { baseLanguage } from '../i18n';
+import { baseLanguage, SUPPORTED_LANGUAGES } from '../i18n';
 
 export class YiviAppBar extends React.Component {
   // Pending-language marker, shared across all instances (only one app bar
@@ -11,11 +11,48 @@ export class YiviAppBar extends React.Component {
   // invariant — tests reset it in beforeEach.
   static _latestRequestedLang = undefined;
 
-  // Cap on chained convergence calls. Two is enough to settle every
-  // resolution order in the existing tests; the cap guards against an
-  // i18next bug that could otherwise spin forever (changeLanguage resolves
-  // without setting `language`).
+  // Counts switcher-initiated `i18n.changeLanguage` calls currently in
+  // flight (including the bounded `_converge` re-issues). When the count
+  // drops to zero, the `languageChanged` subscription below knows it is
+  // safe to clear the static marker on any *external* language change —
+  // some integration call that didn't go through this switcher. While
+  // the count is positive, the marker is load-bearing for out-of-order
+  // convergence and must not be touched by an externally-fired event.
+  static _inFlightSwitcherCalls = 0;
+
+  // Cap on chained convergence calls. The existing rapid-click tests
+  // settle in one or two passes; the cap is set higher (4) to leave
+  // headroom for a future test that exercises a longer cascade or a
+  // production click sequence we haven't profiled. The cap's real job
+  // is to guard against an i18next bug that could otherwise spin forever
+  // (changeLanguage resolves without ever advancing `language`) — any
+  // value ≥ 2 satisfies the observed cases.
   static MAX_CONVERGENCE_PASSES = 4;
+
+  componentDidMount() {
+    // Subscribe to externally-initiated language changes (any code path
+    // that calls `i18n.changeLanguage` outside this switcher — none in
+    // production today, but a future integration or HMR re-init might).
+    // While the switcher's own calls are mid-flight, the count is > 0
+    // and this handler no-ops so the marker stays load-bearing for
+    // convergence. Once all switcher calls settle, an external change
+    // pulls the marker back to `undefined` so the next user click reads
+    // i18n.language directly via the `??` fallback rather than seeing
+    // a now-stale value.
+    this._onExternalLanguageChanged = () => {
+      if (YiviAppBar._inFlightSwitcherCalls === 0) {
+        YiviAppBar._latestRequestedLang = undefined;
+      }
+    };
+    this.props.i18n.on('languageChanged', this._onExternalLanguageChanged);
+  }
+
+  componentWillUnmount() {
+    if (this._onExternalLanguageChanged) {
+      this.props.i18n.off('languageChanged', this._onExternalLanguageChanged);
+      this._onExternalLanguageChanged = undefined;
+    }
+  }
 
   // Fire-and-forget bounded convergence loop. Each pass awaits i18next and
   // re-checks; we stop when the language settles, the latest-requested
@@ -37,13 +74,20 @@ export class YiviAppBar extends React.Component {
     const target = YiviAppBar._latestRequestedLang;
     if (target === undefined) return;
     if (this.props.i18n.language === target) return;
+    YiviAppBar._inFlightSwitcherCalls += 1;
     this.props.i18n.changeLanguage(target).then(
-      () => this._converge(depth + 1),
+      () => {
+        YiviAppBar._inFlightSwitcherCalls -= 1;
+        this._converge(depth + 1);
+      },
       // Log the failure rather than swallow it silently — if convergence
       // itself rejects, i18next stays at the stale language while DOM and
       // localStorage already advertise the new one, and translations would
       // render mismatched with no audit trail.
-      (err) => console.error('Language convergence failed', err),
+      (err) => {
+        YiviAppBar._inFlightSwitcherCalls -= 1;
+        console.error('Language convergence failed', err);
+      },
     );
   }
 
@@ -65,9 +109,11 @@ export class YiviAppBar extends React.Component {
     } catch (e) {
       // localStorage unavailable — pick won't survive reload, but the page still works.
     }
+    YiviAppBar._inFlightSwitcherCalls += 1;
     try {
       await this.props.i18n.changeLanguage(lang);
     } catch (err) {
+      YiviAppBar._inFlightSwitcherCalls -= 1;
       console.error('Language switch failed', err);
       // Roll back so detectLanguage() on next reload doesn't read a language
       // we never successfully switched to — but only if no later click has
@@ -109,6 +155,7 @@ export class YiviAppBar extends React.Component {
       }
       return;
     }
+    YiviAppBar._inFlightSwitcherCalls -= 1;
     // i18next's promises can resolve out of order. If our awaited promise
     // resolved *after* a later click's promise already finished, i18next
     // will have stamped `language` with our (now-stale) value, even though
@@ -132,7 +179,12 @@ export class YiviAppBar extends React.Component {
 
   renderLanguageSwitcher() {
     const current = baseLanguage(this.props.i18n);
-    const langs = ['nl', 'en'];
+    // Source from `SUPPORTED_LANGUAGES` rather than hardcoding so adding
+    // a third language doesn't require touching the switcher too. The
+    // exported order in i18n.js is the order rendered here; if a
+    // particular display order is ever required, sort or re-order at
+    // this site, not in i18n.js.
+    const langs = SUPPORTED_LANGUAGES;
     // `lock` disables both buttons during a yivi-frontend session: the
     // widget reads `language` at mount and never re-reads it, so a switch
     // mid-session would leave the QR/status labels stuck in the original

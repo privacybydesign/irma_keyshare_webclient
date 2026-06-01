@@ -63,6 +63,12 @@ describe('normaliseBase', () => {
     expect(() => normaliseBase('https://cdn.example.com/foo/../etc/')).toThrow(/path-traversal/);
   });
 
+  it('throws on absolute URLs that carry a query or fragment (would produce malformed base)', () => {
+    expect(() => normaliseBase('https://cdn.example.com/foo?x=1')).toThrow(/query\/fragment/);
+    expect(() => normaliseBase('https://cdn.example.com/foo#hash')).toThrow(/query\/fragment/);
+    expect(() => normaliseBase('https://cdn.example.com/?ver=1')).toThrow(/query\/fragment/);
+  });
+
   it('collapses path-slash runs inside absolute URLs (preserves the scheme //)', () => {
     expect(normaliseBase('https://cdn.example.com//foo')).toBe('https://cdn.example.com/foo/');
     expect(normaliseBase('https://cdn.example.com//foo//bar//')).toBe('https://cdn.example.com/foo/bar/');

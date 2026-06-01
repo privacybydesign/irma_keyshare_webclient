@@ -17,6 +17,20 @@ export function normaliseBase(raw) {
     );
   }
   if (/^https?:\/\//i.test(trimmed)) {
+    // Vite's `base` is concatenated with absolute paths at build time;
+    // a query/fragment in the middle would produce malformed URLs like
+    // `https://cdn.example.com/foo?x=1/static/main.js`. Reject those
+    // loudly — the same fail-loud stance as the path-traversal branch
+    // above. If a real use case ever appears, the fix would be to
+    // accept the query/fragment as a structured suffix (rare enough
+    // that we'd rather hear about it).
+    if (/[?#]/.test(trimmed)) {
+      throw new Error(
+        `VITE_BASE rejected: URL with query/fragment is not supported (${JSON.stringify(raw)}). ` +
+          `Vite concatenates 'base' with absolute paths and would produce a malformed URL. ` +
+          `Strip the '?' / '#' suffix.`,
+      );
+    }
     // Collapse runs of slashes in the path portion only, so an operator
     // passing 'https://cdn.example.com//foo' lands on a single-slash path
     // like the bare-path branch does ('//foo' → '/foo/'). Splitting around

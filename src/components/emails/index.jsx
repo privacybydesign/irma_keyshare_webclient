@@ -100,23 +100,27 @@ class Emails extends React.Component {
         <td>{address.email}</td>
         <td className={styles.deleteColumn}>
           {address.delete_in_progress ? (
-            <a
-              role="button"
-              tabIndex="0"
+            // Purely informational tooltip — no click target, so no role
+            // or tabIndex. Previously rendered as <a role="button"
+            // tabIndex="0">, which made it focusable as a button but
+            // had no Enter/Space handler — a dead control for keyboard
+            // users. <span> with aria-label surfaces the explanation
+            // text to screen readers without claiming activatability.
+            <span
               className={styles.tooltip}
               data-title={this.props.t('delete-in-progress-explanation')}
+              aria-label={this.props.t('delete-in-progress-explanation')}
             >
               {this.props.t('delete-in-progress')}
-            </a>
+            </span>
           ) : address.revalidate_in_progress ? (
-            <a
-              role="button"
-              tabIndex="0"
+            <span
               className={styles.tooltip}
               data-title={this.props.t('revalidate-in-progress-explanation')}
+              aria-label={this.props.t('revalidate-in-progress-explanation')}
             >
               {this.props.t('revalidate-in-progress')}
-            </a>
+            </span>
           ) : (
             <YiviButton theme={'ghost'} onClick={() => this.onDeleteEmail(address.email)}>
               <CrossIcon />

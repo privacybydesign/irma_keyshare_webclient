@@ -9,6 +9,7 @@ describe('YiviAppBar language switcher', () => {
     document.documentElement.removeAttribute('lang');
     window.localStorage.clear();
     YiviAppBarClass._latestRequestedLang = undefined;
+    YiviAppBarClass._inFlightSwitcherCalls = 0;
   });
 
   afterEach(() => {
@@ -352,6 +353,38 @@ describe('YiviAppBar language switcher', () => {
     // group so hover anywhere on the switcher surfaces the explanation.
     expect(en.getAttribute('title')).toBeTruthy();
     expect(nl.getAttribute('title')).toBeTruthy();
+  });
+
+  it('clears _latestRequestedLang when an external i18n.changeLanguage fires (no in-flight switcher calls)', async () => {
+    // Mount the app bar so componentDidMount subscribes to languageChanged.
+    // Then simulate an external change (calling i18n.changeLanguage from
+    // outside the switcher — what tests / hypothetical future integrations
+    // would do). With no switcher calls in flight, the subscriber must
+    // clear the marker so the next user click compares against the live
+    // i18n.language rather than the stale marker.
+    render(<YiviAppBar title="Test" />);
+    YiviAppBarClass._latestRequestedLang = 'nl';
+    YiviAppBarClass._inFlightSwitcherCalls = 0;
+    await act(async () => {
+      await i18n.changeLanguage('en');
+    });
+    expect(YiviAppBarClass._latestRequestedLang).toBeUndefined();
+  });
+
+  it('does NOT clear _latestRequestedLang while a switcher call is in flight', async () => {
+    // The marker is load-bearing for out-of-order convergence while
+    // switcher calls are pending. Mock that state by bumping the
+    // in-flight count manually, fire the languageChanged event, and
+    // assert the subscriber bailed without touching the marker.
+    render(<YiviAppBar title="Test" />);
+    YiviAppBarClass._latestRequestedLang = 'nl';
+    YiviAppBarClass._inFlightSwitcherCalls = 1;
+    await act(async () => {
+      await i18n.changeLanguage('en');
+    });
+    expect(YiviAppBarClass._latestRequestedLang).toBe('nl');
+    // Reset for the afterEach cleanup.
+    YiviAppBarClass._inFlightSwitcherCalls = 0;
   });
 
   it('steady-state: <html lang> agrees with i18n.language after the convergence chain drains', async () => {

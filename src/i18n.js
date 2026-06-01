@@ -4,8 +4,17 @@ import { initReactI18next } from 'react-i18next';
 import en from './translations/en.json';
 import nl from './translations/nl.json';
 
-const resources = { en, nl };
-const SUPPORTED_LANGUAGES = Object.keys(resources);
+// Order here is the switcher's left-to-right display order. The default
+// fallback language is `DEFAULT_LANGUAGE` (below), *not* the first key,
+// so reordering for UX doesn't change which language a misconfigured
+// `config.lang` falls back to.
+const resources = { nl, en };
+// Exported so the language switcher (and any future consumer) doesn't
+// duplicate the supported-languages list. NOTE: `public/config.js` ships
+// independently (it's the runtime template, not bundled), so it inlines
+// its own `['nl', 'en']` array. Keep that list in sync with this one if
+// support for a new language is added.
+export const SUPPORTED_LANGUAGES = Object.keys(resources);
 
 // Default language when the requested one isn't supported. Hardcoded as a
 // named constant rather than `supported[0]` so behavior doesn't change if

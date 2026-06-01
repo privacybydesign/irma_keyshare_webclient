@@ -13,22 +13,30 @@ const root = createRoot(container);
 // Misconfigured-deploy guard. `public/config.js` ships with
 // `server: 'http://localhost:8081'` as the local-dev template, and
 // production deploys overwrite it via the k8s overlay. If the overlay
-// step is forgotten / fails silently, the deployed bundle would talk to
-// the user's own machine for every API call — a confusing, hard-to-
-// reproduce failure mode. Fail loud at boot time when the served origin
-// clearly isn't a dev origin but `config.server` still points at
-// localhost, so the operator sees a blank page + console error instead
-// of mystified support tickets. Dev origins (localhost, 127.0.0.1, file:)
-// are exempt — they're the legitimate template-default use case.
+// step is forgotten / fails silently — *or* if `/config.js` itself
+// 404s and `window.config` is undefined — the deployed bundle would
+// either talk to the user's own machine for every API call (the
+// localhost template still in place) or compose URLs like
+// `"undefined/login/irma"` (config missing). Fail loud at boot time in
+// either case on a non-dev origin so the operator sees a blank page +
+// console error instead of mystified support tickets. Dev origins
+// (localhost, 127.0.0.1, file:) are exempt — they're the legitimate
+// template-default use case AND the path where missing /config.js is
+// most likely to be a transient dev hiccup rather than a misconfig.
 const devOriginPatterns = [/^localhost$/i, /^127\.0\.0\.1$/, /^\[::1\]$/];
 const isDevOrigin =
   window.location.protocol === 'file:' || devOriginPatterns.some((re) => re.test(window.location.hostname));
-const serverLooksLocal = /(^|\/\/)(localhost|127\.0\.0\.1|\[::1\])(:|\/|$)/i.test(window.config?.server ?? '');
-if (!isDevOrigin && serverLooksLocal) {
+const configuredServer = window.config?.server;
+const serverIsMissing = !configuredServer || typeof configuredServer !== 'string';
+const serverLooksLocal = !serverIsMissing && /(^|\/\/)(localhost|127\.0\.0\.1|\[::1\])(:|\/|$)/i.test(configuredServer);
+if (!isDevOrigin && (serverIsMissing || serverLooksLocal)) {
+  const reason = serverIsMissing
+    ? 'window.config.server is missing — /config.js likely failed to load or did not set `server`.'
+    : `window.config.server is ${JSON.stringify(configuredServer)} (a localhost URL).`;
   const msg =
-    `[config.js misconfigured] window.config.server is ${JSON.stringify(window.config?.server)} ` +
-    `but the app is served from ${window.location.origin}. ` +
-    `The deploy overlay almost certainly didn't run — check that /config.js is overwritten with the production backend URL.`;
+    `[config.js misconfigured] ${reason} ` +
+    `The app is served from ${window.location.origin}; the deploy overlay almost certainly didn't run — ` +
+    `check that /config.js is overwritten with the production backend URL.`;
   // Render an explicit error rather than the blank page the failed
   // fetches would otherwise produce. Throwing here aborts module
   // evaluation, so React never mounts and the inline message is what
@@ -86,6 +94,11 @@ i18n.on('languageChanged', refreshDocumentTitle);
 if (import.meta.hot) {
   import.meta.hot.dispose(() => {
     i18n.off('languageChanged', refreshDocumentTitle);
+    // `window` is global — its hashchange listener isn't owned by the
+    // module that registered it. Without an off() here, each HMR
+    // reload would stack another checkUrlHash callback on every hash
+    // change, dispatching duplicates.
+    window.removeEventListener('hashchange', checkUrlHash);
   });
 }
 

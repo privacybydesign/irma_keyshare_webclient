@@ -1,4 +1,10 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+// Redux 5 marked the bare `createStore` as deprecated and added a runtime
+// console warning on every load. `legacy_createStore` is the documented
+// non-deprecated alias for the same function — same behavior, no warning.
+// A future cleanup could migrate to `@reduxjs/toolkit`'s `configureStore`,
+// which would also drop the custom `applyMiddleware` call; the alias keeps
+// this PR's scope tight while silencing the dev-console noise.
+import { legacy_createStore as createStore, applyMiddleware, combineReducers } from 'redux';
 import login from './loginstate';
 import logs from './logs';
 import userdata from './userdata';
