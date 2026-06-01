@@ -20,6 +20,18 @@ export class YiviAppBar extends React.Component {
   // Fire-and-forget bounded convergence loop. Each pass awaits i18next and
   // re-checks; we stop when the language settles, the latest-requested
   // marker is cleared (all clicks rolled back), or the pass cap is hit.
+  //
+  // Note we deliberately *don't* clear the marker on agreement here.
+  // Clearing it would let an out-of-order stale resolution from an
+  // earlier click (which sees `marker === undefined` and short-circuits
+  // its own _converge before flipping i18next back) leave i18next pinned
+  // at the wrong language. The trade-off is that a successful click
+  // leaves the marker lit until the next click — relevant only if some
+  // code path outside the switcher calls `i18n.changeLanguage` (which
+  // nothing in this codebase does in production; tests reset the marker
+  // in `beforeEach` because they call changeLanguage externally for
+  // setup). See changeLanguage()'s cascading-rollback comments for the
+  // mirror invariant on the failure path.
   _converge(depth = 0) {
     if (depth >= YiviAppBar.MAX_CONVERGENCE_PASSES) return;
     const target = YiviAppBar._latestRequestedLang;
@@ -72,46 +84,48 @@ export class YiviAppBar extends React.Component {
       // state the user never reached. Reading the live `i18n.language`
       // instead always points at the last *successful* switch (or the
       // initial language, if none succeeded).
+      //
+      // The pending-marker mirrors the same logic: it gets cleared on a
+      // fully-failed cascade (no in-flight clicks left) so the next click
+      // sees `previousLatest === undefined` and falls through to the live
+      // i18n.language for its comparison. Setting it to `previousLatest`
+      // (which can itself be a never-applied language) would soft-lock
+      // the switcher — the `if (current === lang) return` guard at the
+      // top of the function would no-op a click that *should* succeed,
+      // because `current` would be the stale marker rather than the
+      // language i18next actually applied.
       if (YiviAppBar._latestRequestedLang === lang) {
+        const liveLang = baseLanguage(this.props.i18n);
         try {
-          window.localStorage.setItem('lang', baseLanguage(this.props.i18n));
+          window.localStorage.setItem('lang', liveLang);
         } catch (e) {
           // see above
         }
-        YiviAppBar._latestRequestedLang = previousLatest;
+        // If `previousLatest` already matches the live language, restore
+        // it (an earlier in-flight click is still expected to converge
+        // and owns the marker); otherwise reset to undefined so the next
+        // click reads `i18n.language` directly via the `??` fallback.
+        YiviAppBar._latestRequestedLang = previousLatest === liveLang ? previousLatest : undefined;
       }
       return;
     }
     // i18next's promises can resolve out of order. If our awaited promise
     // resolved *after* a later click's promise already finished, i18next
     // will have stamped `language` with our (now-stale) value, even though
-    // a newer click has logically superseded us. Force convergence: if
-    // i18next disagrees with the latest-requested language, re-issue.
-    //
-    // `_latestRequestedLang` is intentionally *not* cleared on success.
-    // Clearing it after the latest click would let an out-of-order stale
-    // resolution from an earlier click see `latest === undefined` and skip
-    // the convergence, leaving i18next pinned at the wrong language. The
-    // trade-off is that an *external* `i18n.changeLanguage` call (not via
-    // this switcher) could leave `_latestRequestedLang` stale, but nothing
-    // in this codebase calls changeLanguage outside the switcher.
-    //
-    // Bounded recursive re-convergence (cap = MAX_CONVERGENCE_PASSES): the
-    // convergence call is itself a promise that can resolve out of order
-    // against another in-flight call. A single fire-and-forget pass would
-    // leave i18next drifting again until the next user click; chaining
-    // another check after the convergence's await keeps closing the gap
-    // until either (a) i18next agrees with the latest-requested language
-    // or (b) we hit the pass cap. Realistic rapid-click sequences resolve
-    // in one to two passes; the cap guards against pathological infinite
-    // loops if i18next ever resolved without actually applying.
-    //
-    // Guard against `latest === undefined` (all in-flight requests rolled
-    // back via the catch path above) — calling `i18n.changeLanguage(undefined)`
-    // tells i18next to re-run language detection, which is non-deterministic.
+    // a newer click has logically superseded us. Bounded recursive
+    // re-convergence (`_converge`, cap = MAX_CONVERGENCE_PASSES): each
+    // pass awaits i18next and re-checks; chaining another check after
+    // the convergence's await keeps closing the gap until either (a)
+    // i18next agrees with the latest-requested language (and `_converge`
+    // clears the marker) or (b) the pass cap is hit. Realistic rapid-
+    // click sequences resolve in one to two passes; the cap guards
+    // against pathological loops if i18next ever resolved without
+    // actually applying. The guard against `latest === undefined` inside
+    // `_converge` keeps it from calling `i18n.changeLanguage(undefined)`,
+    // which triggers non-deterministic language detection.
     this._converge();
     // Only the most recent click writes `<html lang>`. Stale resolutions
-    // return silently.
+    // return silently (marker holds the lang of a newer click).
     if (YiviAppBar._latestRequestedLang !== lang) return;
     document.documentElement.setAttribute('lang', lang);
   }
@@ -142,7 +156,21 @@ export class YiviAppBar extends React.Component {
               <button
                 type="button"
                 className={`${styles.languageButton} ${isActive ? styles.languageButtonActive : ''}`}
-                onClick={() => this.changeLanguage(lang)}
+                // changeLanguage returns a promise (it's async). The internal
+                // try/catch + convergence handler already log every failure
+                // mode, so the only thing an unawaited promise can leak is
+                // an unhandled-rejection from the fire-and-forget convergence
+                // call inside _converge() — which itself swallows via its
+                // .then's onRejected. Belt-and-suspenders: explicit .catch
+                // on the click path so any future regression where a code
+                // path inside changeLanguage forgets to handle a rejection
+                // surfaces in our log instead of as an unhandled rejection
+                // on React's synthetic event handler.
+                onClick={() => {
+                  this.changeLanguage(lang).catch((err) => {
+                    console.error('Unhandled rejection in language switcher click', err);
+                  });
+                }}
                 aria-pressed={isActive}
                 disabled={isDisabled}
                 title={lockTitle}

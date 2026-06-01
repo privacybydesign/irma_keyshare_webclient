@@ -59,6 +59,14 @@ jobs:
       - run: yarn install --immutable
       - run: yarn build
 
+  # PR-only image scan. On master push, `delivery.yml` runs the same
+  # Anchore scan back-to-back with this one — the GHA cache makes the
+  # second build cheap, but the duplication means a newly-disclosed base-
+  # image CVE would red both `ci.yml`'s image-scan and `delivery.yml`'s
+  # publish step on the same commit, doubling the noise without adding
+  # signal. `delivery.yml` owns the gate on master; `ci.yml`'s scan is
+  # the PR-side check.
+  #
   # Note: `security-events: write` is downgraded to read-only when this
   # workflow runs from a forked PR (GitHub's default for untrusted code).
   # The SARIF upload step then 403s — `continue-on-error: true` on that
@@ -68,6 +76,7 @@ jobs:
   # the fork's contributor opens a follow-up from a same-repo branch, or
   # a maintainer re-runs the scan against the merged code on master.
   image-scan:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -102,17 +111,22 @@ jobs:
       # (Code Scanning UI), but don't block merges; we'd just be blocking on
       # something we can't actually patch.
       #
-      # fail-build is only true on master pushes. A newly-disclosed fixable
-      # CVE in the base image otherwise blocks every open PR until the base
-      # is bumped, which has nothing to do with the PR's own changes. PRs
-      # still produce a SARIF report — they just don't gate merges.
+      # fail-build: false on the PR-only scan. A newly-disclosed fixable CVE
+      # in the base image would otherwise block every open PR until the
+      # base bump lands — orthogonal to the PR's own diff. The scan output
+      # still uploads as SARIF for the Code Scanning UI; the gate is
+      # `delivery.yml`'s scan on master push (fail-build: true there).
+      # Anchore can't natively distinguish "PR introduced this dep" from
+      # "upstream just disclosed a new CVE", so we err on the lenient side
+      # here and rely on `yarn audit` + dependabot to catch deliberately
+      # vulnerable dep PRs at install time.
       - name: Scan image with Anchore
         uses: anchore/scan-action@e1165082ffb1fe366ebaf02d8526e7c4989ea9d2 # v7.4.0
         id: scan
         with:
           image: local/${{ steps.image.outputs.name }}:scan
           only-fixed: true
-          fail-build: ${{ github.event_name != 'pull_request' }}
+          fail-build: false
           severity-cutoff: high
           output-format: sarif
 

@@ -8,6 +8,15 @@ import YiviButton from '../../widgets/yivi_button';
 import Spacer from '../../widgets/spacer';
 import { baseLanguage } from '../../i18n';
 
+// Sentinel `@privacybydesign/yivi-frontend` rejects with when the user
+// cancels (vs. an actual network/protocol error). The package doesn't
+// export it as a constant in 1.x — it's only documented as a member of
+// the `YiviState` union — so we hardcode it here with the upstream-
+// coupling caveat. If yivi-frontend ever exports a typed cancel sentinel
+// (or switches to a typed error), swap this constant for the export and
+// audit `emails/index.jsx` for the same string-equality pattern.
+const YIVI_CANCELLED_SENTINEL = 'Aborted';
+
 // The yivi-web-form section must keep the same DOM node *and* its
 // imperatively-appended children (QR canvas, status messages) forever —
 // yivi-frontend writes into it via the DOM, outside React's tracking.
@@ -74,7 +83,7 @@ class SelectMethod extends React.Component {
       })
       .catch((err) => {
         if (widget !== this._yiviWeb) return;
-        if (err !== 'Aborted')
+        if (err !== YIVI_CANCELLED_SENTINEL)
           this.props.dispatch({ type: 'raiseError', errorMessage: `Error while logging in with Yivi: ${err}` });
       });
   }

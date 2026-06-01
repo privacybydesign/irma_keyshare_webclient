@@ -14,6 +14,17 @@ export default defineConfig({
   // rewrites absolute /foo paths in both HTML and CSS — including the
   // @font-face URLs in src/theme.scss — to include this prefix.
   //
+  // **Read from `process.env` directly**, *not* via Vite's `loadEnv()`.
+  // The operator-facing knob here is meant to be set from the shell
+  // (e.g. `VITE_BASE=/sub/ yarn build`) or a Dockerfile ARG — both of
+  // which arrive on `process.env`. `loadEnv()` reads `.env*` files in
+  // the project directory, which would unexpectedly mix in repo-tracked
+  // values during local development and surprise the operator who set
+  // a different shell value. If `.env`-file support is ever wanted,
+  // switch this to `loadEnv(mode, process.cwd(), 'VITE_').VITE_BASE`
+  // inside a defineConfig callback (`defineConfig(({ mode }) => ...)`)
+  // and document that shell values still win over file values.
+  //
   // normaliseBase() tolerates the common operator footguns: `/sub` (missing
   // trailing /), `sub/` (missing leading /), unset (defaults to `/`).
   //

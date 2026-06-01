@@ -7,6 +7,13 @@ import nl from './translations/nl.json';
 const resources = { en, nl };
 const SUPPORTED_LANGUAGES = Object.keys(resources);
 
+// Default language when the requested one isn't supported. Hardcoded as a
+// named constant rather than `supported[0]` so behavior doesn't change if
+// someone reorders the `resources` object (e.g. inserts a third locale
+// alphabetically before 'en'). `DEFAULT_LANGUAGE` must always be a member
+// of `SUPPORTED_LANGUAGES` — the resolver enforces that invariant.
+export const DEFAULT_LANGUAGE = 'en';
+
 // Resolve the requested language up front rather than handing a possibly
 // invalid value to i18next. If we passed `lng: 'fr'` with `fallbackLng: 'en'`,
 // i18n.language would stay 'fr' (i18next records what was requested, not what
@@ -15,10 +22,13 @@ const SUPPORTED_LANGUAGES = Object.keys(resources);
 export function resolveInitialLang(configLang, supported = SUPPORTED_LANGUAGES) {
   const trimmed = (configLang ?? '').toString().trim().toLowerCase();
   const base = trimmed.split('-')[0];
-  // Fall back to the first entry of the supported set rather than a
-  // hardcoded 'en' — otherwise an override that doesn't include 'en'
-  // could leak a value not present in `supported`.
-  return supported.includes(base) ? base : supported[0];
+  if (supported.includes(base)) return base;
+  // Fall back to the explicit default rather than the first entry of the
+  // supported set, so reordering `resources` can't quietly change the
+  // fallback language. If a caller passes a `supported` set that doesn't
+  // include DEFAULT_LANGUAGE (only the test suite does this for negative
+  // cases), use the first entry as a last resort.
+  return supported.includes(DEFAULT_LANGUAGE) ? DEFAULT_LANGUAGE : supported[0];
 }
 
 // Optional chaining: if /config.js 404s or fails to parse (operator misconfig,

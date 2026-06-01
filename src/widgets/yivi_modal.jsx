@@ -15,9 +15,14 @@ class YiviModal extends React.Component {
           <div className={styles.content}>
             <div className={styles.header}>
               <h2>{this.props.title}</h2>
-              <div onClick={() => this.props.onDismiss()}>
+              <button
+                type="button"
+                className={styles.dismissButton}
+                aria-label={this.props.t('cancel')}
+                onClick={() => this.props.onDismiss()}
+              >
                 <CrossIcon />
-              </div>
+              </button>
             </div>
             <Column>
               {this.props.children}

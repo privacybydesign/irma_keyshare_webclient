@@ -354,6 +354,47 @@ describe('YiviAppBar language switcher', () => {
     expect(nl.getAttribute('title')).toBeTruthy();
   });
 
+  it('steady-state: <html lang> agrees with i18n.language after the convergence chain drains', async () => {
+    // After all chained convergence calls settle, the DOM <html lang>
+    // attribute and i18next's own language must match. The intermediate
+    // state during convergence is intentionally inconsistent (setAttribute
+    // fires before the fire-and-forget _converge resolves), so this test
+    // pins the *post-drain* invariant rather than the in-flight state.
+    let pending = [];
+    const mockI18n = {
+      language: 'en',
+      changeLanguage: vi.fn(
+        (lang) =>
+          new Promise((resolve) => {
+            pending.push({
+              lang,
+              fire: () => {
+                mockI18n.language = lang;
+                resolve();
+              },
+            });
+          }),
+      ),
+    };
+    const instance = new YiviAppBarClass({ i18n: mockI18n });
+
+    const p = instance.changeLanguage('nl');
+    pending.shift().fire();
+    await p;
+    // Drain any fire-and-forget convergence calls _converge() queued.
+    // The body of _converge re-checks `i18n.language === target` after
+    // each await, so a settled chain leaves `pending` empty AND the DOM
+    // attribute matching i18next's language.
+    while (pending.length) {
+      pending.shift().fire();
+      await Promise.resolve();
+    }
+    await Promise.resolve();
+
+    expect(mockI18n.language).toBe('nl');
+    expect(document.documentElement.getAttribute('lang')).toBe('nl');
+  });
+
   it('notifies a languageChanged subscriber so consumers like document.title can react', async () => {
     const subscriber = vi.fn();
     i18n.on('languageChanged', subscriber);

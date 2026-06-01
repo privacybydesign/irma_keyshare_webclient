@@ -11,6 +11,11 @@ import * as YiviFrontend from '@privacybydesign/yivi-frontend';
 import CrossIcon from '../../widgets/cross_icon';
 import { baseLanguage } from '../../i18n';
 
+// See select_method.jsx for the rationale on the cancellation sentinel.
+// Keep this string in sync with that one — both call sites should switch
+// together if yivi-frontend ever exports a typed cancel marker.
+const YIVI_CANCELLED_SENTINEL = 'Aborted';
+
 function mapStateToProps(state) {
   return {
     emails: state.userdata.emails,
@@ -27,15 +32,14 @@ class Emails extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const activeEmailAddresses = props.emails
-      .filter((address) => !address.delete_in_progress)
-      .map((address) => address.email);
-    if (!activeEmailAddresses.includes(state.emailToBeDeleted)) {
-      return {
-        emailToBeDeleted: null,
-      };
-    }
-    return state;
+    // React's contract: return `null` to signal "no state change". Returning
+    // `state` (the same object reference) still schedules a no-op re-render
+    // pass internally — null is the documented zero-cost signal.
+    if (state.emailToBeDeleted === null) return null;
+    const stillActive = props.emails.some(
+      (address) => !address.delete_in_progress && address.email === state.emailToBeDeleted,
+    );
+    return stillActive ? null : { emailToBeDeleted: null };
   }
 
   onConfirmDeleteEmail() {
@@ -61,7 +65,7 @@ class Emails extends React.Component {
         this.props.dispatch({ type: 'startUpdateInfo' });
       })
       .catch((err) => {
-        if (err !== 'Aborted')
+        if (err !== YIVI_CANCELLED_SENTINEL)
           this.props.dispatch({ type: 'raiseError', errorMessage: `Error while adding email address: ${err}` });
       });
   }
