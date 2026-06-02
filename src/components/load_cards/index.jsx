@@ -1,5 +1,4 @@
 import { Trans, withTranslation } from 'react-i18next';
-import { baseLanguage } from '../../i18n';
 
 const LoadCards = (props) => {
   return (
@@ -18,8 +17,7 @@ const LoadCards = (props) => {
                 // missing or malformed /config.js doesn't crash the render here
                 // either. Falls through to `undefined`, which renders as an
                 // empty href — degrades gracefully rather than throwing.
-                window.config?.attributesOverviewUrl?.[baseLanguage(props.i18n)] ||
-                window.config?.attributesOverviewUrl?.en
+                window.config?.attributesOverviewUrl?.[props.i18n.language] || window.config?.attributesOverviewUrl?.en
               }
             >
               {/* Trans fills in the link text from the translation. */}

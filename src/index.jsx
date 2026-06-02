@@ -4,103 +4,38 @@ import { Provider } from 'react-redux';
 
 import buildStore from './store';
 import App from './app';
-import i18n, { baseLanguage } from './i18n';
+import i18n from './i18n';
 import './index.scss';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
-
-// Misconfigured-deploy guard. `public/config.js` ships with
-// `server: 'http://localhost:8081'` as the local-dev template, and
-// production deploys overwrite it via the k8s overlay. If the overlay
-// step is forgotten / fails silently — *or* if `/config.js` itself
-// 404s and `window.config` is undefined — the deployed bundle would
-// either talk to the user's own machine for every API call (the
-// localhost template still in place) or compose URLs like
-// `"undefined/login/irma"` (config missing). Fail loud at boot time in
-// either case on a non-dev origin so the operator sees a blank page +
-// console error instead of mystified support tickets. Dev origins
-// (localhost, 127.0.0.1, file:) are exempt — they're the legitimate
-// template-default use case AND the path where missing /config.js is
-// most likely to be a transient dev hiccup rather than a misconfig.
-const devOriginPatterns = [/^localhost$/i, /^127\.0\.0\.1$/, /^\[::1\]$/];
-const isDevOrigin =
-  window.location.protocol === 'file:' || devOriginPatterns.some((re) => re.test(window.location.hostname));
-const configuredServer = window.config?.server;
-const serverIsMissing = !configuredServer || typeof configuredServer !== 'string';
-const serverLooksLocal = !serverIsMissing && /(^|\/\/)(localhost|127\.0\.0\.1|\[::1\])(:|\/|$)/i.test(configuredServer);
-if (!isDevOrigin && (serverIsMissing || serverLooksLocal)) {
-  const reason = serverIsMissing
-    ? 'window.config.server is missing — /config.js likely failed to load or did not set `server`.'
-    : `window.config.server is ${JSON.stringify(configuredServer)} (a localhost URL).`;
-  const msg =
-    `[config.js misconfigured] ${reason} ` +
-    `The app is served from ${window.location.origin}; the deploy overlay almost certainly didn't run — ` +
-    `check that /config.js is overwritten with the production backend URL.`;
-  // Render an explicit error rather than the blank page the failed
-  // fetches would otherwise produce. Throwing here aborts module
-  // evaluation, so React never mounts and the inline message is what
-  // the user sees in the DOM.
-  container.textContent = msg;
-  throw new Error(msg);
-}
-
 const store = buildStore();
-
-// Regex-driven dispatch: capture group `1` is the non-empty token tail.
-// `startsWith` + `slice()` would also fire on `#token=` (empty tail) and
-// dispatch a blank token, which the reducer would then POST verbatim to
-// the backend. The `.+` ensures we only dispatch when there's actually
-// a token to validate.
-const HASH_ACTIONS = [
-  { pattern: /^#token=(.+)$/, action: 'startTokenLogin' },
-  { pattern: /^#verify=(.+)$/, action: 'startRegistrationVerify' },
-];
 
 function checkUrlHash() {
   const fragment = window.location.hash;
-  for (const { pattern, action } of HASH_ACTIONS) {
-    const match = fragment.match(pattern);
-    if (match) {
-      store.dispatch({ type: action, token: match[1] });
-      return;
-    }
+  if (fragment.startsWith('#token=')) {
+    const token = fragment.slice(7);
+    if (token) store.dispatch({ type: 'startTokenLogin', token });
+    else store.dispatch({ type: 'verifySession' });
+  } else if (fragment.startsWith('#verify=')) {
+    const token = fragment.slice(8);
+    if (token) store.dispatch({ type: 'startRegistrationVerify', token });
+    else store.dispatch({ type: 'verifySession' });
+  } else {
+    store.dispatch({ type: 'verifySession' });
   }
-  store.dispatch({ type: 'verifySession' });
 }
 
 window.addEventListener('hashchange', checkUrlHash);
 checkUrlHash();
 
-// Use i18n's resolved language rather than the raw window.config.lang so the
-// DOM attribute agrees with i18next at first paint. They normally match, but
-// if config.lang is unset/typo'd, i18next's `fallbackLng` kicks in and we'd
-// otherwise advertise the wrong language to crawlers / pre-render AT.
-// Subsequent updates to <html lang> happen in YiviAppBar's switcher (which
-// also guards against the rapid double-click race).
-document.documentElement.setAttribute('lang', baseLanguage(i18n));
+document.documentElement.setAttribute('lang', i18n.language);
 
 const refreshDocumentTitle = () => {
   document.title = i18n.t('app:title');
 };
 refreshDocumentTitle();
 i18n.on('languageChanged', refreshDocumentTitle);
-
-// HMR safety: each dev-time full reload re-runs this module and registers
-// a fresh listener. Vite's `import.meta.hot.dispose` fires right before
-// the old module is discarded, so we drop the previous listener there.
-// Production builds strip `import.meta.hot` (it's undefined), so the
-// optional chaining no-ops at runtime.
-if (import.meta.hot) {
-  import.meta.hot.dispose(() => {
-    i18n.off('languageChanged', refreshDocumentTitle);
-    // `window` is global — its hashchange listener isn't owned by the
-    // module that registered it. Without an off() here, each HMR
-    // reload would stack another checkUrlHash callback on every hash
-    // change, dispatching duplicates.
-    window.removeEventListener('hashchange', checkUrlHash);
-  });
-}
 
 root.render(
   <React.StrictMode>

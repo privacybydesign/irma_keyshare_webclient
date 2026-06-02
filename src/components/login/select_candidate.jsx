@@ -9,7 +9,6 @@ import YiviAppBar from '../../widgets/yivi_app_bar';
 import YiviButton from '../../widgets/yivi_button';
 import Spacer from '../../widgets/spacer';
 import YiviTable from '../../widgets/yivi_table';
-import { baseLanguage } from '../../i18n';
 
 class SelectCandidate extends React.Component {
   handleSelectCandidate(username) {
@@ -18,7 +17,7 @@ class SelectCandidate extends React.Component {
 
   renderCandidates() {
     return this.props.candidates.map((candidate) => {
-      const lastActive = moment.unix(candidate.last_active).locale(baseLanguage(this.props.i18n));
+      const lastActive = moment.unix(candidate.last_active).locale(this.props.i18n.language);
       return (
         <tr key={candidate.username}>
           <td>{candidate.username}</td>

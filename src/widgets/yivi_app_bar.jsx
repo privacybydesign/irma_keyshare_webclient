@@ -2,196 +2,22 @@ import React from 'react';
 import styles from './yivi_app_bar.module.scss';
 import YiviButton from './yivi_button';
 import { withTranslation } from 'react-i18next';
-import { baseLanguage, SUPPORTED_LANGUAGES } from '../i18n';
 
 export class YiviAppBar extends React.Component {
-  // Pending-language marker, shared across all instances (only one app bar
-  // is mounted at a time). `undefined` means "no switch in flight; trust
-  // i18next's own state". The explicit field declaration documents the
-  // invariant — tests reset it in beforeEach.
-  static _latestRequestedLang = undefined;
-
-  // Counts switcher-initiated `i18n.changeLanguage` calls currently in
-  // flight (including the bounded `_converge` re-issues). When the count
-  // drops to zero, the `languageChanged` subscription below knows it is
-  // safe to clear the static marker on any *external* language change —
-  // some integration call that didn't go through this switcher. While
-  // the count is positive, the marker is load-bearing for out-of-order
-  // convergence and must not be touched by an externally-fired event.
-  static _inFlightSwitcherCalls = 0;
-
-  // Cap on chained convergence calls. The existing rapid-click tests
-  // settle in one or two passes; the cap is set higher (4) to leave
-  // headroom for a future test that exercises a longer cascade or a
-  // production click sequence we haven't profiled. The cap's real job
-  // is to guard against an i18next bug that could otherwise spin forever
-  // (changeLanguage resolves without ever advancing `language`) — any
-  // value ≥ 2 satisfies the observed cases.
-  static MAX_CONVERGENCE_PASSES = 4;
-
-  componentDidMount() {
-    // Subscribe to externally-initiated language changes (any code path
-    // that calls `i18n.changeLanguage` outside this switcher — none in
-    // production today, but a future integration or HMR re-init might).
-    // While the switcher's own calls are mid-flight, the count is > 0
-    // and this handler no-ops so the marker stays load-bearing for
-    // convergence. Once all switcher calls settle, an external change
-    // pulls the marker back to `undefined` so the next user click reads
-    // i18n.language directly via the `??` fallback rather than seeing
-    // a now-stale value.
-    this._onExternalLanguageChanged = () => {
-      if (YiviAppBar._inFlightSwitcherCalls === 0) {
-        YiviAppBar._latestRequestedLang = undefined;
-      }
-    };
-    this.props.i18n.on('languageChanged', this._onExternalLanguageChanged);
-  }
-
-  componentWillUnmount() {
-    if (this._onExternalLanguageChanged) {
-      this.props.i18n.off('languageChanged', this._onExternalLanguageChanged);
-      this._onExternalLanguageChanged = undefined;
-    }
-  }
-
-  // Fire-and-forget bounded convergence loop. Each pass awaits i18next and
-  // re-checks; we stop when the language settles, the latest-requested
-  // marker is cleared (all clicks rolled back), or the pass cap is hit.
-  //
-  // Note we deliberately *don't* clear the marker on agreement here.
-  // Clearing it would let an out-of-order stale resolution from an
-  // earlier click (which sees `marker === undefined` and short-circuits
-  // its own _converge before flipping i18next back) leave i18next pinned
-  // at the wrong language. The trade-off is that a successful click
-  // leaves the marker lit until the next click — relevant only if some
-  // code path outside the switcher calls `i18n.changeLanguage` (which
-  // nothing in this codebase does in production; tests reset the marker
-  // in `beforeEach` because they call changeLanguage externally for
-  // setup). See changeLanguage()'s cascading-rollback comments for the
-  // mirror invariant on the failure path.
-  _converge(depth = 0) {
-    if (depth >= YiviAppBar.MAX_CONVERGENCE_PASSES) return;
-    const target = YiviAppBar._latestRequestedLang;
-    if (target === undefined) return;
-    if (this.props.i18n.language === target) return;
-    YiviAppBar._inFlightSwitcherCalls += 1;
-    this.props.i18n.changeLanguage(target).then(
-      () => {
-        YiviAppBar._inFlightSwitcherCalls -= 1;
-        this._converge(depth + 1);
-      },
-      // Log the failure rather than swallow it silently — if convergence
-      // itself rejects, i18next stays at the stale language while DOM and
-      // localStorage already advertise the new one, and translations would
-      // render mismatched with no audit trail.
-      (err) => {
-        YiviAppBar._inFlightSwitcherCalls -= 1;
-        console.error('Language convergence failed', err);
-      },
-    );
-  }
-
   async changeLanguage(lang) {
-    // Compare against the *latest-requested* language, not just i18next's
-    // current value — rapid clicks (NL → EN) fire while NL's changeLanguage
-    // is still pending and i18n.language is stale, and we want the second
-    // click to still proceed.
-    const previousLatest = YiviAppBar._latestRequestedLang;
-    // `??` not `||` — an accidentally-set empty-string marker would
-    // otherwise incorrectly fall through to baseLanguage().
-    const current = previousLatest ?? baseLanguage(this.props.i18n);
-    if (current === lang) return;
-    YiviAppBar._latestRequestedLang = lang;
-    // Persist the user's choice *before* awaiting i18next. A reload between
-    // the await and a later persist call would silently lose the pick.
+    if (this.props.i18n.language === lang) return;
     try {
       window.localStorage.setItem('lang', lang);
-    } catch (e) {
+    } catch (_) {
       // localStorage unavailable — pick won't survive reload, but the page still works.
     }
-    YiviAppBar._inFlightSwitcherCalls += 1;
-    try {
-      await this.props.i18n.changeLanguage(lang);
-    } catch (err) {
-      YiviAppBar._inFlightSwitcherCalls -= 1;
-      console.error('Language switch failed', err);
-      // Roll back so detectLanguage() on next reload doesn't read a language
-      // we never successfully switched to — but only if no later click has
-      // already overwritten our state (that newer click owns localStorage).
-      // Restore _latestRequestedLang to the prior pending value rather than
-      // clearing it, so a still-pending earlier request retains ownership
-      // of the convergence step.
-      //
-      // Rollback target is `i18n.language` *now* (the language i18next has
-      // actually applied), not the `previousLatest` captured at call time.
-      // With a cascade of failing rapid clicks (A then B both reject), the
-      // captured `previousLatest` for B is A — itself a never-applied
-      // language. Persisting that would mean the next reload starts in a
-      // state the user never reached. Reading the live `i18n.language`
-      // instead always points at the last *successful* switch (or the
-      // initial language, if none succeeded).
-      //
-      // The pending-marker mirrors the same logic: it gets cleared on a
-      // fully-failed cascade (no in-flight clicks left) so the next click
-      // sees `previousLatest === undefined` and falls through to the live
-      // i18n.language for its comparison. Setting it to `previousLatest`
-      // (which can itself be a never-applied language) would soft-lock
-      // the switcher — the `if (current === lang) return` guard at the
-      // top of the function would no-op a click that *should* succeed,
-      // because `current` would be the stale marker rather than the
-      // language i18next actually applied.
-      if (YiviAppBar._latestRequestedLang === lang) {
-        const liveLang = baseLanguage(this.props.i18n);
-        try {
-          window.localStorage.setItem('lang', liveLang);
-        } catch (e) {
-          // see above
-        }
-        // If `previousLatest` already matches the live language, restore
-        // it (an earlier in-flight click is still expected to converge
-        // and owns the marker); otherwise reset to undefined so the next
-        // click reads `i18n.language` directly via the `??` fallback.
-        YiviAppBar._latestRequestedLang = previousLatest === liveLang ? previousLatest : undefined;
-      }
-      return;
-    }
-    YiviAppBar._inFlightSwitcherCalls -= 1;
-    // i18next's promises can resolve out of order. If our awaited promise
-    // resolved *after* a later click's promise already finished, i18next
-    // will have stamped `language` with our (now-stale) value, even though
-    // a newer click has logically superseded us. Bounded recursive
-    // re-convergence (`_converge`, cap = MAX_CONVERGENCE_PASSES): each
-    // pass awaits i18next and re-checks; chaining another check after
-    // the convergence's await keeps closing the gap until either (a)
-    // i18next agrees with the latest-requested language (and `_converge`
-    // clears the marker) or (b) the pass cap is hit. Realistic rapid-
-    // click sequences resolve in one to two passes; the cap guards
-    // against pathological loops if i18next ever resolved without
-    // actually applying. The guard against `latest === undefined` inside
-    // `_converge` keeps it from calling `i18n.changeLanguage(undefined)`,
-    // which triggers non-deterministic language detection.
-    this._converge();
-    // Only the most recent click writes `<html lang>`. Stale resolutions
-    // return silently (marker holds the lang of a newer click).
-    if (YiviAppBar._latestRequestedLang !== lang) return;
+    await this.props.i18n.changeLanguage(lang);
     document.documentElement.setAttribute('lang', lang);
   }
 
   renderLanguageSwitcher() {
-    const current = baseLanguage(this.props.i18n);
-    // Source from `SUPPORTED_LANGUAGES` rather than hardcoding so adding
-    // a third language doesn't require touching the switcher too. The
-    // exported order in i18n.js is the order rendered here; if a
-    // particular display order is ever required, sort or re-order at
-    // this site, not in i18n.js.
-    const langs = SUPPORTED_LANGUAGES;
-    // `lock` disables both buttons during a yivi-frontend session: the
-    // widget reads `language` at mount and never re-reads it, so a switch
-    // mid-session would leave the QR/status labels stuck in the original
-    // language until the next navigation. Disabling the switcher avoids
-    // that mismatched-language pitfall; tooltip explains why for sighted
-    // users, the same string sits in `aria-label` of the group when
-    // locked so screen readers also get the reason.
+    const current = this.props.i18n.language;
+    const langs = ['nl', 'en'];
     const lock = !!this.props.lockLanguageSwitcher;
     const lockTitle = lock ? this.props.t('language-switcher-locked-title') : undefined;
     const groupLabel = lock
@@ -208,21 +34,7 @@ export class YiviAppBar extends React.Component {
               <button
                 type="button"
                 className={`${styles.languageButton} ${isActive ? styles.languageButtonActive : ''}`}
-                // changeLanguage returns a promise (it's async). The internal
-                // try/catch + convergence handler already log every failure
-                // mode, so the only thing an unawaited promise can leak is
-                // an unhandled-rejection from the fire-and-forget convergence
-                // call inside _converge() — which itself swallows via its
-                // .then's onRejected. Belt-and-suspenders: explicit .catch
-                // on the click path so any future regression where a code
-                // path inside changeLanguage forgets to handle a rejection
-                // surfaces in our log instead of as an unhandled rejection
-                // on React's synthetic event handler.
-                onClick={() => {
-                  this.changeLanguage(lang).catch((err) => {
-                    console.error('Unhandled rejection in language switcher click', err);
-                  });
-                }}
+                onClick={() => this.changeLanguage(lang)}
                 aria-pressed={isActive}
                 disabled={isDisabled}
                 title={lockTitle}

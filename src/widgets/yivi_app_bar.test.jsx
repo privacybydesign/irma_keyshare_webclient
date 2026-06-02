@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, act, cleanup } from '@testing-library/react';
-import YiviAppBar, { YiviAppBar as YiviAppBarClass } from './yivi_app_bar.jsx';
+import YiviAppBar from './yivi_app_bar.jsx';
 import i18n from '../i18n.js';
 
 describe('YiviAppBar language switcher', () => {
@@ -8,8 +8,6 @@ describe('YiviAppBar language switcher', () => {
     await i18n.changeLanguage('en');
     document.documentElement.removeAttribute('lang');
     window.localStorage.clear();
-    YiviAppBarClass._latestRequestedLang = undefined;
-    YiviAppBarClass._inFlightSwitcherCalls = 0;
   });
 
   afterEach(() => {
@@ -27,11 +25,6 @@ describe('YiviAppBar language switcher', () => {
     expect(nl.getAttribute('aria-pressed')).toBe('false');
   });
 
-  it('does not duplicate the disabled state with aria-disabled (NVDA/JAWS double-announce regression)', () => {
-    render(<YiviAppBar title="Test" />);
-    expect(screen.getByRole('button', { name: 'EN' }).hasAttribute('aria-disabled')).toBe(false);
-  });
-
   it('flips i18n language, html lang attribute, and localStorage when the other button is clicked', async () => {
     render(<YiviAppBar title="Test" />);
     await act(async () => {
@@ -42,45 +35,6 @@ describe('YiviAppBar language switcher', () => {
     expect(window.localStorage.getItem('lang')).toBe('nl');
     expect(screen.getByRole('button', { name: 'NL' }).disabled).toBe(true);
     expect(screen.getByRole('button', { name: 'EN' }).disabled).toBe(false);
-  });
-
-  it('writes localStorage *before* awaiting i18n.changeLanguage (so a reload mid-await keeps the pick)', async () => {
-    // Replace i18n.changeLanguage with a promise we hold open. While it is
-    // unresolved, the click handler is paused at its `await`. If localStorage
-    // is already populated at that point, the implementation must have
-    // written it *before* entering the await — which is exactly the
-    // invariant this test protects.
-    let resolveLangChange;
-    const langChangePromise = new Promise((resolve) => {
-      resolveLangChange = resolve;
-    });
-    vi.spyOn(i18n, 'changeLanguage').mockImplementation(() => langChangePromise);
-
-    render(<YiviAppBar title="Test" />);
-    fireEvent.click(screen.getByRole('button', { name: 'NL' }));
-
-    // Sync handler portion has finished; awaiting i18n.changeLanguage now.
-    expect(window.localStorage.getItem('lang')).toBe('nl');
-
-    resolveLangChange();
-    await act(async () => {
-      await langChangePromise;
-    });
-  });
-
-  it('is a no-op when called with the already-active language', async () => {
-    // Call the method directly. `fireEvent.click` on the active button is a
-    // false positive in jsdom: HTMLButtonElement.disabled suppresses the
-    // synthetic click before React's handler ever runs, so the internal
-    // `if (current === lang) return` guard is never exercised that way. The
-    // disabled-button rendering is covered by a separate test; this one
-    // pins the method-level guard regardless of how the click was issued.
-    const setItemSpy = vi.spyOn(window.localStorage, 'setItem');
-    const changeSpy = vi.spyOn(i18n, 'changeLanguage');
-    const instance = new YiviAppBarClass({ i18n });
-    await instance.changeLanguage('en');
-    expect(setItemSpy).not.toHaveBeenCalled();
-    expect(changeSpy).not.toHaveBeenCalled();
   });
 
   it('survives localStorage being unavailable (Safari private mode etc.)', async () => {
@@ -95,337 +49,14 @@ describe('YiviAppBar language switcher', () => {
     expect(document.documentElement.getAttribute('lang')).toBe('nl');
   });
 
-  it('cascading-rollback does not persist a never-applied language when two clicks both reject', async () => {
-    // Bug scenario: clicks A (NL) then B (EN) both reject. A's catch
-    // skips because _latestRequestedLang === 'en', not 'nl'. B's catch
-    // runs. The earlier code captured `previousLatest` at call time and
-    // wrote it back — B's previousLatest was 'nl' (set by A's sync
-    // prologue), itself a language i18next never reached. The next
-    // reload would then read 'nl' from localStorage even though the
-    // user is still effectively in the initial language. Fix: rollback
-    // target is `i18n.language` *now* — the actually-applied language —
-    // so a cascade of failures always settles localStorage on the last
-    // known-applied value (here: the initial 'en').
-    const mockI18n = {
-      language: 'en',
-      changeLanguage: vi.fn(() => Promise.reject(new Error('load failed'))),
-    };
-    const instance = new YiviAppBarClass({ i18n: mockI18n });
-    window.localStorage.setItem('lang', 'en');
-
-    const a = instance.changeLanguage('nl');
-    const b = instance.changeLanguage('en');
-    await Promise.all([a, b]);
-
-    // Neither click applied; localStorage must reflect the initial 'en',
-    // not the never-applied 'nl' captured at click-B time.
-    expect(window.localStorage.getItem('lang')).toBe('en');
-  });
-
-  it('rolls back localStorage when i18n.changeLanguage rejects', async () => {
-    const mockI18n = {
-      language: 'en',
-      changeLanguage: vi.fn(() => Promise.reject(new Error('load failed'))),
-    };
-    const instance = new YiviAppBarClass({ i18n: mockI18n });
-
-    window.localStorage.setItem('lang', 'en');
-    await instance.changeLanguage('nl');
-
-    // localStorage must reflect the *previous* (still-current) language, not
-    // the failed one — otherwise detectLanguage() on next reload would start
-    // the user in a language they never successfully switched to.
-    expect(window.localStorage.getItem('lang')).toBe('en');
-    expect(YiviAppBarClass._latestRequestedLang).toBeUndefined();
-  });
-
-  it('re-issues changeLanguage when an out-of-order resolution leaves i18next at the wrong language', async () => {
-    // Two changeLanguage calls (NL then EN) with resources that resolve in
-    // reverse order — EN's promise settles first, NL's later. Without the
-    // convergence step, i18next.language would end up `nl` (whichever
-    // promise resolves last wins inside i18next) while localStorage and
-    // <html lang> point at `en`, so translations would silently render
-    // in the wrong language. Verify the switcher re-issues a
-    // changeLanguage('en') to bring i18next back in sync.
-    const calls = [];
-    const resolvers = {};
-    const mockI18n = {
-      language: 'en',
-      changeLanguage: vi.fn((lang) => {
-        calls.push(lang);
-        return new Promise((resolve) => {
-          resolvers[lang] = () => {
-            // Mimic i18next: setting language on resolution.
-            mockI18n.language = lang;
-            resolve();
-          };
-        });
-      }),
-    };
-    const instance = new YiviAppBarClass({ i18n: mockI18n });
-
-    const nlPromise = instance.changeLanguage('nl');
-    const enPromise = instance.changeLanguage('en');
-
-    // Resolve EN first, NL second — i18next.language will end at 'nl'.
-    resolvers.en();
-    resolvers.nl();
-    await Promise.all([nlPromise, enPromise]);
-
-    // The post-await convergence in the second-resolving call (NL) must
-    // have detected the drift and re-issued changeLanguage('en').
-    expect(calls).toContain('en');
-    expect(calls.filter((c) => c === 'en').length).toBeGreaterThanOrEqual(2);
-  });
-
-  it('survives three rapid clicks with arbitrary resolution order — last click wins', async () => {
-    // NL → EN → NL with arbitrary promise resolution order. The convergence
-    // step should pull i18next back to whichever language was requested
-    // last regardless of which earlier promise settled when.
-    const pending = []; // FIFO of resolver entries: { lang, fire }
-    const mockI18n = {
-      language: 'en',
-      changeLanguage: vi.fn(
-        (lang) =>
-          new Promise((resolve) => {
-            pending.push({
-              lang,
-              fire: () => {
-                mockI18n.language = lang;
-                resolve();
-              },
-            });
-          }),
-      ),
-    };
-    const instance = new YiviAppBarClass({ i18n: mockI18n });
-
-    const p1 = instance.changeLanguage('nl');
-    const p2 = instance.changeLanguage('en');
-    const p3 = instance.changeLanguage('nl');
-
-    expect(window.localStorage.getItem('lang')).toBe('nl');
-    expect(YiviAppBarClass._latestRequestedLang).toBe('nl');
-
-    // pending = [nl(p1), en(p2), nl(p3)]. Resolve in chaotic order: EN
-    // first (the middle click), then NL#1, then the final NL.
-    pending.splice(1, 1)[0].fire(); // EN (p2)
-    pending.shift().fire(); // NL (p1)
-    pending.shift().fire(); // NL (p3)
-    await Promise.all([p1, p2, p3]);
-
-    // Drain any fire-and-forget convergence calls the post-await steps
-    // queued (each pulled from the head of `pending`).
-    while (pending.length) {
-      pending.shift().fire();
-      await Promise.resolve();
-    }
-
-    expect(mockI18n.language).toBe('nl');
-    expect(document.documentElement.getAttribute('lang')).toBe('nl');
-  });
-
-  it('survives rapid clicks: the last requested language wins even if i18next resolves out of order', async () => {
-    // The disabled state on the inactive button prevents this race via the
-    // DOM in normal flow, but withTranslation can re-render off Redux /
-    // other state mid-flight too, briefly re-enabling the other button.
-    // Test the underlying method directly so the guard is verified
-    // independently of the disabled-button rendering path.
-    const resolvers = {};
-    const mockI18n = {
-      language: 'en',
-      changeLanguage: vi.fn(
-        (lang) =>
-          new Promise((resolve) => {
-            resolvers[lang] = resolve;
-          }),
-      ),
-    };
-    const instance = new YiviAppBarClass({ i18n: mockI18n });
-
-    const nlPromise = instance.changeLanguage('nl');
-    const enPromise = instance.changeLanguage('en');
-
-    // localStorage reflects the latest call immediately (sync writes before
-    // the await), even though no i18next promise has resolved yet.
-    expect(window.localStorage.getItem('lang')).toBe('en');
-
-    // Resolve EN first, then NL — the *earlier* request finishes last.
-    resolvers.en();
-    resolvers.nl();
-    await Promise.all([nlPromise, enPromise]);
-
-    // The post-await setAttribute from NL must bail out because EN is the
-    // latest-requested language; the DOM has to settle at EN.
-    expect(document.documentElement.getAttribute('lang')).toBe('en');
-  });
-
-  it('logs but does not corrupt state when the post-await convergence call itself rejects', async () => {
-    // Same out-of-order scenario as the convergence test, but make the
-    // fire-and-forget convergence call (the re-issued changeLanguage that
-    // pulls i18next back into sync) reject. The .catch must log via
-    // console.error and the surrounding state must remain consistent with
-    // the user's most recent click — otherwise a transient network/load
-    // hiccup during convergence would silently corrupt localStorage and
-    // the latest-requested marker.
-    const calls = [];
-    const resolvers = {};
-    const mockI18n = {
-      language: 'en',
-      changeLanguage: vi.fn((lang) => {
-        calls.push(lang);
-        // First two calls (the user's NL then EN) resolve. The third call
-        // is the convergence re-issue — reject it.
-        if (calls.length >= 3) {
-          return Promise.reject(new Error('convergence failed'));
-        }
-        return new Promise((resolve) => {
-          resolvers[lang] = () => {
-            mockI18n.language = lang;
-            resolve();
-          };
-        });
-      }),
-    };
-    const instance = new YiviAppBarClass({ i18n: mockI18n });
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-    const nlPromise = instance.changeLanguage('nl');
-    const enPromise = instance.changeLanguage('en');
-
-    // EN resolves first, NL second — NL's post-await convergence detects the
-    // drift (i18next stuck on 'nl') and fires a third changeLanguage('en')
-    // which rejects.
-    resolvers.en();
-    resolvers.nl();
-    await Promise.all([nlPromise, enPromise]);
-    // Microtask drain for the fire-and-forget rejection to hit .catch.
-    await Promise.resolve();
-    await Promise.resolve();
-
-    expect(errorSpy).toHaveBeenCalledWith('Language convergence failed', expect.any(Error));
-    // localStorage and the latest-requested marker reflect the user's final
-    // pick (EN), not the failed-convergence intermediate state.
-    expect(window.localStorage.getItem('lang')).toBe('en');
-    expect(YiviAppBarClass._latestRequestedLang).toBe('en');
-  });
-
-  it('bounded recursive convergence caps re-issues at MAX_CONVERGENCE_PASSES', async () => {
-    // Pathological i18next stub that "resolves" without actually applying
-    // the language. Without the cap, _converge would loop forever; with
-    // the cap, the chain stops after MAX_CONVERGENCE_PASSES recursive
-    // calls (independent of the initial user-issued changeLanguage).
-    let calls = 0;
-    const mockI18n = {
-      language: 'en',
-      changeLanguage: vi.fn(() => {
-        calls += 1;
-        // Never advances mockI18n.language — every convergence pass sees
-        // the same drift and would re-issue without the cap.
-        return Promise.resolve();
-      }),
-    };
-    const instance = new YiviAppBarClass({ i18n: mockI18n });
-
-    await instance.changeLanguage('nl');
-    // Drain queued microtasks so the recursive .then callbacks all fire.
-    for (let i = 0; i < 20; i += 1) {
-      await Promise.resolve();
-    }
-
-    // One initial call + MAX_CONVERGENCE_PASSES convergence calls.
-    expect(calls).toBe(1 + YiviAppBarClass.MAX_CONVERGENCE_PASSES);
-  });
-
   it('renders the language switcher locked when lockLanguageSwitcher is set (yivi-session-in-flight)', () => {
-    // The yivi-frontend widget reads its `language` argument once at
-    // mount and never refreshes — switching EN↔NL during an active
-    // session would leave its labels stuck in the original language.
-    // SelectMethod passes `lockLanguageSwitcher` to disable the switcher
-    // for the duration of the QR/email-login page; this test pins that
-    // both buttons are disabled and the tooltip is set when locked.
     render(<YiviAppBar title="Test" lockLanguageSwitcher />);
     const en = screen.getByRole('button', { name: 'EN' });
     const nl = screen.getByRole('button', { name: 'NL' });
     expect(en.disabled).toBe(true);
     expect(nl.disabled).toBe(true);
-    // Tooltip is set on both individual buttons and on the wrapping
-    // group so hover anywhere on the switcher surfaces the explanation.
     expect(en.getAttribute('title')).toBeTruthy();
     expect(nl.getAttribute('title')).toBeTruthy();
-  });
-
-  it('clears _latestRequestedLang when an external i18n.changeLanguage fires (no in-flight switcher calls)', async () => {
-    // Mount the app bar so componentDidMount subscribes to languageChanged.
-    // Then simulate an external change (calling i18n.changeLanguage from
-    // outside the switcher — what tests / hypothetical future integrations
-    // would do). With no switcher calls in flight, the subscriber must
-    // clear the marker so the next user click compares against the live
-    // i18n.language rather than the stale marker.
-    render(<YiviAppBar title="Test" />);
-    YiviAppBarClass._latestRequestedLang = 'nl';
-    YiviAppBarClass._inFlightSwitcherCalls = 0;
-    await act(async () => {
-      await i18n.changeLanguage('en');
-    });
-    expect(YiviAppBarClass._latestRequestedLang).toBeUndefined();
-  });
-
-  it('does NOT clear _latestRequestedLang while a switcher call is in flight', async () => {
-    // The marker is load-bearing for out-of-order convergence while
-    // switcher calls are pending. Mock that state by bumping the
-    // in-flight count manually, fire the languageChanged event, and
-    // assert the subscriber bailed without touching the marker.
-    render(<YiviAppBar title="Test" />);
-    YiviAppBarClass._latestRequestedLang = 'nl';
-    YiviAppBarClass._inFlightSwitcherCalls = 1;
-    await act(async () => {
-      await i18n.changeLanguage('en');
-    });
-    expect(YiviAppBarClass._latestRequestedLang).toBe('nl');
-    // Reset for the afterEach cleanup.
-    YiviAppBarClass._inFlightSwitcherCalls = 0;
-  });
-
-  it('steady-state: <html lang> agrees with i18n.language after the convergence chain drains', async () => {
-    // After all chained convergence calls settle, the DOM <html lang>
-    // attribute and i18next's own language must match. The intermediate
-    // state during convergence is intentionally inconsistent (setAttribute
-    // fires before the fire-and-forget _converge resolves), so this test
-    // pins the *post-drain* invariant rather than the in-flight state.
-    let pending = [];
-    const mockI18n = {
-      language: 'en',
-      changeLanguage: vi.fn(
-        (lang) =>
-          new Promise((resolve) => {
-            pending.push({
-              lang,
-              fire: () => {
-                mockI18n.language = lang;
-                resolve();
-              },
-            });
-          }),
-      ),
-    };
-    const instance = new YiviAppBarClass({ i18n: mockI18n });
-
-    const p = instance.changeLanguage('nl');
-    pending.shift().fire();
-    await p;
-    // Drain any fire-and-forget convergence calls _converge() queued.
-    // The body of _converge re-checks `i18n.language === target` after
-    // each await, so a settled chain leaves `pending` empty AND the DOM
-    // attribute matching i18next's language.
-    while (pending.length) {
-      pending.shift().fire();
-      await Promise.resolve();
-    }
-    await Promise.resolve();
-
-    expect(mockI18n.language).toBe('nl');
-    expect(document.documentElement.getAttribute('lang')).toBe('nl');
   });
 
   it('notifies a languageChanged subscriber so consumers like document.title can react', async () => {

@@ -9,7 +9,6 @@ import PlusIcon from '../../widgets/plus_icon';
 import styles from './index.module.scss';
 import * as YiviFrontend from '@privacybydesign/yivi-frontend';
 import CrossIcon from '../../widgets/cross_icon';
-import { baseLanguage } from '../../i18n';
 
 // See select_method.jsx for the rationale on the cancellation sentinel.
 // Keep this string in sync with that one — both call sites should switch
@@ -57,7 +56,7 @@ class Emails extends React.Component {
 
   onAddEmail() {
     YiviFrontend.newPopup({
-      language: baseLanguage(this.props.i18n),
+      language: this.props.i18n.language,
       session: this.props.addEmailYiviSession,
     })
       .start()
@@ -160,8 +159,7 @@ class Emails extends React.Component {
                   // Optional chaining: see load_cards/index.jsx for rationale —
                   // a missing /config.js shouldn't crash the AccountOverview
                   // render path on top of the reducer-level guards.
-                  window.config?.emailIssuanceUrl?.[baseLanguage(this.props.i18n)] ||
-                  window.config?.emailIssuanceUrl?.en
+                  window.config?.emailIssuanceUrl?.[this.props.i18n.language] || window.config?.emailIssuanceUrl?.en
                 }
               >
                 {/* Trans fills in the link text from the translation. */}

@@ -8,11 +8,10 @@ import { legacy_createStore as createStore, applyMiddleware, combineReducers } f
 import login from './loginstate';
 import logs from './logs';
 import userdata from './userdata';
-import i18n, { baseLanguage } from '../i18n';
+import i18n from '../i18n';
 
 // All fetch() calls below use `window.config?.server` rather than the bare
-// dereference. Mirrors the same defensive pattern as i18n.js / store/userdata.js
-// / store/loginstate.js so a missing /config.js doesn't cause every dispatched
+// dereference so a missing /config.js doesn't cause every dispatched
 // action to throw — the fetch instead resolves to a URL starting with
 // "undefined/" and falls into the existing .catch handler, which raises a
 // user-visible error instead of an uncaught TypeError.
@@ -187,7 +186,7 @@ function handleEmailLogin({ dispatch }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: action.email,
-          language: baseLanguage(i18n),
+          language: i18n.language,
         }),
       })
         .then((res) => {

@@ -6,7 +6,6 @@ import Column from '../../widgets/column';
 import YiviAppBar from '../../widgets/yivi_app_bar';
 import YiviButton from '../../widgets/yivi_button';
 import Spacer from '../../widgets/spacer';
-import { baseLanguage } from '../../i18n';
 
 // Sentinel `@privacybydesign/yivi-frontend` rejects with when the user
 // cancels (vs. an actual network/protocol error). The package doesn't
@@ -64,7 +63,7 @@ class SelectMethod extends React.Component {
     // longer matches, the resolution belongs to a stale mount.
     const widget = YiviFrontend.newWeb({
       element: '#yivi-web-form',
-      language: baseLanguage(this.props.i18n),
+      language: this.props.i18n.language,
       session: this.props.yiviSession,
     });
     this._yiviWeb = widget;

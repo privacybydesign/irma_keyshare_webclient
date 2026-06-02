@@ -5,11 +5,10 @@ import 'moment/locale/nl';
 
 import styles from './logs_table.module.scss';
 import YiviTable from '../../widgets/yivi_table';
-import { baseLanguage } from '../../i18n';
 
 class LogsTable extends React.Component {
   renderLogEntryTime(timestamp) {
-    const time = moment.unix(timestamp).locale(baseLanguage(this.props.i18n));
+    const time = moment.unix(timestamp).locale(this.props.i18n.language);
 
     return (
       <td className={'when-column'} title={time.format('dddd, D MMM YYYY, H:mm:ss')}>
