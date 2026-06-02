@@ -10,9 +10,7 @@ import styles from './index.module.scss';
 import * as YiviFrontend from '@privacybydesign/yivi-frontend';
 import CrossIcon from '../../widgets/cross_icon';
 
-// See select_method.jsx for the rationale on the cancellation sentinel.
-// Keep this string in sync with that one — both call sites should switch
-// together if yivi-frontend ever exports a typed cancel marker.
+// yivi-frontend rejects with this string on user cancel (not an error).
 const YIVI_CANCELLED_SENTINEL = 'Aborted';
 
 function mapStateToProps(state) {
@@ -31,9 +29,6 @@ class Emails extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    // React's contract: return `null` to signal "no state change". Returning
-    // `state` (the same object reference) still schedules a no-op re-render
-    // pass internally — null is the documented zero-cost signal.
     if (state.emailToBeDeleted === null) return null;
     const stillActive = props.emails.some(
       (address) => !address.delete_in_progress && address.email === state.emailToBeDeleted,
@@ -99,12 +94,6 @@ class Emails extends React.Component {
         <td>{address.email}</td>
         <td className={styles.deleteColumn}>
           {address.delete_in_progress ? (
-            // Purely informational tooltip — no click target, so no role
-            // or tabIndex. Previously rendered as <a role="button"
-            // tabIndex="0">, which made it focusable as a button but
-            // had no Enter/Space handler — a dead control for keyboard
-            // users. <span> with aria-label surfaces the explanation
-            // text to screen readers without claiming activatability.
             <span
               className={styles.tooltip}
               data-title={this.props.t('delete-in-progress-explanation')}
@@ -156,14 +145,9 @@ class Emails extends React.Component {
               <a
                 key="issuer-link"
                 href={
-                  // Optional chaining: see load_cards/index.jsx for rationale —
-                  // a missing /config.js shouldn't crash the AccountOverview
-                  // render path on top of the reducer-level guards.
                   window.config?.emailIssuanceUrl?.[this.props.i18n.language] || window.config?.emailIssuanceUrl?.en
                 }
-              >
-                {/* Trans fills in the link text from the translation. */}
-              </a>,
+              />,
             ]}
           />
         </p>

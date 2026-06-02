@@ -1,20 +1,8 @@
-// Redux 5 marked the bare `createStore` as deprecated and added a runtime
-// console warning on every load. `legacy_createStore` is the documented
-// non-deprecated alias for the same function — same behavior, no warning.
-// A future cleanup could migrate to `@reduxjs/toolkit`'s `configureStore`,
-// which would also drop the custom `applyMiddleware` call; the alias keeps
-// this PR's scope tight while silencing the dev-console noise.
 import { legacy_createStore as createStore, applyMiddleware, combineReducers } from 'redux';
 import login from './loginstate';
 import logs from './logs';
 import userdata from './userdata';
 import i18n from '../i18n';
-
-// All fetch() calls below use `window.config?.server` rather than the bare
-// dereference so a missing /config.js doesn't cause every dispatched
-// action to throw — the fetch instead resolves to a URL starting with
-// "undefined/" and falls into the existing .catch handler, which raises a
-// user-visible error instead of an uncaught TypeError.
 
 // Catch and deal with log loading
 function handleLoadLogs({ getState, dispatch }) {

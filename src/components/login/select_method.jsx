@@ -7,31 +7,11 @@ import YiviAppBar from '../../widgets/yivi_app_bar';
 import YiviButton from '../../widgets/yivi_button';
 import Spacer from '../../widgets/spacer';
 
-// Sentinel `@privacybydesign/yivi-frontend` rejects with when the user
-// cancels (vs. an actual network/protocol error). The package doesn't
-// export it as a constant in 1.x — it's only documented as a member of
-// the `YiviState` union — so we hardcode it here with the upstream-
-// coupling caveat. If yivi-frontend ever exports a typed cancel sentinel
-// (or switches to a typed error), swap this constant for the export and
-// audit `emails/index.jsx` for the same string-equality pattern.
+// yivi-frontend rejects with this string on user cancel (not an error).
 const YIVI_CANCELLED_SENTINEL = 'Aborted';
 
-// The yivi-web-form section must keep the same DOM node *and* its
-// imperatively-appended children (QR canvas, status messages) forever —
-// yivi-frontend writes into it via the DOM, outside React's tracking.
-//
-// React's reconciler already preserves the section's *element identity*
-// across re-renders (same type, same id, no React-tracked children), so
-// `shouldComponentUpdate => false` is not load-bearing for that on its
-// own — the surrounding select_method.test.jsx pins node identity end-
-// to-end. The guard's actual job is defense-in-depth: if a future edit
-// to the JSX below accidentally adds children to `<section>` (e.g. a
-// translated placeholder caption), React would diff those new JSX
-// children against the DOM, conclude yivi's imperatively-appended
-// canvas is "extra", and rip it out mid-session. `shouldComponentUpdate
-// => false` short-circuits render() entirely so no such JSX edit can
-// reach reconciliation without also touching this guard, surfacing the
-// regression at code-review time instead of runtime.
+// yivi-frontend writes into this section via the DOM directly. Never re-render
+// it so React doesn't clobber the imperatively-appended QR canvas.
 class YiviWebFormMount extends React.Component {
   shouldComponentUpdate() {
     return false;
@@ -43,24 +23,9 @@ class YiviWebFormMount extends React.Component {
 }
 
 class SelectMethod extends React.Component {
-  // Hold the email input via a React ref instead of fishing it back out
-  // with `document.getElementById('input-email')`. The id is still useful
-  // (it labels the form's submit button for any external automation and
-  // matches the autofill convention) but reading via getElementById makes
-  // the id load-bearing for correctness — rename it or accidentally mount
-  // a second SelectMethod and the submit silently picks up the wrong
-  // node. The ref is owned by this instance and is therefore unambiguous.
   _emailInputRef = React.createRef();
 
   componentDidMount() {
-    // React 19 StrictMode runs componentDidMount → componentWillUnmount →
-    // componentDidMount on the *same* instance in development to surface
-    // unsafe lifecycle patterns. A simple `_unmounted` flag isn't enough:
-    // when mount #2 runs it resets the flag, and a still-pending `.then`
-    // from mount #1's `start()` would then incorrectly pass the guard.
-    // Capture the widget reference in closure scope so each mount's
-    // callbacks compare against their own widget; if `this._yiviWeb` no
-    // longer matches, the resolution belongs to a stale mount.
     const widget = YiviFrontend.newWeb({
       element: '#yivi-web-form',
       language: this.props.i18n.language,
@@ -71,10 +36,7 @@ class SelectMethod extends React.Component {
       .start()
       .then(() => {
         if (widget !== this._yiviWeb) return;
-        // Delay dispatch to make Yivi success animation visible. Stash the
-        // timer id so componentWillUnmount can cancel it — otherwise the
-        // dispatch fires on an unmounted tree if the user navigates away
-        // in this 1s window.
+        // Delay to let the Yivi success animation play; cancel on unmount.
         this._verifyTimer = setTimeout(() => {
           this._verifyTimer = undefined;
           this.props.dispatch({ type: 'verifySession' });
@@ -147,12 +109,6 @@ class SelectMethod extends React.Component {
   render() {
     return (
       <>
-        {/* The yivi-frontend widget reads its `language` argument once at
-            mount and never refreshes its labels — switching EN↔NL while
-            the QR is on screen would leave the widget's own strings in
-            the original language. Lock the switcher for the duration of
-            SelectMethod so users can't end up in that mismatched state;
-            the rest of the app re-renders normally on language change. */}
         <YiviAppBar title={this.props.t('title')} lockLanguageSwitcher />
         <Column>
           <Spacer />
