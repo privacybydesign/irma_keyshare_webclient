@@ -61,6 +61,11 @@
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   border: 0px;
+  margin: 0 auto;
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 
   .yivi-web-content {
     border-radius: 8px;
