@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   `lang="en"` is the conservative fallback that crawlers and pre-JS
-  assistive tech see for the brief window before src/index.jsx mounts.
+  assistive tech see for the brief window before src/index.tsx mounts.
   Once the React tree mounts, it overrides this attribute with whatever
   i18next resolved (window.config.lang → localStorage → navigator.languages
   → "en"); the yivi-app-bar switcher then mutates it on every change.
@@ -38,6 +38,6 @@
       <p lang="nl">Je moet JavaScript inschakelen om deze app te gebruiken.</p>
     </noscript>
     <div id="root"></div>
-    <script type="module" src="/src/index.jsx"></script>
+    <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>

@@ -1,9 +1,9 @@
 @use 'theme' as *;
 
-// Three explicit grid columns spanning the bar: side / title / side. The
-// title sits in its own column so it can never overlap the controls, and
-// the side columns each take 1fr of remaining space so the title is
-// visually centered regardless of which side controls are rendered.
+// Three-column grid: [lang] [title] [logout].
+// 1fr side columns keep the title visually centred regardless of which
+// side controls are present. The title lives in the auto middle column so
+// it sizes to its content on wide screens without polluting the sides.
 .bar {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -23,22 +23,34 @@
     font-weight: bold;
     font-size: 24px;
     line-height: 30px;
-    min-width: 0; // lets the cell shrink rather than overflow on tiny viewports
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  // Slight tightening on narrow viewports so the three cells comfortably
-  // share a single row on typical phones (~375 px CSS).
-  @media (max-width: 480px) {
-    gap: 4px;
-    padding: 0 8px;
+  // On narrow screens switch to a two-row flex layout:
+  // row 1 — lang switcher left, logout button right (if present)
+  // row 2 — title full-width and centred
+  // This avoids the 1fr auto 1fr grid collapsing when the auto title
+  // track is wider than the available space.
+  @media (max-width: 540px) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: unset;
+    gap: 0;
+    padding: 8px 12px;
 
     h1 {
+      order: 3;
+      flex: 0 0 100%;
       font-size: 18px;
       line-height: 24px;
-      padding: 12px 0;
+      padding: 2px 0 10px;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: unset;
     }
   }
 }
@@ -50,6 +62,10 @@
   align-items: center;
   gap: 6px;
   min-width: 0;
+
+  @media (max-width: 540px) {
+    order: 1;
+  }
 }
 
 .languageButton {
@@ -87,4 +103,9 @@
   grid-column: 3;
   justify-self: end;
   min-width: 0;
+
+  @media (max-width: 540px) {
+    order: 2;
+    margin-left: auto;
+  }
 }

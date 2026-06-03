@@ -10,6 +10,6 @@ export default defineConfig({
     },
     globals: false,
     setupFiles: ['./vitest.setup.js'],
-    include: ['src/**/*.test.js', 'src/**/*.test.jsx', '*.test.js'],
+    include: ['src/**/*.test.ts', 'src/**/*.test.tsx', '*.test.js'],
   },
 });
