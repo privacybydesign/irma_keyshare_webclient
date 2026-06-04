@@ -18,7 +18,7 @@ Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in a browser.
 
 The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Lint is not run inline by the Vite dev server — use `yarn lint` (or the CI workflow) to surface ESLint and Stylelint findings.
 
 If you want your local React app to communicate with the MyIRMA backend, you will face CORS issues in your browser.
 Even if you use a local setup, the MyIRMA backend server will use another port to host its endpoints on.
@@ -53,4 +53,44 @@ You can easily test the React app using Docker and Go:
 4. Run `irma keyshare myirmaserver --static-path /path/to/irma_keyshare_webclient/build -c ./testdata/configurations/myirmaserver.yml`
 5. Open [http://localhost:8081](http://localhost:8081) to view it in a browser.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Configuration
+
+The deployed app reads its runtime config from `public/config.js`, which sets `window.config`. The file in this repo is the local-development template; deployments (e.g. the Kubernetes manifests in `irma-keyshare-ops`) overwrite it with environment-specific values.
+
+### `lang`
+
+The `lang` field decides which translation the app starts in. Starting in 4.0.0 the shipped template runs a small `detectLanguage()` helper at script-load time:
+
+1. If `localStorage.lang` holds `nl` or `en` (set by a previous click on the in-app language switcher), that wins.
+2. Otherwise, walk `navigator.languages` in preference order and pick the first base subtag (`nl` or `en`) we support.
+3. Otherwise, fall back to `en`.
+
+This is a behavior change from earlier versions where `lang` was hard-coded to `'en'`. **Operators who want to keep the old "always start in English" behavior** should replace the `detectLanguage()` call with a literal in the deployed `config.js`:
+
+```js
+window.config = {
+  ...
+  lang: 'en',
+  ...
+};
+```
+
+The in-app EN/NL switcher in the header writes the user's pick to `localStorage.lang` regardless of how the initial language was chosen, so subsequent loads honour the explicit pick.
+
+## CI / Delivery / Release
+
+Three workflows split the work:
+
+- **`ci.yml`** runs on every PR and every push to `master`. Four parallel jobs: `lint`, `test`, `build`, `image-scan`. The image-scan job builds the production Docker image locally and runs `anchore/scan-action`, but never pushes. This is the PR gate.
+- **`delivery.yml`** runs on push to `master` and on `workflow_dispatch`. Builds, scans, and pushes `:edge` to GHCR — same scan as `ci.yml` / `release.yml`, with `fail-build: true` since publishing has no PR-style escape hatch. Dispatch is restricted to `master` via a job-level `if: github.ref == 'refs/heads/master'`: re-publishing `:edge` from the current `master` commit is supported, but dispatching from a PR branch causes the job to be skipped (the Actions UI renders skipped jobs distinctly from passing ones, so a stray "Run workflow" click can't masquerade as a successful republish). This keeps `master` as the single source of truth for the deployed `:edge` tag — for pre-merge end-to-end testing of a PR branch, build and push the image to your own GHCR namespace instead.
+- **`release.yml`** runs on `release: published`. Builds + scans + pushes `:X.Y.Z`, `:X.Y`, `:X`, and `:latest` based on the release tag.
+
+## Container vulnerability scanning
+
+All three workflows run [`anchore/scan-action`](https://github.com/anchore/scan-action) against the built image, with SARIF uploaded to GitHub Code Scanning. The scope of the build-failing gate is deliberately narrow — note what does **not** block merges or releases:
+
+- **Severity cutoff is `high`.** Moderate and low CVEs surface in Code Scanning but do not fail the build. Bump `severity-cutoff` in all three workflows if you want a stricter gate.
+- **`only-fixed: true`.** Unfixable CVEs (no upstream patch available) are reported via SARIF but don't fail the build — blocking on something we can't actually patch isn't useful. They become "fixable" automatically once a fix is published.
+- **`fail-build` is gated to non-PR events.** PR runs in `ci.yml` always upload a SARIF report but never block the PR on its content. The intent is that a freshly-disclosed upstream CVE shouldn't block every open PR until the base image is bumped. The gate is unconditional on `delivery.yml` (master push or workflow_dispatch) and `release.yml` (published release) — anything that publishes to GHCR has to clear the bar.
+
+The runtime base image is pinned by manifest-list digest (`joseluisq/static-web-server:2.42.0@sha256:…`) so an upstream silent re-tag of `:latest` can't shift scan results without a source change — bump both the tag and the digest together when reviewing CVE fixes. The build-stage image (`node:24-alpine`) is intentionally **not** digest-pinned: its output never ships, and pinning would slow CVE patches in the build toolchain without changing the scanned artefact.

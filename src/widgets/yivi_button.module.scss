@@ -1,4 +1,4 @@
-@import 'src/theme';
+@use 'theme' as *;
 
 @mixin button {
   width: fit-content;
@@ -21,8 +21,11 @@
   @include button;
   font-size: 16px;
   color: white;
-  background: #e12747 url('../../public/assets/button-primary.svg') no-repeat
-    right top;
+  // The SVG lives in `public/` and is served at /assets/. Reference it via
+  // the absolute URL so Vite rewrites it correctly under a sub-path deploy
+  // (`base: '/sub/'`) instead of reaching across the source tree, which
+  // would silently inline a second copy alongside the served one.
+  background: #e12747 url('/assets/button-primary.svg') no-repeat right top;
 }
 
 .button-secondary {

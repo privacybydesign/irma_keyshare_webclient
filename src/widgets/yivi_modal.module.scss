@@ -1,4 +1,4 @@
-@import 'src/theme';
+@use 'theme' as *;
 
 .overlay {
   position: fixed;
@@ -13,8 +13,7 @@
 
 .container {
   position: absolute;
-  max-width: 500px;
-  min-width: 280px;
+  width: min(500px, calc(100% - 32px));
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -47,4 +46,23 @@
 
 .buttonBar button {
   margin-left: 16px;
+}
+
+// Dismiss control in the header. `<button>` (not `<div>`) so it's
+// keyboard-accessible (Enter/Space activate, focus ring visible) and
+// announced to screen readers — the previous `<div onClick>` version
+// was effectively invisible to AT users. Reset the user-agent button
+// chrome since the visual is just the CrossIcon SVG.
+.dismissButton {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+}
+.dismissButton:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }

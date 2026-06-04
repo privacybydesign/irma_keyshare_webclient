@@ -4,6 +4,7 @@
     "stylelint-prettier/recommended"
   ],
   "rules": {
-    "prettier/prettier": [true, {"singleQuote": true}]
+    "prettier/prettier": [true, {"singleQuote": true}],
+    "scss/load-no-partial-leading-underscore": true
   }
 }

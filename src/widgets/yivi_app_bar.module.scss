@@ -1,26 +1,111 @@
-@import 'src/theme';
+@use 'theme' as *;
 
+// Three-column grid: [lang] [title] [logout].
+// 1fr side columns keep the title visually centred regardless of which
+// side controls are present. The title lives in the auto middle column so
+// it sizes to its content on wide screens without polluting the sides.
 .bar {
-  height: 86px;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  min-height: 86px;
   background-color: $headerColor;
   border-bottom: 1px solid #cfe4ef;
-}
-
-.content {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
 
   h1 {
     @include fontAccentTheme;
-    width: 100%;
+    grid-column: 2;
+    margin: 0;
+    padding: 16px 0;
     text-align: center;
     font-weight: bold;
     font-size: 24px;
     line-height: 30px;
-    padding: 16px 0;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // On narrow screens switch to a two-row flex layout:
+  // row 1 — lang switcher left, logout button right (if present)
+  // row 2 — title full-width and centred
+  // This avoids the 1fr auto 1fr grid collapsing when the auto title
+  // track is wider than the available space.
+  @media (max-width: 540px) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: unset;
+    gap: 0;
+    padding: 8px 12px;
+
+    h1 {
+      order: 3;
+      flex: 0 0 100%;
+      font-size: 18px;
+      line-height: 24px;
+      padding: 2px 0 10px;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: unset;
+    }
+  }
+}
+
+.languageSwitcher {
+  grid-column: 1;
+  justify-self: start;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+
+  @media (max-width: 540px) {
+    order: 1;
+  }
+}
+
+.languageButton {
+  background: none;
+  border: 0;
+  padding: 4px 6px;
+  font: inherit;
+  font-size: 14px;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.languageButtonActive {
+  font-weight: bold;
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.languageDivider {
+  opacity: 0.5;
+  font-size: 14px;
+}
+
+.logout {
+  grid-column: 3;
+  justify-self: end;
+  min-width: 0;
+
+  @media (max-width: 540px) {
+    order: 2;
+    margin-left: auto;
   }
 }

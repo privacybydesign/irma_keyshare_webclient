@@ -1,42 +1,8 @@
-@font-face {
-  font-family: 'OpenSans';
-  src: url('./fonts/open-sans-v34-latin-regular.woff2') format('woff2'),
-    url('./fonts/open-sans-v34-latin-regular.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'OpenSans';
-  src: url('./fonts/open-sans-v34-latin-700.woff2') format('woff2'),
-    url('./fonts/open-sans-v34-latin-700.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Alexandria';
-  src: url('./fonts/alexandria-v1-latin-regular.woff2') format('woff2'),
-    url('./fonts/alexandria-v1-latin-regular.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Alexandria';
-  src: url('./fonts/alexandria-v1-latin-600.woff2') format('woff2'),
-    url('./fonts/alexandria-v1-latin-600.woff') format('woff');
-  font-weight: 600;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Alexandria';
-  src: url('./fonts/alexandria-v1-latin-700.woff2') format('woff2'),
-    url('./fonts/alexandria-v1-latin-700.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
-}
+// SASS variables + mixins only — no top-level CSS rules. This file is
+// `@use`d from every module `*.scss`, so anything at the top level here
+// would be emitted into every per-module CSS chunk. The actual @font-face
+// declarations and the #yivi-web-form override live in src/index.scss
+// (imported once from src/index.jsx).
 
 $backgroundColor: #eaf3f9;
 $headerColor: white;
@@ -53,17 +19,4 @@ $textAccentColor: #484747;
 @mixin fontAccentTheme {
   color: $textAccentColor;
   font-family: 'Alexandria', Verdana, Arial, sans-serif;
-}
-
-/* Temporary Yivi web-form styling overrides */
-#yivi-web-form {
-  background: white;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  border: 0px;
-
-  .yivi-web-content {
-    border-radius: 8px;
-    background: #f7f5f3;
-  }
 }

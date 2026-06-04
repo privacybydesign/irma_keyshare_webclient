@@ -1,4 +1,4 @@
-@import 'src/theme';
+@use 'theme' as *;
 
 .center {
   align-items: center;

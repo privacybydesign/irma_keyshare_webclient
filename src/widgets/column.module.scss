@@ -1,7 +1,12 @@
 .column {
   display: flex;
   flex-direction: column;
-  padding: 0 16px 16px;
-  max-width: 650px;
+  padding: 0 24px 24px;
+  max-width: 680px;
+  width: 100%;
   margin: 0 auto;
+
+  @media (max-width: 480px) {
+    padding: 0 16px 16px;
+  }
 }

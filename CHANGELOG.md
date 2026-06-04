@@ -5,6 +5,46 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Operator notes
+- **`public/config.js` ships with `server: 'http://localhost:8081'`.** This file is the local-development template; production deployments are expected to overwrite it (the `irma-keyshare-ops` Kubernetes manifests do this). If the overlay is misconfigured and the template ships unchanged, the browser bundle will silently issue API calls to `http://localhost:8081` from the user's machine — there is no runtime guard for this in the SPA. Verify after every release that the deployed `/config.js` resolves to the intended backend URL (a curl against the deployed host is enough).
+
+### Changed
+- **Workflow split.** `status-checks.yml` is replaced by `ci.yml` (lint / test / build / image-scan jobs in parallel, no image push). The Delivery workflow is now narrowly focused: it pushes `:edge` to GHCR on every merge to `master` and on `workflow_dispatch` against `master`. A job-level `if: github.ref == 'refs/heads/master'` skips the publish on any non-master ref, so a stray "Run workflow" click on a PR branch is rendered as "skipped" in the Actions UI rather than masquerading as a successful republish. A new `release.yml` handles versioned releases — on a published (non-pre-release) GitHub Release it builds, scans, and pushes `:X.Y.Z`, `:X.Y`, `:X`, and `:latest`; pre-releases are skipped to avoid clobbering the stable tag set.
+- The previous `:pr-<n>` and `:<branch>` (workflow_dispatch) tag rules are gone — `delivery.yml` always tags `:edge`. Pre-merge end-to-end testing of a PR branch can no longer overwrite the deployed `:edge`; build and push to a personal GHCR namespace instead.
+- The weekly cron that re-scanned the deployed `:edge` image is gone with the split; restore as a separate `scan.yml` if periodic CVE re-checks are still wanted.
+- Add a `yarn test` script and a `test` job in `ci.yml`. The script currently wraps Vitest; coverage is intentionally narrow on this first pass (reducers, helpers, and a single component smoke).
+
+## [4.0.0] - 2026-05-28
+### Changed
+- **Bundler:** Replace the unmaintained `react-scripts@5` with Vite 8 + `@vitejs/plugin-react@6`. Build output directory stays at `build/`; dev server boots in ~100 ms (was 10–15 s); main bundle is 85.76 kB gzipped (Terser, route-split — `moment/nl` ships in its own 56.84 kB on-demand chunk).
+- **Package manager:** Migrate from yarn 1.22 to yarn 4.15 via corepack with `nodeLinker: node-modules`. The `yarn-4.15.0.cjs` release is committed under `.yarn/releases/`; CI / Docker pick it up via the `packageManager` field.
+- **JSX file extension:** 29 files containing JSX renamed from `.js` to `.jsx` (Vite 8 / Rolldown only parses JSX in `.jsx` files).
+- **Default language:** `public/config.js` now picks the first browser-preferred language we support (`nl` / `en`) and falls back to `en` instead of being hard-coded. Users' explicit choices are persisted in `localStorage.lang` and take precedence on subsequent loads. **Operators who relied on the old hard-coded `en` default should pin the language explicitly in their deployed `config.js`.**
+- **SCSS:** Migrate every `@import 'src/theme';` to `@use 'theme' as *;` (Sass 3 removes `@import`). Vite's Sass `loadPaths` is narrowed to `src/` so partials resolve by bare name without granting cross-module access to the repo root.
+- Move `src/fonts/` to `public/fonts/`; `@font-face` URLs use absolute `/fonts/...` paths that Vite's CSS asset pipeline rewrites based on `base` so sub-path deploys work.
+- Node bumped 16 → 24 in CI and in the build image (`Dockerfile`).
+
+### Added
+- **Major dependency bumps:** React + ReactDOM 18 → 19, Redux 4 → 5, react-redux 8 → 9, i18next 22 → 26, react-i18next 12 → 17.
+- **EN/NL language switcher** in `YiviAppBar`. Click flips `i18n.changeLanguage()` + the `<html lang>` attribute + `localStorage.lang`. The active button is the native `disabled` plus `aria-pressed="true"` so screen readers and keyboard users get the right semantics without the double-announce that `aria-disabled` would cause. Wrapper has `role="group"` and a translated `aria-label`.
+- **`workflow_dispatch` trigger** on the Delivery workflow so `:edge` can be re-published from the current `master` commit manually via the Actions UI without forcing an empty push (the job is gated to `master`).
+- **Container vulnerability scanning** via `anchore/scan-action` on every PR, every push to `master`, and every published release. SARIF reports always upload to the Code Scanning UI; `fail-build` only gates non-PR events so a newly-disclosed upstream CVE doesn't block unrelated PRs.
+
+### Fixed
+- Language switcher's translated text now actually swaps language — class components were caching `props.t` in their constructor, so post-switch renders still used the stale `t` (react-i18next 17 returns a new `t` reference on language change).
+- App-bar layout no longer hides the language switcher behind the absolutely-positioned title on the login page.
+- Heading row no longer leaves ~128 px of dead vertical space around the App-ID line on the account overview.
+- Mobile header collapses cleanly into a single row instead of stacking three rows with empty gaps.
+- Remove broken `https://privacybydesign.foundation/issuance/` link; LoadCards section now points at `https://yivi.app/storing_and_sharing/`.
+
+### Security
+- `yarn npm audit --severity high --all` returns no findings (was 32 across critical/high/moderate/low under `react-scripts`' devDep subtree).
+- Pin every GitHub Action to a full commit SHA with a `# vX.Y.Z` trailer.
+- Drop `contents: write` permission from the Delivery workflow (reduces blast radius).
+- `github.repository` value interpolated via `env:` rather than directly into a `run:` script — eliminates one expression-injection vector.
+- Stylelint deprecation `scss/at-import-no-partial-leading-underscore` replaced with its successor `scss/load-no-partial-leading-underscore`.
+- Runtime base image pinned by manifest-list digest (`joseluisq/static-web-server:2.42.0@sha256:2d67e47…`) so a silent upstream re-tag of `:latest` can't flip Anchore scan results without a source change.
+- README "Container vulnerability scanning" section documents the scope of the build-failing gate (cutoff `high`, `only-fixed: true`, PR runs scan-only) so future maintainers don't assume merges block on all known CVEs.
 
 ## [3.1.3] - 2024-04-18
 ### Fixed

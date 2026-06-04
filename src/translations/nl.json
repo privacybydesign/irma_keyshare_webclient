@@ -7,9 +7,9 @@
     "intro-par1": "Dit is de self care omgeving van Yivi. Als je Yivi gebruiker bent, kun je via deze pagina de activiteiten van je Yivi-app bekijken. Ook is het mogelijk om de app op afstand te blokkeren, bijvoorbeeld bij diefstal of verlies.",
     "intro-par2": "Yivi ziet wanneer je Yivi-app gebruikt wordt, maar niet waar. Ook zien wij niet welke informatie je deelt, of met wie. Op deze manier proberen we de beste balans te vinden tussen veiligheid en privacy.",
     "login-methods": "Je kunt hieronder op twee manieren inloggen:",
-    "login-method-yivi-title":"Met jouw Yivi-app",
+    "login-method-yivi-title": "Met jouw Yivi-app",
     "login-method-yivi-description": "Scan de QR code met jouw Yivi app en volg de instructies op het scherm.",
-    "login-method-email-title":" Met je e-mailadres",
+    "login-method-email-title": " Met je e-mailadres",
     "login-method-email-description": "Tijdens de activatie van Yivi heb je een e-mailadres opgegeven. Als je dat adres hieronder invult krijg je een e-mail met een link. Deze link geeft je toegang tot MijnYivi.",
     "login-using": "Log in met",
     "email-address": "E-mailadres",
@@ -95,10 +95,10 @@
     "header": "Er ging iets mis",
     "explanation": "Deze link is verlopen.",
     "explanation-details": "Je kunt alsnog je e-mailadres toevoegen zodat je jouw Yivi-app kunt blokkeren bij verlies of diefstal:",
-    "point-1":"Ga naar <0>MijnYivi</0>.",
-    "point-2":"Klik op 'Open Yivi-app' of scan de QR code met jouw Yivi-app.",
-    "point-3":"Volg de instructies in jouw Yivi app om in te loggen in MijnYivi.",
-    "point-4":"Klik op 'Voeg e-mailadres toe' en volg de instructies om je e-mailadres toe toe voegen aan MijnYivi.",
+    "point-1": "Ga naar <0>MijnYivi</0>.",
+    "point-2": "Klik op 'Open Yivi-app' of scan de QR code met jouw Yivi-app.",
+    "point-3": "Volg de instructies in jouw Yivi app om in te loggen in MijnYivi.",
+    "point-4": "Klik op 'Voeg e-mailadres toe' en volg de instructies om je e-mailadres toe toe voegen aan MijnYivi.",
     "retry": "Ga naar MijnYivi"
   },
   "warning-message": {
@@ -119,6 +119,8 @@
     "cancel": "Annuleren"
   },
   "yivi-app-bar": {
-    "logout": "Uitloggen"
+    "logout": "Uitloggen",
+    "language-switcher-label": "Taal",
+    "language-switcher-locked-title": "Rond de Yivi-sessie af of annuleer deze voordat je van taal wisselt."
   }
 }

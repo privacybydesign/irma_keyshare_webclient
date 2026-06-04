@@ -1,4 +1,10 @@
-@import 'src/theme';
+@use 'theme' as *;
+
+.wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 
 .table {
   width: 100%;
@@ -10,6 +16,10 @@
     border-spacing: 0;
     text-align: left;
     padding: 8px 8px 8px 0px;
+  }
+
+  th {
+    font-weight: bold;
   }
 
   td {

@@ -2,8 +2,15 @@
 
 # dependencies
 /node_modules
-/.pnp
-.pnp.js
+
+# yarn berry — pin the binary in tree but ignore the global cache / install state
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
 
 # testing
 /coverage
@@ -21,3 +28,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Claude Code per-project state (lock files, scratch). Tracked locally
+# only; never relevant to the build or to other contributors.
+.claude/

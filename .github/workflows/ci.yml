@@ -1,0 +1,141 @@
+# CI runs on every PR and every push to master. Verifies the codebase
+# (lint, test, build) and exercises the production Docker image with a
+# vulnerability scan, but never pushes anything. Pushing :edge happens in
+# delivery.yml; tagged releases happen in release.yml.
+
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+# A push storm to a PR re-runs the full lint/test/build/image-scan matrix in
+# parallel for every commit; cancel the older run on the same branch. On
+# master we want every commit to be checked, so the master path skips this
+# block via the `if`-style ref check below.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Use Node.js 24
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24
+          cache: 'yarn'
+      - run: yarn install --immutable
+      - run: yarn lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Use Node.js 24
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24
+          cache: 'yarn'
+      - run: yarn install --immutable
+      - run: yarn test
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Use Node.js 24
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24
+          cache: 'yarn'
+      - run: yarn install --immutable
+      - run: yarn build
+
+  # PR-only image scan. On master push, `delivery.yml` runs the same
+  # Anchore scan back-to-back with this one — the GHA cache makes the
+  # second build cheap, but the duplication means a newly-disclosed base-
+  # image CVE would red both `ci.yml`'s image-scan and `delivery.yml`'s
+  # publish step on the same commit, doubling the noise without adding
+  # signal. `delivery.yml` owns the gate on master; `ci.yml`'s scan is
+  # the PR-side check.
+  #
+  # Note: `security-events: write` is downgraded to read-only when this
+  # workflow runs from a forked PR (GitHub's default for untrusted code).
+  # The SARIF upload step then 403s — `continue-on-error: true` on that
+  # step keeps the job green so fork-originated PRs don't show a red
+  # `image-scan` even when the scan itself passed. The scan output still
+  # surfaces in the action log; Code Scanning just won't ingest it until
+  # the fork's contributor opens a follow-up from a same-repo branch, or
+  # a maintainer re-runs the scan against the merged code on master.
+  image-scan:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      # Docker rejects uppercase characters in image tags. github.repository
+      # is mixed-case if the org/repo name has any.
+      - name: Compute lowercase image name
+        id: image
+        env:
+          REPO: ${{ github.repository }}
+        run: |
+          printf 'name=%s\n' "$(echo "$REPO" | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
+
+      - name: Build container locally for scanning
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
+        with:
+          context: .
+          load: true
+          tags: local/${{ steps.image.outputs.name }}:scan
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # only-fixed: true — only FAIL the build for CVEs that have a fix
+      # available upstream. Unfixable highs+ still appear in the SARIF report
+      # (Code Scanning UI), but don't block merges; we'd just be blocking on
+      # something we can't actually patch.
+      #
+      # fail-build: false on the PR-only scan. A newly-disclosed fixable CVE
+      # in the base image would otherwise block every open PR until the
+      # base bump lands — orthogonal to the PR's own diff. The scan output
+      # still uploads as SARIF for the Code Scanning UI; the gate is
+      # `delivery.yml`'s scan on master push (fail-build: true there).
+      # Anchore can't natively distinguish "PR introduced this dep" from
+      # "upstream just disclosed a new CVE", so we err on the lenient side
+      # here and rely on `yarn audit` + dependabot to catch deliberately
+      # vulnerable dep PRs at install time.
+      - name: Scan image with Anchore
+        uses: anchore/scan-action@e1165082ffb1fe366ebaf02d8526e7c4989ea9d2 # v7.4.0
+        id: scan
+        with:
+          image: local/${{ steps.image.outputs.name }}:scan
+          only-fixed: true
+          fail-build: false
+          severity-cutoff: high
+          output-format: sarif
+
+      - name: Upload Anchore scan SARIF report
+        uses: github/codeql-action/upload-sarif@f52b05f4acaaa234e44466e66d29050e135ea9ef # v4.36.0
+        if: ${{ !cancelled() }}
+        # Forked PRs lose `security-events: write`; the upload 403s. Mark
+        # the step itself non-fatal so the job stays green — the scan ran
+        # and any findings still appear in the workflow log.
+        continue-on-error: true
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
