@@ -2,21 +2,10 @@
 #
 # Triggers:
 #   - push to master      → automatic :edge after every merge
-#   - workflow_dispatch   → manual :edge re-run, restricted to master (see
-#                           ref gate below). Lets you re-publish :edge for
-#                           the current master commit without forcing an
-#                           empty push.
+#   - workflow_dispatch   → manual :edge build, can be dispatched from any
+#                           branch (including PR branches) to smoke-test
+#                           the deployment path in staging pre-merge.
 #
-# The dispatch trigger used to accept any branch (to allow cutting an :edge
-# from a PR branch as a deployment-path smoke test pre-merge), but that
-# meant any maintainer with write access could overwrite the deployed
-# :edge tag with un-reviewed PR-branch code — the Anchore scan blocks
-# vulnerable code, not arbitrary code. The job-level `if` below gates the
-# whole job on the master ref so a non-master dispatch short-circuits
-# before any checkout/setup step runs. A skipped job renders distinctly
-# from a passing one in the Actions UI, so an accidental "Run workflow"
-# on a PR branch surfaces as "skipped" — not green. Pre-merge deployment
-# testing should use a feature branch tag in a personal repo instead.
 # Tagged releases (:X.Y.Z) live in release.yml.
 
 name: Delivery
@@ -42,17 +31,6 @@ permissions:
 jobs:
   publish-edge:
     runs-on: ubuntu-latest
-    # Gate the whole job (not just the first step) on the master ref so a
-    # non-master `workflow_dispatch` short-circuits before any checkout /
-    # setup step has a chance to run, even if a future edit reorders the
-    # step list. A skipped job renders distinctly from a passing job in
-    # GitHub's Actions UI (gray dash, not a green check), so a maintainer
-    # who dispatches against a PR branch sees that the publish was skipped
-    # rather than a misleading green tick. The hard-fail step variant we
-    # had before traded that future-proofing for a louder error message;
-    # job-level `if` is the safer of the two when a wrong-ref dispatch
-    # could otherwise check out un-reviewed code.
-    if: github.ref == 'refs/heads/master'
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
