@@ -737,12 +737,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@privacybydesign/yivi-frontend@npm:^1.0.2":
-  version: 1.0.3
-  resolution: "@privacybydesign/yivi-frontend@npm:1.0.3"
+"@privacybydesign/yivi-frontend@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@privacybydesign/yivi-frontend@npm:1.0.4"
   dependencies:
     "@privacybydesign/yivi-css": "npm:1.0.1"
-  checksum: 10c0/da9dc6cffd2eb5ce1bc8757a67a3c0d39c81177018735d3da8f4760ee3fd6df103ba5b96cee7bdc20f53b84652293571345d35817c09ee6ce587ef0d0ac739c0
+  checksum: 10c0/b40d0402dea615060e1e22d322c1bc51580a10d951a2974efb1a60d3f6955d075402841ac45b967072553d267d44bbaad550f772d17ec27ef38dcbd054295038
   languageName: node
   linkType: hard
 
@@ -2738,7 +2738,7 @@ __metadata:
   dependencies:
     "@eslint-react/eslint-plugin": "npm:^5.8.7"
     "@eslint/js": "npm:^10"
-    "@privacybydesign/yivi-frontend": "npm:^1.0.2"
+    "@privacybydesign/yivi-frontend": "npm:^1.0.4"
     "@reduxjs/toolkit": "npm:^2.12.0"
     "@testing-library/dom": "npm:^10"
     "@testing-library/react": "npm:^16"
