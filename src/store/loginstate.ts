@@ -40,6 +40,8 @@ export default function login(state: LoginState = initialState, action: AppActio
       };
     case 'tokenInvalid':
       return { ...state, sessionState: 'tokenInvalid' };
+    case 'sessionExpired':
+      return { ...state, sessionState: 'sessionExpired' };
     case 'raiseWarning':
       return {
         ...state,

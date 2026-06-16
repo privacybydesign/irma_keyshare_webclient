@@ -9,6 +9,7 @@ const RegistrationVerified = lazy(() => import('./components/registration_verifi
 const TokenInvalid = lazy(() => import('./components/token_invalid'));
 const WarningMessage = lazy(() => import('./components/warning_message'));
 const ErrorMessage = lazy(() => import('./components/error_message'));
+const SessionExpired = lazy(() => import('./components/session_expired'));
 
 const mapStateToProps = (state: RootState) => ({
   loading: ['unknown', 'loggingOut'].includes(state.login.sessionState),
@@ -16,6 +17,7 @@ const mapStateToProps = (state: RootState) => ({
   registrationVerified: state.login.sessionState === 'showPostRegistration',
   tokenInvalid: state.login.sessionState === 'tokenInvalid',
   warningRaised: state.login.sessionState === 'warningRaised',
+  sessionExpired: state.login.sessionState === 'sessionExpired',
   errorRaised: state.login.error !== '',
 });
 
@@ -29,6 +31,7 @@ function pickScreen(props: Props) {
   if (props.registrationVerified) return <RegistrationVerified dispatch={props.dispatch} />;
   if (props.tokenInvalid) return <TokenInvalid dispatch={props.dispatch} />;
   if (props.warningRaised) return <WarningMessage />;
+  if (props.sessionExpired) return <SessionExpired />;
   return <Login />;
 }
 

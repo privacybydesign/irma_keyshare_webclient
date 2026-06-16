@@ -115,6 +115,11 @@
     "error-details": "De volgende fout trad op:",
     "retry": "Ga terug naar loginpagina"
   },
+  "session-expired": {
+    "header": "Sessie verlopen",
+    "explanation": "Je bent uitgelogd omdat je sessie is verlopen. Log opnieuw in om het gebruik van je Yivi-app te bekijken.",
+    "login-again": "Opnieuw inloggen"
+  },
   "yivi-modal": {
     "cancel": "Annuleren"
   },
