@@ -2,7 +2,7 @@
   "name": "myirma",
   "version": "4.0.0",
   "private": true,
-  "license": "BSD-3-Clause",
+  "license": "Apache-2.0",
   "type": "module",
   "dependencies": {
     "@privacybydesign/yivi-frontend": "^1.0.4",
