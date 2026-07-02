@@ -1,0 +1,43 @@
+# static-web-server configuration for the production image.
+#
+# This file exists to attach a baseline set of HTTP security headers to every
+# response (defense-in-depth against clickjacking, MIME sniffing and injected
+# script/style). It is loaded by static-web-server via the SERVER_CONFIG_FILE
+# environment variable set in the Dockerfile. Host, port and root are supplied
+# by the base image's environment variables (SERVER_HOST=::, SERVER_PORT=80,
+# SERVER_ROOT=/public); the [general] section below only restates the root so
+# the file is self-contained.
+#
+# If this app is fronted by a reverse proxy that already sets these headers,
+# the values here are harmless duplicates — but they guarantee the headers are
+# present even when served directly.
+
+[general]
+root = "/public"
+
+[advanced]
+
+# Applied to every response ("**" matches all request paths).
+[[advanced.headers]]
+source = "**"
+
+[advanced.headers.headers]
+# Content-Security-Policy — the built SPA only loads its own bundled JS/CSS
+# (script-src/style-src 'self'), plus:
+#   - 'unsafe-inline' for style-src: React renders inline `style={...}` attributes
+#     and the bundled @privacybydesign/yivi-frontend injects a runtime <style> tag.
+#   - img-src data:: the Yivi widget renders its QR code as a data:-URI / canvas image.
+#   - connect-src 'self' https:: XHR/fetch go to the keyshare server
+#     (window.config.server), whose origin is operator-configurable and may differ
+#     from the app's own origin. Tighten this to the exact keyshare origin(s) if known.
+#   - frame-ancestors 'none' + object-src 'none' + base-uri 'self' + form-action 'self'
+#     harden against clickjacking, plugin/object injection and base-tag / form hijacking.
+Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'"
+# Legacy clickjacking protection for browsers that don't honour frame-ancestors.
+X-Frame-Options = "DENY"
+# Stop browsers from MIME-sniffing responses away from their declared type.
+X-Content-Type-Options = "nosniff"
+# Don't leak the full URL (which may carry a magic-link #token fragment) in the
+# Referer header on outbound navigation. (strict-origin-when-cross-origin still
+# strips URL fragments, but no-referrer is the most conservative choice here.)
+Referrer-Policy = "no-referrer"

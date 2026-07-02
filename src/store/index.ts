@@ -40,8 +40,9 @@ function handleLoadLogs({ getState, dispatch }: AppMiddlewareAPI): ReturnType<Mi
           dispatch({ type: 'loadedLogs', entries: resjson });
         })
         .catch((err: unknown) => {
+          console.error('Error while loading log entries:', err);
           dispatch({ type: 'errorLoadingLogs' });
-          dispatch({ type: 'raiseError', errorMessage: `Error while loading log entries: ${err}` });
+          dispatch({ type: 'raiseError', errorMessage: 'error-loading-logs' });
         });
     }
     return next(action as UnknownAction);
@@ -66,8 +67,9 @@ function handleUpdateData({ getState, dispatch }: AppMiddlewareAPI): ReturnType<
           dispatch({ type: 'updateInfo', data: resjson });
         })
         .catch((err: unknown) => {
+          console.error('Error while loading user data:', err);
           dispatch({ type: 'errorUpdateInfo' });
-          dispatch({ type: 'raiseError', errorMessage: `Error while loading user data: ${err}` });
+          dispatch({ type: 'raiseError', errorMessage: 'error-loading-userdata' });
         });
     }
     return next(action as UnknownAction);
@@ -100,7 +102,8 @@ function handleEmail({ dispatch }: AppMiddlewareAPI): ReturnType<Middleware> {
           });
         })
         .catch((err: unknown) => {
-          dispatch({ type: 'raiseError', errorMessage: `Error while removing email: ${err}` });
+          console.error('Error while removing email:', err);
+          dispatch({ type: 'raiseError', errorMessage: 'error-removing-email' });
         });
     }
     return next(action as UnknownAction);
@@ -132,7 +135,8 @@ function handleDeleteAccount({ dispatch }: AppMiddlewareAPI): ReturnType<Middlew
           });
         })
         .catch((err: unknown) => {
-          dispatch({ type: 'raiseError', errorMessage: `Error while deleting account: ${err}` });
+          console.error('Error while deleting account:', err);
+          dispatch({ type: 'raiseError', errorMessage: 'error-deleting-account' });
         });
     }
     return next(action as UnknownAction);
@@ -161,7 +165,8 @@ function handleTokenLogin({ dispatch }: AppMiddlewareAPI): ReturnType<Middleware
           }
         })
         .catch((err: unknown) => {
-          dispatch({ type: 'raiseError', errorMessage: `Error while fetching login candidates: ${err}` });
+          console.error('Error while fetching login candidates:', err);
+          dispatch({ type: 'raiseError', errorMessage: 'error-login-candidates' });
         });
     }
     if (matchAction(action, 'finishTokenLogin')) {
@@ -177,7 +182,8 @@ function handleTokenLogin({ dispatch }: AppMiddlewareAPI): ReturnType<Middleware
           dispatch({ type: 'loggedIn' });
         })
         .catch((err: unknown) => {
-          dispatch({ type: 'raiseError', errorMessage: `Error while logging in with token: ${err}` });
+          console.error('Error while logging in with token:', err);
+          dispatch({ type: 'raiseError', errorMessage: 'error-token-login' });
         });
     }
     return next(action as UnknownAction);
@@ -198,7 +204,8 @@ function handleEmailLogin({ dispatch }: AppMiddlewareAPI): ReturnType<Middleware
           dispatch({ type: 'emailSent' });
         })
         .catch((err: unknown) => {
-          dispatch({ type: 'raiseError', errorMessage: `Error while logging in with email: ${err}` });
+          console.error('Error while logging in with email:', err);
+          dispatch({ type: 'raiseError', errorMessage: 'error-email-login' });
         });
     }
     return next(action as UnknownAction);
@@ -223,7 +230,8 @@ function handleRegistrationVerify({ dispatch }: AppMiddlewareAPI): ReturnType<Mi
           }
         })
         .catch((err: unknown) => {
-          dispatch({ type: 'raiseError', errorMessage: `Error while verifying email: ${err}` });
+          console.error('Error while verifying email:', err);
+          dispatch({ type: 'raiseError', errorMessage: 'error-verifying-email' });
         });
     }
     return next(action as UnknownAction);
@@ -251,7 +259,8 @@ function handleVerifySession({ dispatch }: AppMiddlewareAPI): ReturnType<Middlew
           }
         })
         .catch((err: unknown) => {
-          dispatch({ type: 'raiseError', errorMessage: `Error while verifying session: ${err}` });
+          console.error('Error while verifying session:', err);
+          dispatch({ type: 'raiseError', errorMessage: 'error-verifying-session' });
         });
     }
     return next(action as UnknownAction);
@@ -280,11 +289,10 @@ function handleLogout({ dispatch }: AppMiddlewareAPI): ReturnType<Middleware> {
           dispatch({ type: 'loggedOut' });
         })
         .catch((err: unknown) => {
-          const errorMessage = `Error while logging out: ${err}`;
+          console.error('Error while logging out:', err);
           if (!isResolve) {
-            dispatch({ type: 'raiseError', errorMessage });
+            dispatch({ type: 'raiseError', errorMessage: 'error-logout' });
           } else {
-            console.error(errorMessage);
             dispatch({ type: 'loggedOut' });
           }
         });

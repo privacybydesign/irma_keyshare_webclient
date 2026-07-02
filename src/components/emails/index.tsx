@@ -63,8 +63,10 @@ class Emails extends React.Component<Props, State> {
         this.props.dispatch({ type: 'startUpdateInfo' });
       })
       .catch((err: unknown) => {
-        if (err !== YIVI_CANCELLED_SENTINEL)
-          this.props.dispatch({ type: 'raiseError', errorMessage: `Error while adding email address: ${err}` });
+        if (err !== YIVI_CANCELLED_SENTINEL) {
+          console.error('Error while adding email address:', err);
+          this.props.dispatch({ type: 'raiseError', errorMessage: 'error-adding-email' });
+        }
       });
   }
 

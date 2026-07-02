@@ -113,6 +113,18 @@
     "header": "Something went wrong",
     "explanation": "The requested action could not be processed. Please check your internet connection and try again. If the problem keeps occurring, please contact Yivi.",
     "error-details": "The following error occurred:",
+    "error-loading-logs": "Your activity log could not be loaded.",
+    "error-loading-userdata": "Your account details could not be loaded.",
+    "error-removing-email": "The email address could not be removed.",
+    "error-adding-email": "The email address could not be added.",
+    "error-deleting-account": "Your account could not be deleted.",
+    "error-login-candidates": "The login could not be started.",
+    "error-token-login": "You could not be logged in.",
+    "error-email-login": "The login email could not be sent.",
+    "error-yivi-login": "You could not be logged in with Yivi.",
+    "error-verifying-email": "Your email address could not be verified.",
+    "error-verifying-session": "Your session could not be verified.",
+    "error-logout": "You could not be logged out.",
     "retry": "Go to login page"
   },
   "yivi-modal": {
