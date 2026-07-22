@@ -90,7 +90,7 @@ describe('handleLoadLogs — GET /user/logs/:index', () => {
     await flush();
     expect(store.getState().logs.logEntries).toEqual([]);
     expect(store.getState().logs.loading).toBe(false);
-    expect(store.getState().login.error).toContain('Error while loading log entries');
+    expect(store.getState().login.error).toBe('error-loading-logs');
   });
 
   it('dedupe guard: a second loadLogs while one is in flight does not fetch again', () => {
@@ -115,7 +115,7 @@ describe('handleUpdateData — GET /user', () => {
     store.dispatch({ type: 'startUpdateInfo' });
     await flush();
     expect(store.getState().userdata.fetching).toBe(false);
-    expect(store.getState().login.error).toContain('Error while loading user data');
+    expect(store.getState().login.error).toBe('error-loading-userdata');
   });
 
   it('dedupe guard: a second startUpdateInfo while fetching does not fetch again', () => {
@@ -159,7 +159,7 @@ describe('handleEmail — POST /email/remove', () => {
     mockFetch({ '/email/remove': jsonRes(500, { error: 'something-else' }) });
     store.dispatch({ type: 'removeEmail', email: 'a@b.c' });
     await flush();
-    expect(store.getState().login.error).toContain('Error while removing email');
+    expect(store.getState().login.error).toBe('error-removing-email');
   });
 });
 
@@ -184,7 +184,7 @@ describe('handleDeleteAccount — POST /user/delete', () => {
     mockFetch({ '/user/delete': jsonRes(500, { error: 'nope' }) });
     store.dispatch({ type: 'removeAccount' });
     await flush();
-    expect(store.getState().login.error).toContain('Error while deleting account');
+    expect(store.getState().login.error).toBe('error-deleting-account');
   });
 });
 
@@ -213,21 +213,21 @@ describe('handleTokenLogin — POST /login/token/candidates + /login/token', () 
     mockFetch({ '/login/token/candidates': jsonRes(200, []) });
     store.dispatch({ type: 'startTokenLogin', token: 'tok' });
     await flush();
-    expect(store.getState().login.error).toContain('no candidates returned');
+    expect(store.getState().login.error).toBe('error-login-candidates');
   });
 
   it('non-200 on the candidates request raises an error', async () => {
     mockFetch({ '/login/token/candidates': noBody(500) });
     store.dispatch({ type: 'startTokenLogin', token: 'tok' });
     await flush();
-    expect(store.getState().login.error).toContain('Error while fetching login candidates');
+    expect(store.getState().login.error).toBe('error-login-candidates');
   });
 
   it('finishTokenLogin with a non-204 response raises an error', async () => {
     mockFetch({ '/login/token': noBody(500) });
     store.dispatch({ type: 'finishTokenLogin', token: 'tok', username: 'alice' });
     await flush();
-    expect(store.getState().login.error).toContain('Error while logging in with token');
+    expect(store.getState().login.error).toBe('error-token-login');
   });
 });
 
@@ -243,7 +243,7 @@ describe('handleEmailLogin — POST /login/email', () => {
     mockFetch({ '/login/email': noBody(500) });
     store.dispatch({ type: 'startEmailLogin', email: 'a@b.c' });
     await flush();
-    expect(store.getState().login.error).toContain('Error while logging in with email');
+    expect(store.getState().login.error).toBe('error-email-login');
   });
 });
 
@@ -267,7 +267,7 @@ describe('handleRegistrationVerify — POST /verify', () => {
     mockFetch({ '/verify': noBody(500) });
     store.dispatch({ type: 'startRegistrationVerify', token: 'tok' });
     await flush();
-    expect(store.getState().login.error).toContain('Error while verifying email');
+    expect(store.getState().login.error).toBe('error-verifying-email');
   });
 });
 
@@ -290,14 +290,14 @@ describe('handleVerifySession — POST /checksession', () => {
     mockFetch({ '/checksession': textRes(200, 'something-weird') });
     store.dispatch({ type: 'verifySession' });
     await flush();
-    expect(store.getState().login.error).toContain('Error while verifying session');
+    expect(store.getState().login.error).toBe('error-verifying-session');
   });
 
   it('non-200 status raises an error', async () => {
     mockFetch({ '/checksession': textRes(500, '') });
     store.dispatch({ type: 'verifySession' });
     await flush();
-    expect(store.getState().login.error).toContain('Error while verifying session');
+    expect(store.getState().login.error).toBe('error-verifying-session');
   });
 });
 
@@ -323,7 +323,7 @@ describe('handleLogout — POST /logout', () => {
     mockFetch({ '/logout': noBody(500) });
     store.dispatch({ type: 'logout' });
     await flush();
-    expect(store.getState().login.error).toContain('Error while logging out');
+    expect(store.getState().login.error).toBe('error-logout');
   });
 
   it('resolveError: a failed request still forces a clean logout (no error raised)', async () => {
