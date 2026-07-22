@@ -29,7 +29,10 @@ const ErrorMessage = (props: Props) => {
         <p>
           {props.t('error-details')}
           <br />
-          <i>{props.error.toString()}</i>
+          {/* props.error is a stable i18n key (ErrorMessageKey), never a raw
+              exception string — the underlying detail is logged to the console
+              only, so nothing sensitive is rendered here. */}
+          <i>{props.t(props.error)}</i>
         </p>
         <YiviButton theme={'primary'} onClick={onRetry}>
           {props.t('retry')}
