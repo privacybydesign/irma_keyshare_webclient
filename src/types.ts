@@ -34,10 +34,30 @@ export interface Candidate {
   last_active: number;
 }
 
+// Stable i18n keys (in the `error-message` namespace) for user-facing error
+// screens. Errors are mapped to one of these keys so the UI never renders a raw
+// exception/status string (which can leak internal detail); the underlying
+// detail is logged to the console only. Keep in sync with the `error-message`
+// section of the translation files.
+export type ErrorMessageKey =
+  | 'error-loading-logs'
+  | 'error-loading-userdata'
+  | 'error-removing-email'
+  | 'error-adding-email'
+  | 'error-deleting-account'
+  | 'error-login-candidates'
+  | 'error-token-login'
+  | 'error-email-login'
+  | 'error-yivi-login'
+  | 'error-verifying-email'
+  | 'error-verifying-session'
+  | 'error-logout';
+
 export interface LoginState {
   sessionState: SessionState;
   candidates: Candidate[];
-  error: string;
+  // '' when no error is raised, otherwise an ErrorMessageKey to render.
+  error: '' | ErrorMessageKey;
   token?: string;
   yiviSession?: YiviSessionConfig;
   explanation?: string;
@@ -107,7 +127,7 @@ export type AppAction =
   | { type: 'tokenInvalid' }
   | { type: 'sessionExpired' }
   | { type: 'raiseWarning'; explanation: string; details: string }
-  | { type: 'raiseError'; errorMessage: string }
+  | { type: 'raiseError'; errorMessage: ErrorMessageKey }
   | { type: 'resolveError' }
   | { type: 'loadLogs'; index: number }
   | { type: 'loadedLogs'; entries: LogEntry[] }

@@ -52,8 +52,10 @@ class SelectMethod extends React.Component<Props> {
       })
       .catch((err: unknown) => {
         if (widget !== this._yiviWeb) return;
-        if (err !== YIVI_CANCELLED_SENTINEL)
-          this.props.dispatch({ type: 'raiseError', errorMessage: `Error while logging in with Yivi: ${err}` });
+        if (err !== YIVI_CANCELLED_SENTINEL) {
+          console.error('Error while logging in with Yivi:', err);
+          this.props.dispatch({ type: 'raiseError', errorMessage: 'error-yivi-login' });
+        }
       });
   }
 

@@ -69,15 +69,15 @@ describe('login reducer', () => {
   });
 
   it('raiseError sets error only when it is currently empty (first-error wins)', () => {
-    const first = login(initial, { type: 'raiseError', errorMessage: 'boom' });
-    expect(first.error).toBe('boom');
-    const second = login(first, { type: 'raiseError', errorMessage: 'second' });
+    const first = login(initial, { type: 'raiseError', errorMessage: 'error-loading-logs' });
+    expect(first.error).toBe('error-loading-logs');
+    const second = login(first, { type: 'raiseError', errorMessage: 'error-logout' });
     expect(second).toBe(first);
-    expect(second.error).toBe('boom');
+    expect(second.error).toBe('error-loading-logs');
   });
 
   it('resolveError clears the error and transitions to loggingOut', () => {
-    const errored = login(initial, { type: 'raiseError', errorMessage: 'boom' });
+    const errored = login(initial, { type: 'raiseError', errorMessage: 'error-loading-logs' });
     const next = login(errored, { type: 'resolveError' });
     expect(next.error).toBe('');
     expect(next.sessionState).toBe('loggingOut');

@@ -113,6 +113,18 @@
     "header": "Er ging iets mis",
     "explanation": "De gevraagde actie kon niet worden verwerkt. Controleer je internetverbinding en probeer het opnieuw. Als de fout blijft aanhouden, neem dan contact op met Yivi.",
     "error-details": "De volgende fout trad op:",
+    "error-loading-logs": "Je activiteitenlog kon niet worden geladen.",
+    "error-loading-userdata": "Je accountgegevens konden niet worden geladen.",
+    "error-removing-email": "Het e-mailadres kon niet worden verwijderd.",
+    "error-adding-email": "Het e-mailadres kon niet worden toegevoegd.",
+    "error-deleting-account": "Je account kon niet worden verwijderd.",
+    "error-login-candidates": "Het inloggen kon niet worden gestart.",
+    "error-token-login": "Je kon niet worden ingelogd.",
+    "error-email-login": "De login-e-mail kon niet worden verzonden.",
+    "error-yivi-login": "Je kon niet met Yivi worden ingelogd.",
+    "error-verifying-email": "Je e-mailadres kon niet worden geverifieerd.",
+    "error-verifying-session": "Je sessie kon niet worden geverifieerd.",
+    "error-logout": "Je kon niet worden uitgelogd.",
     "retry": "Ga terug naar loginpagina"
   },
   "session-expired": {
