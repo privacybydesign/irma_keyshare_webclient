@@ -1,11 +1,9 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import type { WithTranslation } from 'react-i18next';
-import moment from 'moment';
-import 'moment/locale/nl';
-
 import styles from './logs_table.module.scss';
 import YiviTable from '../../widgets/yivi_table';
+import { formatAbsoluteTime, formatRelativeTime } from '../../datetime';
 import type { LogEntry } from '../../types';
 
 interface OwnProps {
@@ -16,11 +14,11 @@ type Props = OwnProps & WithTranslation;
 
 class LogsTable extends React.Component<Props> {
   renderLogEntryTime(timestamp: number) {
-    const time = moment.unix(timestamp).locale(this.props.i18n.language);
+    const lang = this.props.i18n.language;
 
     return (
-      <td className={'when-column'} title={time.format('dddd, D MMM YYYY, H:mm:ss')}>
-        {time.fromNow()}
+      <td className={'when-column'} title={formatAbsoluteTime(timestamp, lang)}>
+        {formatRelativeTime(timestamp, lang)}
       </td>
     );
   }
