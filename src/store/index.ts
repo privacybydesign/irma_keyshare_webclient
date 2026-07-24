@@ -25,6 +25,21 @@ function matchAction<T extends AppAction['type']>(
   return typeof action === 'object' && action !== null && (action as { type?: unknown }).type === type;
 }
 
+// When the keyshare session has expired (or the cookie is unknown), the server
+// rejects requests to session-protected endpoints with HTTP 400 and a body of
+// `{"error":"INVALID_REQUEST","message":"not logged in", ...}`. We detect that
+// specific case so the UI can show a clear "your session expired" message
+// instead of surfacing a raw, unexplained 400 to the user.
+export async function isExpiredSession(res: Response): Promise<boolean> {
+  if (res.status !== 400) return false;
+  try {
+    const body: { message?: string } = await res.clone().json();
+    return body?.message === 'not logged in';
+  } catch {
+    return false;
+  }
+}
+
 function handleLoadLogs({ getState, dispatch }: AppMiddlewareAPI): ReturnType<Middleware> {
   return (next) => (action) => {
     if (matchAction(action, 'loadLogs') && !getState().logs.loading) {
@@ -32,12 +47,18 @@ function handleLoadLogs({ getState, dispatch }: AppMiddlewareAPI): ReturnType<Mi
         method: 'GET',
         credentials: 'include',
       })
-        .then((res) => {
-          if (res.status !== 200) throw res.status;
-          return res.json();
-        })
-        .then((resjson: LogEntry[]) => {
-          dispatch({ type: 'loadedLogs', entries: resjson });
+        .then(async (res) => {
+          if (res.status === 200) {
+            const entries: LogEntry[] = await res.json();
+            dispatch({ type: 'loadedLogs', entries });
+            return;
+          }
+          dispatch({ type: 'errorLoadingLogs' });
+          if (await isExpiredSession(res)) {
+            dispatch({ type: 'sessionExpired' });
+            return;
+          }
+          dispatch({ type: 'raiseError', errorMessage: 'error-loading-logs' });
         })
         .catch((err: unknown) => {
           console.error('Error while loading log entries:', err);
@@ -59,12 +80,18 @@ function handleUpdateData({ getState, dispatch }: AppMiddlewareAPI): ReturnType<
         method: 'GET',
         credentials: 'include',
       })
-        .then((res) => {
-          if (res.status !== 200) throw res.status;
-          return res.json();
-        })
-        .then((resjson: UserDataResponse) => {
-          dispatch({ type: 'updateInfo', data: resjson });
+        .then(async (res) => {
+          if (res.status === 200) {
+            const data: UserDataResponse = await res.json();
+            dispatch({ type: 'updateInfo', data });
+            return;
+          }
+          dispatch({ type: 'errorUpdateInfo' });
+          if (await isExpiredSession(res)) {
+            dispatch({ type: 'sessionExpired' });
+            return;
+          }
+          dispatch({ type: 'raiseError', errorMessage: 'error-loading-userdata' });
         })
         .catch((err: unknown) => {
           console.error('Error while loading user data:', err);

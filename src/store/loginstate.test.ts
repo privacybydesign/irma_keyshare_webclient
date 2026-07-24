@@ -27,6 +27,7 @@ describe('login reducer', () => {
     ['loggedIn', 'loggedIn'],
     ['logout', 'loggingOut'],
     ['tokenInvalid', 'tokenInvalid'],
+    ['sessionExpired', 'sessionExpired'],
   ])('action %s transitions sessionState to %s', (type, expected) => {
     expect(login(initial, { type } as unknown as AppAction).sessionState).toBe(expected);
   });

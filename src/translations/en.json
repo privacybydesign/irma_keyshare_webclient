@@ -127,6 +127,11 @@
     "error-logout": "You could not be logged out.",
     "retry": "Go to login page"
   },
+  "session-expired": {
+    "header": "Session expired",
+    "explanation": "You have been logged out because your session expired. Please log in again to view the usage of your Yivi app.",
+    "login-again": "Log in again"
+  },
   "yivi-modal": {
     "cancel": "Cancel"
   },

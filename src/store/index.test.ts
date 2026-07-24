@@ -1,6 +1,15 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import buildStore from './index';
+import buildStore, { isExpiredSession } from './index';
 import type { Candidate, UserDataResponse } from '../types';
+
+// Body the keyshare server returns for a session-protected endpoint when the
+// session cookie has expired or is unknown (HTTP 400).
+const NOT_LOGGED_IN = JSON.stringify({
+  status: 400,
+  error: 'INVALID_REQUEST',
+  description: 'Invalid HTTP request',
+  message: 'not logged in',
+});
 
 // ── fetch mock plumbing ──────────────────────────────────────────────────────
 //
@@ -32,6 +41,15 @@ const noBody = (status: number): StubResponse => ({
   json: () => Promise.resolve({}),
   text: () => Promise.resolve(''),
 });
+
+// The exact 400 + "not logged in" response the keyshare server returns for an
+// expired/unknown session. `isExpiredSession` reads it via `res.clone().json()`,
+// so this stub exposes a matching `clone()`.
+const expiredSessionRes = (): StubResponse =>
+  ({
+    status: 400,
+    clone: () => ({ json: () => Promise.resolve(JSON.parse(NOT_LOGGED_IN)) }),
+  }) as unknown as StubResponse;
 
 // Route a request to the longest matching path prefix in `routes`. Any path not
 // covered rejects loudly so an unanticipated fetch surfaces as a test failure
@@ -93,6 +111,15 @@ describe('handleLoadLogs — GET /user/logs/:index', () => {
     expect(store.getState().login.error).toBe('error-loading-logs');
   });
 
+  it('a 400 "not logged in" shows the session-expired screen instead of a raw error', async () => {
+    mockFetch({ '/user/logs': expiredSessionRes() });
+    store.dispatch({ type: 'loadLogs', index: 0 });
+    await flush();
+    expect(store.getState().login.sessionState).toBe('sessionExpired');
+    expect(store.getState().login.error).toBe('');
+    expect(store.getState().logs.loading).toBe(false);
+  });
+
   it('dedupe guard: a second loadLogs while one is in flight does not fetch again', () => {
     const fetchFn = mockFetch({ '/user/logs': jsonRes(200, []) });
     store.dispatch({ type: 'loadLogs', index: 0 }); // reducer flips logs.loading on
@@ -130,6 +157,15 @@ describe('handleUpdateData — GET /user', () => {
     store.dispatch({ type: 'emailRemoved' });
     await flush();
     expect(store.getState().userdata.username).toBe('carol');
+  });
+
+  it('a 400 "not logged in" shows the session-expired screen instead of a raw error', async () => {
+    mockFetch({ '/user': expiredSessionRes() });
+    store.dispatch({ type: 'startUpdateInfo' });
+    await flush();
+    expect(store.getState().login.sessionState).toBe('sessionExpired');
+    expect(store.getState().login.error).toBe('');
+    expect(store.getState().userdata.fetching).toBe(false);
   });
 });
 
@@ -334,5 +370,24 @@ describe('handleLogout — POST /logout', () => {
     expect(store.getState().login.sessionState).toBe('loggedOut');
     expect(store.getState().login.error).toBe('');
     expect(consoleError).toHaveBeenCalled();
+  });
+});
+
+describe('isExpiredSession', () => {
+  it('detects the 400 "not logged in" body as an expired session', async () => {
+    expect(await isExpiredSession(new Response(NOT_LOGGED_IN, { status: 400 }))).toBe(true);
+  });
+
+  it('ignores non-400 responses', async () => {
+    expect(await isExpiredSession(new Response(NOT_LOGGED_IN, { status: 500 }))).toBe(false);
+  });
+
+  it('ignores a 400 with a different message (e.g. a genuinely malformed request)', async () => {
+    const body = JSON.stringify({ status: 400, error: 'INVALID_REQUEST', message: 'invalid offset' });
+    expect(await isExpiredSession(new Response(body, { status: 400 }))).toBe(false);
+  });
+
+  it('ignores a 400 with a non-JSON body', async () => {
+    expect(await isExpiredSession(new Response('not json', { status: 400 }))).toBe(false);
   });
 });

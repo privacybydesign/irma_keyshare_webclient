@@ -26,7 +26,8 @@ export type SessionState =
   | 'loggingOut'
   | 'loggedOut'
   | 'tokenInvalid'
-  | 'warningRaised';
+  | 'warningRaised'
+  | 'sessionExpired';
 
 export interface Candidate {
   username: string;
@@ -124,6 +125,7 @@ export type AppAction =
   | { type: 'logout' }
   | { type: 'loggedOut' }
   | { type: 'tokenInvalid' }
+  | { type: 'sessionExpired' }
   | { type: 'raiseWarning'; explanation: string; details: string }
   | { type: 'raiseError'; errorMessage: ErrorMessageKey }
   | { type: 'resolveError' }
