@@ -50,7 +50,7 @@
   "resolutions": {
     "brace-expansion": "^2.1.2",
     "cross-spawn": "^7.0.6",
-    "fast-uri": "^3.1.4",
+    "fast-uri": "^3.1.9",
     "flatted": "^3.3.3",
     "form-data": "^4.0.4",
     "immutable": "^5.1.8",
