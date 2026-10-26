@@ -1,4 +1,4 @@
-FROM node:24-alpine AS build
+FROM node:25-alpine AS build
 WORKDIR /app
 # Enable corepack so the yarn version pinned in package.json's packageManager
 # field (currently 4.x via .yarn/releases) is used instead of any classic
@@ -18,7 +18,7 @@ RUN yarn build
 # Pinned by manifest-list digest so an upstream re-tag of :latest can't flip
 # the Anchore scan between green and red without a source change. Bump the
 # tag + digest together when a CVE patch warrants it.
-FROM joseluisq/static-web-server:2.42.0@sha256:2d67e47e22172235e339908777e692006ffdcf42dc4c531aff5d4337a7559a1e
+FROM joseluisq/static-web-server:2.44.1@sha256:94618e3d17802265a21926217e6f9e7832b311b6fbf5933684001739fafed06a
 COPY --from=build /app/build /public
 # Attach baseline HTTP security headers (CSP, X-Frame-Options,
 # X-Content-Type-Options, Referrer-Policy) to every response. static-web-server
