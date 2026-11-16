@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import buildStore from './store';
 import App from './app';
 import i18n from './i18n';
+import { installHashLoginHandler } from './urlhash';
 import './index.scss';
 
 const container = document.getElementById('root');
@@ -12,23 +13,7 @@ if (!container) throw new Error('root element not found');
 const root = createRoot(container);
 const store = buildStore();
 
-function checkUrlHash() {
-  const fragment = window.location.hash;
-  if (fragment.startsWith('#token=')) {
-    const token = fragment.slice(7);
-    if (token) store.dispatch({ type: 'startTokenLogin', token });
-    else store.dispatch({ type: 'verifySession' });
-  } else if (fragment.startsWith('#verify=')) {
-    const token = fragment.slice(8);
-    if (token) store.dispatch({ type: 'startRegistrationVerify', token });
-    else store.dispatch({ type: 'verifySession' });
-  } else {
-    store.dispatch({ type: 'verifySession' });
-  }
-}
-
-window.addEventListener('hashchange', checkUrlHash);
-checkUrlHash();
+installHashLoginHandler(store.dispatch, () => store.getState().login.sessionState);
 
 document.documentElement.setAttribute('lang', i18n.language);
 

@@ -123,7 +123,7 @@ describe('SelectMethod', () => {
     });
     expect(dispatch).toHaveBeenCalledWith({
       type: 'raiseError',
-      errorMessage: 'Error while logging in with Yivi: boom',
+      errorMessage: 'error-yivi-login',
     });
   });
 

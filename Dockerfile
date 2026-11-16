@@ -20,3 +20,9 @@ RUN yarn build
 # tag + digest together when a CVE patch warrants it.
 FROM joseluisq/static-web-server:2.42.0@sha256:2d67e47e22172235e339908777e692006ffdcf42dc4c531aff5d4337a7559a1e
 COPY --from=build /app/build /public
+# Attach baseline HTTP security headers (CSP, X-Frame-Options,
+# X-Content-Type-Options, Referrer-Policy) to every response. static-web-server
+# only applies the [advanced.headers] rules when SERVER_CONFIG_FILE points at
+# the config file, so both the COPY and the env var are required.
+COPY sws-config.toml /etc/sws/config.toml
+ENV SERVER_CONFIG_FILE=/etc/sws/config.toml

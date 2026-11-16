@@ -1,15 +1,13 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import type { WithTranslation } from 'react-i18next';
-import moment from 'moment';
-import 'moment/locale/nl';
-
 import styles from './select_candidate.module.scss';
 import Column from '../../widgets/column';
 import YiviAppBar from '../../widgets/yivi_app_bar';
 import YiviButton from '../../widgets/yivi_button';
 import Spacer from '../../widgets/spacer';
 import YiviTable from '../../widgets/yivi_table';
+import { formatAbsoluteTime, formatRelativeTime } from '../../datetime';
 import type { AppDispatch, Candidate } from '../../types';
 
 interface OwnProps {
@@ -26,12 +24,14 @@ class SelectCandidate extends React.Component<Props> {
   }
 
   renderCandidates() {
+    const lang = this.props.i18n.language;
     return this.props.candidates.map((candidate) => {
-      const lastActive = moment.unix(candidate.last_active).locale(this.props.i18n.language);
       return (
         <tr key={candidate.username}>
           <td>{candidate.username}</td>
-          <td title={lastActive.format('dddd, D MMM YYYY, H:mm:ss')}>{lastActive.fromNow()}</td>
+          <td title={formatAbsoluteTime(candidate.last_active, lang)}>
+            {formatRelativeTime(candidate.last_active, lang)}
+          </td>
           <td className={styles.buttonCol}>
             <YiviButton theme={'ghost'} onClick={() => this.handleSelectCandidate(candidate.username)}>
               {this.props.t('login')}
