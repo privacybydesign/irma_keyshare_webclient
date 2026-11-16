@@ -38,7 +38,7 @@
     "terser": "^5.51.2",
     "typescript": "^6.0.3",
     "vite": "^8.3.5",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.11"
   },
   "scripts": {
     "lint": "eslint . && stylelint 'src/**/*.scss'",
