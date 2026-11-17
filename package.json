@@ -31,7 +31,7 @@
     "jsdom": "^29.1.1",
     "postcss": "^8.5.32",
     "prettier": "^3",
-    "stylelint": "^17",
+    "stylelint": "^18",
     "stylelint-config-recommended-scss": "^17",
     "stylelint-prettier": "^5",
     "stylelint-scss": "^7",
