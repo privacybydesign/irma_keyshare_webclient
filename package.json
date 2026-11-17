@@ -7,7 +7,7 @@
   "dependencies": {
     "@privacybydesign/yivi-frontend": "^1.0.5",
     "@reduxjs/toolkit": "^2.14.0",
-    "i18next": "^26.2.0",
+    "i18next": "^27.1.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-i18next": "^17.0.8",
