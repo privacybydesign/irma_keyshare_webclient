@@ -1,16 +1,37 @@
 # static-web-server configuration for the production image.
 #
-# This file exists to attach a baseline set of HTTP security headers to every
-# response (defense-in-depth against clickjacking, MIME sniffing and injected
-# script/style). It is loaded by static-web-server via the SERVER_CONFIG_FILE
-# environment variable set in the Dockerfile. Host, port and root are supplied
-# by the base image's environment variables (SERVER_HOST=::, SERVER_PORT=80,
-# SERVER_ROOT=/public); the [general] section below only restates the root so
-# the file is self-contained.
+# This file attaches a baseline set of HTTP security headers to every response
+# (defense-in-depth against clickjacking, MIME sniffing and injected
+# script/style) and pins the Cache-Control policy per path. It is loaded by
+# static-web-server via the SERVER_CONFIG_FILE environment variable set in the
+# Dockerfile. Host, port and root are supplied by the base image's environment
+# variables (SERVER_HOST=::, SERVER_PORT=80, SERVER_ROOT=/public); the
+# [general] section below only restates the root so the file is self-contained.
 #
 # If this app is fronted by a reverse proxy that already sets these headers,
 # the values here are harmless duplicates — but they guarantee the headers are
 # present even when served directly.
+#
+# ## How the header rules resolve
+#
+# SWS post-processes responses in a fixed order (src/handler.rs): its built-in
+# `cache-control-headers` feature runs first, then `[[advanced.headers]]` last.
+# Both use HeaderMap::insert (replace, not append), so the Cache-Control values
+# set below deterministically win over the built-in extension-based defaults —
+# and no header is ever emitted twice. The built-in feature is left enabled so
+# that any path not matched below still gets a sane fallback.
+#
+# `source` globs are compiled with globset's defaults, which means `*` matches
+# path separators too — so `/assets/*` also matches `/assets/favicons/x.png`.
+# Rules are evaluated top to bottom and later matches override earlier ones,
+# which is what the broad-then-narrow ordering below relies on.
+#
+# The globs are absolute and rooted, so they assume a root deploy. Under a
+# sub-path deploy (VITE_BASE=/sub/) the assets are served from /sub/assets/...,
+# no narrow rule matches, and everything falls through to the `no-cache` of the
+# `**` rule below — correct, just slower than it needs to be. If a sub-path
+# deploy ever becomes the norm, add `/sub/`-prefixed duplicates of the rules
+# below; SWS has no config-level variable interpolation to do it in one place.
 
 [general]
 root = "/public"
@@ -41,3 +62,72 @@ X-Content-Type-Options = "nosniff"
 # Referer header on outbound navigation. (strict-origin-when-cross-origin still
 # strips URL fragments, but no-referrer is the most conservative choice here.)
 Referrer-Policy = "no-referrer"
+# Revalidate-by-default. Only content-hashed files are opted into long-lived
+# caching, by the narrower rules below; everything else has to check back.
+#
+# This is the important one for the SPA entry document. Vite writes the hashed
+# chunk filenames into index.html, so a cached index.html pins the exact set of
+# chunk URLs a browser will ask for. SWS's built-in default gives HTML
+# `max-age=86400`, which means a browser could spend up to a day requesting
+# chunk filenames from a build that is no longer deployed — every one of those
+# requests 404s, and because the 404 body is HTML the browser reports it as
+# "blocked because of a disallowed MIME type ('text/html')" rather than as a
+# missing file. `no-cache` still lets the browser store the document, it just
+# has to revalidate; SWS answers with a 304 when it is unchanged, so the cost
+# is one conditional request per navigation, not a full re-download.
+#
+# It also covers /config.js, which is NOT content-hashed: it is mounted from a
+# Kubernetes ConfigMap (see irma-keyshare-ops, myirmaserver/main.tf) and its
+# contents change per environment and whenever an operator edits the tfvars.
+# The built-in feature classifies it by its `.js` extension and would hand out
+# `max-age=31536000`, so a returning visitor could pin a year-old keyshare
+# server URL. Revalidating is the only correct policy for a mutable filename.
+Cache-Control = "no-cache"
+
+# Everything Vite copies verbatim from public/ into build/assets/ — the favicon
+# set and button-primary.svg. These keep their original filenames, so a change
+# reuses the same URL and cannot be cache-busted. One day is short enough that
+# a replaced icon or an edited webmanifest.json propagates on its own.
+[[advanced.headers]]
+source = "/assets/*"
+
+[advanced.headers.headers]
+Cache-Control = "public, max-age=86400"
+
+# Content-hashed build output. Vite derives the hash in `name-HASH.js` from the
+# chunk's contents, so a changed file always arrives under a new URL and these
+# can be cached for a year. Listed as two extension rules rather than one broad
+# `/assets/*` so that the unhashed files matched by the rule above keep their
+# shorter TTL — only .js and .css are emitted with hashes.
+#
+# Deliberately WITHOUT the `immutable` directive. `immutable` tells the browser
+# to skip revalidation even on an explicit reload, which is the behaviour we do
+# not want here: SWS applies these rules by request path with no regard for the
+# response status (src/control_headers.rs and src/custom_headers.rs both key off
+# req.uri().path()), so a 404 for a missing chunk is served with this same
+# year-long Cache-Control and browsers may cache negative responses that carry
+# explicit freshness. Without `immutable`, a reload revalidates and recovers;
+# with it, a chunk that 404s once could stay broken in that browser. Fixing this
+# properly needs a status-code condition, which SWS has no config for — the
+# real mitigation is not serving two builds behind one Service at the same time.
+[[advanced.headers]]
+source = "/assets/*.js"
+
+[advanced.headers.headers]
+Cache-Control = "public, max-age=31536000"
+
+[[advanced.headers]]
+source = "/assets/*.css"
+
+[advanced.headers.headers]
+Cache-Control = "public, max-age=31536000"
+
+# Self-hosted webfonts. Not content-hashed either, but they are referenced from
+# hashed CSS, are byte-stable across builds, and a swapped typeface is cosmetic
+# rather than load-bearing — so these keep the year-long TTL the built-in
+# feature already gave them (.woff/.woff2 are both on its one-year list).
+[[advanced.headers]]
+source = "/fonts/*"
+
+[advanced.headers.headers]
+Cache-Control = "public, max-age=31536000"
