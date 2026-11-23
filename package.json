@@ -32,7 +32,7 @@
     "postcss": "^8.5.32",
     "prettier": "^3",
     "stylelint": "^17",
-    "stylelint-config-recommended-scss": "^17",
+    "stylelint-config-recommended-scss": "^18",
     "stylelint-prettier": "^5",
     "stylelint-scss": "^7",
     "terser": "^5.51.2",
