@@ -28,7 +28,7 @@
     "eslint-config-prettier": "^10",
     "eslint-plugin-prettier": "^5",
     "globals": "^17.14.0",
-    "jsdom": "^29.1.1",
+    "jsdom": "^31.0.1",
     "postcss": "^8.5.32",
     "prettier": "^3",
     "stylelint": "^17",
